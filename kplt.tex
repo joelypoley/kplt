@@ -46,6 +46,7 @@
 \theoremstyle{definition}
 \newtheorem{example}[theorem]{Example}
 \newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{problem}[theorem]{Problem}
 
 \newcommand{\iso}{\cong}
 \newcommand{\op}{\operatorname}
@@ -524,6 +525,8 @@ Note that \( \Lambda(A) = \Lambda(H) \) by adapting the argument in the above le
     Thus \( I \subset NO + O\alpha \), since the other inclusion is obvious we have \( I =  NO + O\alpha \).
 \end{proof}
 
+{\color{red} Given a \( \Z \)-basis for \( I \) how would you find \( \alpha \) in the above lemma?}
+
 \section{KPLT paper in special case}
 
 We will now go through the KPLT paper.
@@ -545,6 +548,15 @@ Since we can choose to solve the isogeny problem for any maximal order we will a
     O = \Z \langle i, (1+j) / 2 \rangle = \op{span}_\Z \{ (1+j) / 2, (i+k) / 2 , j, k \}.
 \]
 Note that \( \{ (1+j) / 2, (i+k) / 2 , j, k \} \) is a \( \Z \)-basis for \( O \) in Hermite normal form.
+
+We state this formally
+\begin{problem} \label{prob: general}
+Let \( p \equiv 3 \pmod{4} \).
+Let \( B =  (-1, -p \; \mid \; \Q) \) be a quaternion algebra.
+Let \( O = \Z \langle i, (1+j) / 2 \).
+Let \( I \subset O \) be an ideal.
+Given a prime \( \ell \), \( p \), a basis for \( O \) and a basis for \( I \) find a basis for a left \( O \)-ideal \( J \) such that \( J \) has \( \ell \)-power norm.
+\end{problem}
 
 \begin{lemma}[Properties of \( (-1, -p \; \mid \; \Q) \)]
     Let \( p \equiv 3 \pmod{4} \).
@@ -688,6 +700,7 @@ Note that \( \{ (1+j) / 2, (i+k) / 2 , j, k \} \) is a \( \Z \)-basis for \( O \
     If \( \nrd(\alpha) = NM \), where \( M \) is prime then return \( J = I \overline{\alpha} / N \), else pick another random element an continue.
 \end{example}
 
+
 \begin{example}
     Given \( O = \Z \langle i, (1+j) / 2 \) and an integer \( M \) we show how to find \( \gamma \in O \) such that \( \nrd(\gamma) = M \).
 
@@ -697,8 +710,14 @@ Note that \( \{ (1+j) / 2, (i+k) / 2 , j, k \} \) is a \( \Z \)-basis for \( O \
     Moreover \( t + xi + yj + zk \in O \) because \( t, x, y, z \in \Z \) and \( \Z \langle i ,j, k \rangle \subset O \).
 \end{example}
 
+So far we have reduced the problem of finding a left \( O \)-ideal with \( \ell \)-power norm equivalent to \( I \) to the same problem but we may assume that \( I \) has prime norm.
+We will further assume that \( N \) is large, coprime to \( \ell \), 4 and \( p \).
 
+We will now reduce the problem of
 
+\begin{lemma}[It is ]
+
+\end{lemma}
 
 
 
