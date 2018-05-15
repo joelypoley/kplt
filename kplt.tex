@@ -549,7 +549,8 @@ Since we can choose to solve the isogeny problem for any maximal order we will a
 \]
 Note that \( \{ (1+j) / 2, (i+k) / 2 , j, k \} \) is a \( \Z \)-basis for \( O \) in Hermite normal form.
 
-We state this formally
+We state this formally.
+
 \begin{problem} \label{prob: general}
 Let \( p \equiv 3 \pmod{4} \).
 Let \( B =  (-1, -p \; \mid \; \Q) \) be a quaternion algebra.
@@ -710,15 +711,117 @@ Given a prime \( \ell \), \( p \), a basis for \( O \) and a basis for \( I \) f
     Moreover \( t + xi + yj + zk \in O \) because \( t, x, y, z \in \Z \) and \( \Z \langle i ,j, k \rangle \subset O \).
 \end{example}
 
-So far we have reduced the problem of finding a left \( O \)-ideal with \( \ell \)-power norm equivalent to \( I \) to the same problem but we may assume that \( I \) has prime norm.
-We will further assume that \( N \) is large, coprime to \( \ell \), 4 and \( p \).
 
-We will now reduce the problem of
+So far we have reduced Problem \ref{prob: general} to the following problem.
+\begin{problem} \label{prob: prime norm}
+Let \( p \equiv 3 \pmod{4} \).
+Let \( B =  (-1, -p \; \mid \; \Q) \) be a quaternion algebra.
+Let \( O = \Z \langle i, (1+j) / 2 \).
+Let \( I \subset O \) be an ideal with prime norm \( N \).
+We further assume \( N \) is large and coprime to \( \ell \), 4 and \( p \).
+Given a prime \( \ell \), \( p \), a basis for \( O \) and a basis for \( I \) find a basis for a left \( O \)-ideal \( J \) such that \( J \) has \( \ell \)-power norm.
+\end{problem}
 
-\begin{lemma}[It is ]
+This is equivalent to the following problem, although I'm not sure what the most elegant proof is.
+\begin{problem} \label{prob: prime norm}
+Let \( p \equiv 3 \pmod{4} \).
+Let \( B =  (-1, -p \; \mid \; \Q) \) be a quaternion algebra.
+Let \( O = \Z \langle i, (1+j) / 2 \).
+Let \( I \subset O \) be an ideal with prime norm \( N \).
+We further assume \( N \) is large and coprime to \( \ell \), 4 and \( p \).
+Given a prime \( \ell \), \( p \), a basis for \( O \), \( N \) and \( \alpha \in I \) such that \( I = ON + O\alpha \) find a basis for a left \( O \)-ideal \( J \) such that \( J \) has \( \ell \)-power norm.
+\end{problem}
 
+This problem can then be reduced using Lemma ??
+
+\begin{problem} \label{prob: ell power}
+Let \( p \equiv 3 \pmod{4} \).
+Let \( B =  (-1, -p \; \mid \; \Q) \) be a quaternion algebra.
+Let \( O = \Z \langle i, (1+j) / 2 \).
+Let \( I \subset O \) be an ideal with prime norm \( N \).
+We further assume \( N \) is large and coprime to \( \ell \), 4 and \( p \).
+Given a prime \( \ell \), \( p \), a basis for \( O \), \( N \) and \( \alpha \in I \) such that \( I = ON + O\alpha \) find \( \beta \in I \) such that \( \nrd(\beta) = N\ell^e \) for some \( e \in \N \).
+\end{problem}
+
+\begin{lemma}
+    Let \( p \equiv 3 \pmod{4} \).
+    Let \( B =  (-1, -p \; \mid \; \Q) \) be a quaternion algebra.
+    Let \( O = \Z \langle i, (1+j) / 2 \).
+    Let \( \alpha \in O \).
+    Let \( N \) be prime.
+    Let \( I = ON + O\alpha \) be a left \( O \)-ideal with norm \( N \).
+    Suppose
+    \[
+        \beta \equiv \lambda \alpha \pmod{NO}
+    \]
+    where \( (lambda, N) = 1 \).
+    Then
+    \[
+        I = ON + O\beta .
+    \]
 \end{lemma}
+\begin{proof}
+    \[
+        ON + O\alpha
+        = ON + O(\lambda^{-1} \bmod{N}\beta)
+        \subset ON + O\beta .
+    \]
+    and
+    \[
+        ON + O\beta
+        = ON + O\lambda \alpha
+        \subset ON + O\alpha .
+    \]
+\end{proof}
 
+The previous lemma reduces the problem further.
+
+\begin{problem} \label{prob: solve congruence}
+Let \( p \equiv 3 \pmod{4} \).
+Let \( B =  (-1, -p \; \mid \; \Q) \) be a quaternion algebra.
+Let \( O = \Z \langle i, (1+j) / 2 \).
+Let \( I \subset O \) be an ideal with prime norm \( N \).
+We further assume \( N \) is large and coprime to \( \ell \), 4 and \( p \).
+Given a prime \( \ell \), \( p \), a basis for \( O \), \( N \) and \( \alpha \in I \) such that \( I = ON + O\alpha \), find \( \beta \in I \) such that
+\[
+    \beta \equiv \lambda \alpha \pmod{NO}
+\]
+where \(\lambda \) is coprime to \( N \) and
+\[
+    \nrd(\beta) = N\ell^e
+\]
+for some \( e \in \N \).
+\end{problem}
+
+We can now solve the problem like this
+\begin{enumerate}
+    \item
+          Find a random \( \gamma \in O \) with \( \nrd(\gamma) = N \ell^e_0 \) using Lemma ??
+    \item
+          Find \( \mu \in Rj \subset  O \) such that \( \gamma\mu \equiv \alpha \mod NO \) using linear algebra.
+    \item
+          Find \( \mu' \in  O \) and \( \lambda \in \Z \) such that \( \mu' \equiv \lambda \mu \mod NO \) and \( \nrd(\mu') = \ell^{e_1} \) and \( (\lambda, N) = 1 \) using techniques yet to be described.
+    \item
+          Set \( \beta = \gamma \mu' = \lambda\gamma\mu \equiv \lambda \alpha \pmod{NO} \). Then \( \nrd(\beta) = \nrd(\gamma)\nrd(\mu') = N\ell^{e_0 + e_1}\) and \( \beta \equiv \lambda \alpha \pmod{NO} \) as required.
+\end{enumerate}
+
+We have therefore reduced the problem to this.
+\begin{problem}
+Let \( p \equiv 3 \pmod{4} \).
+Let \( B =  (-1, -p \; \mid \; \Q) \) be a quaternion algebra.
+Let \( O = \Z \langle i, (1+j) / 2 \).
+Let \( R = \Z[i] \).
+Let \( N \) be prime.
+Given \( \mu \in Rj \) find \( \mu' \in O \) and \(\lambda \in \Z \) such that
+\[
+    \mu' \equiv \lambda \mu \pmod{NO}
+\]
+where \( (\lambda, N) = 1 \) and
+\[
+    \nrd(\mu') = \ell^{e_1}
+\]
+for some \( e_1 \in \N \).
+\end{problem}
 
 
 
