@@ -421,6 +421,76 @@ Note that \( \Lambda(A) = \Lambda(H) \) by adapting the argument in the above le
     See paragraph 9.6.3 for details.
 \end{remark}
 
+\begin{remark}[Ideals of \( M_2(\F_{p^n} \) ]
+    Let \( R =  M_2(\F_{p^n} \).
+    Then the proper ideals of \( R \) are all of the form \( I = R\alpha \) where
+    \[
+        \alpha =
+        \begin{pmatrix}
+            a & b \\
+            0 & 0
+        \end{pmatrix}.
+    \]
+    Hence
+    \[
+        I = \left\{ \begin{pmatrix}
+            c_1a & c_1b \\
+            c_2a & c_2b
+        \end{pmatrix} \mid c_i \in \F_{p^n} \right\}
+    \]
+
+    We now show that all ideals are of this form.
+    Let \( I \subset R \) be a left \( R \)-ideal.
+    The claim is that both of the rows of the elements \( \alpha \in I \) are of the form \( \begin{pmatrix} c_1a & c_1b\end{pmatrix} \) for some fixed \( a, b \in \F_{p^n} \).
+    Suppose that
+    \[
+        \alpha =  \begin{pmatrix}
+            a & b \\
+            * & *
+        \end{pmatrix}
+    \]
+    and
+    \[
+        \beta = \begin{pmatrix}
+            c & d \\
+            * & *
+        \end{pmatrix}
+    \]
+    where \( (a, b) \) and \( (c, d) \) are linearly independent.
+    Then
+    \[
+        \begin{pmatrix}
+            a & b \\
+            c & d
+        \end{pmatrix} = \alpha + E \beta \in I
+    \]
+    where \( E \in M_2(\F_{p^n}) \) is the elementary matrix that swaps rows.
+    Since \( (a, b) \) and \( (c, d) \) are linearly independent the matrix \( \begin{pmatrix}
+        a & b \\
+        c & d
+    \end{pmatrix} \) is invertible and hence \( I \) contains a unit so \( I = R \).
+    It follows that all proper ideals are of this form.
+
+    Moreover \( R \) acts on its left ideals by right multiplication
+    \[
+        \begin{pmatrix}
+            a & b \\
+            0 & 0
+        \end{pmatrix}
+        \begin{pmatrix}
+            c_1 & c_2 \\
+            c_3 & c_4
+        \end{pmatrix}
+        =
+        \begin{pmatrix}
+            ac_1 + bc_3 & ac_2 + bc_4 \\
+            0           & 0
+        \end{pmatrix}
+    \]
+    and it's relatively clear this action is transitive for nontrivial proper ideals.
+
+\end{remark}
+
 \begin{lemma}[Ideal of \( M_2(\F_{p^n} \) ]
     There is a bijection
     \[
