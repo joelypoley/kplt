@@ -106,13 +106,12 @@
 
 \section{KPLT paper in special case}
 \subsection{Description of special case}
-We will now go through the KPLT paper.
 
 Theorem 9 of the paper says that if you can solve the ideal isogeny problem for a maximal order \( O \subset B_{p, \infty} \) then you can solve it for any  maximal order.
 
 
-We will focus on the quaternion algebra with discriminant \( p \equiv 3 \pmod{4} \).
-This quaternion algebra can be written as
+We only describe the algorithm for a quaternion algebra with discriminant \( p \equiv 3 \pmod{4} \).
+These quaternion algebras can be written as
 \[
     B = (-1, -p \, \mid \, \Q).
 \]
@@ -129,7 +128,7 @@ We state the problem we are trying to solve formally.
 \begin{problem} \label{prob: general}
 Let \( p \equiv 3 \pmod{4} \).
 Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
-Let \( O = \Z \langle i, (1+j) / 2 \).
+Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
 Let \( I \subset O \) be a left \( O \)-ideal ideal.
 Given a prime \( \ell \), \( p \) and a basis for \( I \) find a basis for a left \( O \)-ideal \( J \) such that \( J \) has \( \ell \)-power norm.
 \end{problem}
@@ -190,7 +189,7 @@ Given a prime \( \ell \), \( p \) and a basis for \( I \) find a basis for a lef
 \begin{lemma}[Maximal order in \( B_{p, \infty} \) where \( p \equiv 3 \pmod{4} \)]
     Let \( p \equiv 3 \pmod{4} \).
     Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
-    Let \( O = \Z \langle i, (1+j) / 2 \).
+    Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
     Then \( O \) is a maximal order.
 \end{lemma}
 \begin{proof}
@@ -214,15 +213,13 @@ Given a prime \( \ell \), \( p \) and a basis for \( I \) find a basis for a lef
     \end{lstlisting}
 \end{example}
 
-\begin{remark}
-    We will now define a ``distinguished quadratic subring'' of \( O \).
-    This subring may be slightly different if \( p \not\equiv 3 \pmod{4} \).
-\end{remark}
+We will now define a ``distinguished quadratic subring'' of \( O \).
+This subring may be slightly different if \( p \not\equiv 3 \pmod{4} \).
 
 \begin{lemma}[Distinguished quadratice subring]
     Let \( p \equiv 3 \pmod{4} \).
     Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
-    Let \( O = \Z \langle i, (1+j) / 2 \).
+    Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
     Let \( R = \Z[i] \subset O \).
     Then \( R \) has discriminant \( D = 4 \), \( R^\perp = Rj \) and \( R + Rj = \Z\langle i, j \rangle\) is a suborder of \( O \) of index \( D \).
     Moreover
@@ -239,11 +236,10 @@ Given a prime \( \ell \), \( p \) and a basis for \( I \) find a basis for a lef
 
 \subsection{High level overview}
 
-We first describe the special case of the problem we are trying to solve.
 \begin{problem}
 Let \( p \equiv 3 \pmod{4} \).
 Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
-Let \( O = \Z \langle i, (1+j) / 2 \).
+Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
 Let \( R = \Z \langle i , j \rangle \).
 Given a basis for a left \( O \)-ideal \( I \subset O \) and a prime number \( \ell \), find a basis for another left \( O \)-ideal \( J \subset O \) such that \( I \) and \( J \) are in the same class and \( \nrd(J) \) is a power of \( \ell \).
 \end{problem}
@@ -254,33 +250,34 @@ We will solve this problem like this:
 \begin{enumerate}
     \item
           Replace \( I \) with an ideal in the same class but with reduced norm \( N \) where \( N \) is a large prime, coprime to \( \ell \), \( |\disc R| \) and \( p \).
-    \item Find \( \alpha \in I \) such that \( I = ON + O\alpha \).
     \item
-          Find a \( \gamma \in O \) with \[ \nrd(\gamma) = N \ell^{e_0} \] for some \( e_0 \in \N \).
+          Find \( \alpha \in I \) such that \( I = ON + O\alpha \).
     \item
-          Find \( \mu \in Rj \subset  O \) such that \[ \gamma\mu \equiv \alpha \mod NO \] and \( \nrd(\mu) \not\equiv 0 \pmod{N} \).
+          Find \( \gamma \in O \) with \[ \nrd(\gamma) = N \ell^{e_0} \] for some \( e_0 \in \N \).
     \item
-          Find \( \mu' \in  O \) and \( \lambda \in \Z \) such that \[ \mu' \equiv \lambda \mu \mod NO \] and \[ \nrd(\mu') = \ell^{e_1} \] and \( (\lambda, N) = 1 \).
+          Find \( \mu_0 \in Rj \subset  O \) such that \[ \gamma\mu_0 \equiv \alpha \mod NO \] and \( \nrd(\mu_0) \not\equiv 0 \pmod{N} \).
     \item
-          Set \( \beta = \gamma \mu' = \lambda\gamma\mu \equiv \lambda \alpha \pmod{NO} \). %Then \( \beta \in I \) and \( \nrd(\beta) = \nrd(\gamma)\nrd(\mu') = N\ell^{e_0 + e_1}\).
+          Find \( \mu \in  O \) and \( \lambda \in \Z \) such that \[ \mu \equiv \lambda \mu_0 \mod NO \] and \[ \nrd(\mu) = \ell^{e_1} \] and \( \gcd(\lambda, N) = 1 \).
     \item
-          Finally \[ J \vcentcolon = I\overline{\beta}/N \] is an ideal in the same class with \( J \subset O \) and \( \nrd(J) \) is a power of \( \ell \).
+          Set \( \beta = \gamma \mu = \lambda\gamma\mu_0 \equiv \lambda \alpha \pmod{NO} \).
+          Then \[ J \vcentcolon = I\overline{\beta}/N \] is an ideal in the same class with \( J \subset O \) and \( \nrd(J) \) is a power of \( \ell \).
 \end{enumerate}
 
 We first show that the output is correct, we will then show how to complete each of the steps.
 
 \subsection{Proof the output is correct}
 We will use the following two lemmas.
-\begin{lemma}[Finding an equivalent ideal]
+\begin{lemma}[Finding an equivalent ideal] \label{lem: change norm}
     Let \( p \equiv 3 \pmod{4} \).
     Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
-    Let \( O = \Z \langle i, (1+j) / 2 \).
+    Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
     Let \( I \) be a left \( O \)-ideal of reduced norm \( N \).
     Let \( \alpha \in I \).
     Let \( \gamma = \overline{\alpha} / N \).
     Then \( I \gamma \) is a left, non-fractional \( O \)-ideal of norm \( \nrd(\alpha) / N \).
 \end{lemma}
 \begin{proof}
+    First observe that
     \[
         \nrd(I \gamma) = \nrd(I)\nrd(\gamma) = N \nrd(\alpha) / N^2 = \nrd(\alpha) / N.
     \]
@@ -291,18 +288,18 @@ We will use the following two lemmas.
     \]
 \end{proof}
 
-\begin{lemma}
+\begin{lemma} \label{lem: beta in I}
     Let \( p \equiv 3 \pmod{4} \).
     Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
-    Let \( O = \Z \langle i, (1+j) / 2 \).
+    Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
     Let \( \alpha \in O \).
     Let \( N \) be prime.
-    Let \( I = ON + O\alpha \) be a left \( O \)-ideal with norm \( N \).
+    Let \( I = ON + O\alpha \) be a left \( O \)-ideal and suppose \( I \) has norm \( N \).
     Suppose
     \[
         \beta \equiv \lambda \alpha \pmod{NO}
     \]
-    where \( (lambda, N) = 1 \).
+    where \( (\lambda, N) = 1 \).
     Then
     \[
         \beta \in I.
@@ -326,8 +323,8 @@ We will use the following two lemmas.
 
 We can now prove the correctness.
 Let \( \beta \) be as in step 6.
-Then \( \beta \in I \) from Lemma ?? and \( \nrd(\beta) = \nrd(\gamma) \nrd(\mu') = N\ell^{e_0 + e_1} \).
-Now from Lemma ?? \( I\overline{\beta}/N \) has norm \( \nrd(\beta) / N = \ell^{e_0 + e_1} \).
+Then \( \beta \in I \) from Lemma \ref{lem: beta in I} and \( \nrd(\beta) = \nrd(\gamma) \nrd(\mu) = N\ell^{e_0 + e_1} \).
+Now from Lemma \ref{lem: change norm} \( I\overline{\beta}/N \) has norm \( \nrd(\beta) / N = \ell^{e_0 + e_1} \) as required.
 
 \subsection{Step 1}
 \subsection{Step 2}
@@ -373,7 +370,7 @@ So far we have reduced Problem \ref{prob: general} to the following problem.
 \begin{problem} \label{prob: prime norm}
 Let \( p \equiv 3 \pmod{4} \).
 Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
-Let \( O = \Z \langle i, (1+j) / 2 \).
+Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
 Let \( I \subset O \) be an ideal with prime norm \( N \).
 We further assume \( N \) is large and coprime to \( \ell \), 4 and \( p \).
 Given a prime \( \ell \), \( p \), a basis for \( O \) and a basis for \( I \) find a basis for a left \( O \)-ideal \( J \) such that \( J \) has \( \ell \)-power norm.
@@ -383,7 +380,7 @@ This is equivalent to the following problem, although I'm not sure what the most
 \begin{problem} \label{prob: prime norm}
 Let \( p \equiv 3 \pmod{4} \).
 Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
-Let \( O = \Z \langle i, (1+j) / 2 \).
+Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
 Let \( I \subset O \) be an ideal with prime norm \( N \).
 We further assume \( N \) is large and coprime to \( \ell \), 4 and \( p \).
 Given a prime \( \ell \), \( p \), a basis for \( O \), \( N \) and \( \alpha \in I \) such that \( I = ON + O\alpha \) find a basis for a left \( O \)-ideal \( J \) such that \( J \) has \( \ell \)-power norm.
@@ -394,7 +391,7 @@ This problem can then be reduced using Lemma ??
 \begin{problem} \label{prob: ell power}
 Let \( p \equiv 3 \pmod{4} \).
 Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
-Let \( O = \Z \langle i, (1+j) / 2 \).
+Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
 Let \( I \subset O \) be an ideal with prime norm \( N \).
 We further assume \( N \) is large and coprime to \( \ell \), 4 and \( p \).
 Given a prime \( \ell \), \( p \), a basis for \( O \), \( N \) and \( \alpha \in I \) such that \( I = ON + O\alpha \) find \( \beta \in I \) such that \( \nrd(\beta) = N\ell^e \) for some \( e \in \N \).
@@ -406,7 +403,7 @@ The previous lemma reduces the problem further.
 \begin{problem} \label{prob: solve congruence}
 Let \( p \equiv 3 \pmod{4} \).
 Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
-Let \( O = \Z \langle i, (1+j) / 2 \).
+Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
 Let \( I \subset O \) be an ideal with prime norm \( N \).
 We further assume \( N \) is large and coprime to \( \ell \), 4 and \( p \).
 Given a prime \( \ell \), \( p \), a basis for \( O \), \( N \) and \( \alpha \in I \) such that \( I = ON + O\alpha \), find \( \beta \in I \) such that
@@ -425,11 +422,11 @@ We can now solve the problem like this
     \item
           Find a random \( \gamma \in O \) with \( \nrd(\gamma) = N \ell^e_0 \) using Lemma ??
     \item
-          Find \( \mu \in Rj \subset  O \) such that \( \gamma\mu \equiv \alpha \mod NO \) using linear algebra.
+          Find \( \mu_0 \in Rj \subset  O \) such that \( \gamma\mu_0 \equiv \alpha \mod NO \) using linear algebra.
     \item
-          Find \( \mu' \in  O \) and \( \lambda \in \Z \) such that \( \mu' \equiv \lambda \mu \mod NO \) and \( \nrd(\mu') = \ell^{e_1} \) and \( (\lambda, N) = 1 \) using techniques yet to be described.
+          Find \( \mu' \in  O \) and \( \lambda \in \Z \) such that \( \mu' \equiv \lambda \mu_0 \mod NO \) and \( \nrd(\mu') = \ell^{e_1} \) and \( (\lambda, N) = 1 \) using techniques yet to be described.
     \item
-          Set \( \beta = \gamma \mu' = \lambda\gamma\mu \equiv \lambda \alpha \pmod{NO} \). Then \( \nrd(\beta) = \nrd(\gamma)\nrd(\mu') = N\ell^{e_0 + e_1}\) and \( \beta \equiv \lambda \alpha \pmod{NO} \) as required.
+          Set \( \beta = \gamma \mu' = \lambda\gamma\mu_0 \equiv \lambda \alpha \pmod{NO} \). Then \( \nrd(\beta) = \nrd(\gamma)\nrd(\mu') = N\ell^{e_0 + e_1}\) and \( \beta \equiv \lambda \alpha \pmod{NO} \) as required.
 \end{enumerate}
 
 \section{Step 2}
@@ -455,7 +452,7 @@ The first observation is that instead of working over \( O / NO \) we can work o
 \begin{corollary}[\( O / NO \iso (R + Rj) / N(R + Rj)\)]
     Let \( p \equiv 3 \pmod{4} \).
     Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
-    Let \( O = \Z \langle i, (1+j) / 2 \).
+    Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
     Let \( R = \Z[i] \).
     Let \( N \) be a prime not dividing \( [O : R + Rj] \).
     Then
@@ -551,7 +548,7 @@ We have therefore reduced the problem to this.
 \begin{problem}
 Let \( p \equiv 3 \pmod{4} \).
 Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
-Let \( O = \Z \langle i, (1+j) / 2 \).
+Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
 Let \( R = \Z[i] \).
 Let \( N \) be prime.
 Given \( \mu \in Rj \) find \( \mu' \in O \) and \(\lambda \in \Z \) such that
