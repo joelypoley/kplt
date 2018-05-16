@@ -54,7 +54,7 @@
 \theoremstyle{definition}
 \newtheorem{example}[theorem]{Example}
 \newtheorem{exercise}[theorem]{Exercise}
-\newtheorem{problem}[theorem]{Problem}
+\newtheorem{prob}[theorem]{Problem}
 
 \newcommand{\iso}{\cong}
 \newcommand{\op}{\operatorname}
@@ -125,13 +125,13 @@ Note that \( \{ (1+j) / 2, (i+k) / 2 , j, k \} \) is a \( \Z \)-basis for \( O \
 
 We state the problem we are trying to solve formally.
 
-\begin{problem} \label{prob: general}
-Let \( p \equiv 3 \pmod{4} \).
-Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
-Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
-Let \( I \subset O \) be a left \( O \)-ideal ideal.
-Given a prime \( \ell \), \( p \) and a basis for \( I \) find a basis for a left \( O \)-ideal \( J \) such that \( J \) has \( \ell \)-power norm.
-\end{problem}
+\begin{prob} \label{prob: general}
+    Let \( p \equiv 3 \pmod{4} \).
+    Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
+    Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
+    Let \( I \subset O \) be a left \( O \)-ideal ideal.
+    Given a prime \( \ell \), \( p \) and a basis for \( I \) find a basis for a left \( O \)-ideal \( J \) such that \( J \) has \( \ell \)-power norm.
+\end{prob}
 
 \begin{lemma}[Properties of \( (-1, -p \, \mid \, \Q) \)]
     Let \( p \equiv 3 \pmod{4} \).
@@ -236,13 +236,13 @@ This subring may be slightly different if \( p \not\equiv 3 \pmod{4} \).
 
 \subsection{High level overview}
 
-\begin{problem}
-Let \( p \equiv 3 \pmod{4} \).
-Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
-Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
-Let \( R = \Z \langle i , j \rangle \).
-Given a basis for a left \( O \)-ideal \( I \subset O \) and a prime number \( \ell \), find a basis for another left \( O \)-ideal \( J \subset O \) such that \( I \) and \( J \) are in the same class and \( \nrd(J) \) is a power of \( \ell \).
-\end{problem}
+\begin{prob}
+    Let \( p \equiv 3 \pmod{4} \).
+    Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
+    Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
+    Let \( R = \Z \langle i , j \rangle \).
+    Given a basis for a left \( O \)-ideal \( I \subset O \) and a prime number \( \ell \), find a basis for another left \( O \)-ideal \( J \subset O \) such that \( I \) and \( J \) are in the same class and \( \nrd(J) \) is a power of \( \ell \).
+\end{prob}
 
 If \( p \equiv 1 \pmod{4} \) then \( B \), \( O \) and \( R \) will be different as described in Section 2.3 of the paper.
 
@@ -367,55 +367,55 @@ Now from Lemma \ref{lem: change norm} \( I\overline{\beta}/N \) has norm \( \nrd
 
 
 So far we have reduced Problem \ref{prob: general} to the following problem.
-\begin{problem} \label{prob: prime norm}
-Let \( p \equiv 3 \pmod{4} \).
-Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
-Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
-Let \( I \subset O \) be an ideal with prime norm \( N \).
-We further assume \( N \) is large and coprime to \( \ell \), 4 and \( p \).
-Given a prime \( \ell \), \( p \), a basis for \( O \) and a basis for \( I \) find a basis for a left \( O \)-ideal \( J \) such that \( J \) has \( \ell \)-power norm.
-\end{problem}
+\begin{prob} \label{prob: prime norm}
+    Let \( p \equiv 3 \pmod{4} \).
+    Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
+    Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
+    Let \( I \subset O \) be an ideal with prime norm \( N \).
+    We further assume \( N \) is large and coprime to \( \ell \), 4 and \( p \).
+    Given a prime \( \ell \), \( p \), a basis for \( O \) and a basis for \( I \) find a basis for a left \( O \)-ideal \( J \) such that \( J \) has \( \ell \)-power norm.
+\end{prob}
 
 This is equivalent to the following problem, although I'm not sure what the most elegant proof is.
-\begin{problem} \label{prob: prime norm}
-Let \( p \equiv 3 \pmod{4} \).
-Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
-Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
-Let \( I \subset O \) be an ideal with prime norm \( N \).
-We further assume \( N \) is large and coprime to \( \ell \), 4 and \( p \).
-Given a prime \( \ell \), \( p \), a basis for \( O \), \( N \) and \( \alpha \in I \) such that \( I = ON + O\alpha \) find a basis for a left \( O \)-ideal \( J \) such that \( J \) has \( \ell \)-power norm.
-\end{problem}
+\begin{prob} \label{prob: prime norm}
+    Let \( p \equiv 3 \pmod{4} \).
+    Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
+    Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
+    Let \( I \subset O \) be an ideal with prime norm \( N \).
+    We further assume \( N \) is large and coprime to \( \ell \), 4 and \( p \).
+    Given a prime \( \ell \), \( p \), a basis for \( O \), \( N \) and \( \alpha \in I \) such that \( I = ON + O\alpha \) find a basis for a left \( O \)-ideal \( J \) such that \( J \) has \( \ell \)-power norm.
+\end{prob}
 
 This problem can then be reduced using Lemma ??
 
-\begin{problem} \label{prob: ell power}
-Let \( p \equiv 3 \pmod{4} \).
-Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
-Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
-Let \( I \subset O \) be an ideal with prime norm \( N \).
-We further assume \( N \) is large and coprime to \( \ell \), 4 and \( p \).
-Given a prime \( \ell \), \( p \), a basis for \( O \), \( N \) and \( \alpha \in I \) such that \( I = ON + O\alpha \) find \( \beta \in I \) such that \( \nrd(\beta) = N\ell^e \) for some \( e \in \N \).
-\end{problem}
+\begin{prob} \label{prob: ell power}
+    Let \( p \equiv 3 \pmod{4} \).
+    Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
+    Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
+    Let \( I \subset O \) be an ideal with prime norm \( N \).
+    We further assume \( N \) is large and coprime to \( \ell \), 4 and \( p \).
+    Given a prime \( \ell \), \( p \), a basis for \( O \), \( N \) and \( \alpha \in I \) such that \( I = ON + O\alpha \) find \( \beta \in I \) such that \( \nrd(\beta) = N\ell^e \) for some \( e \in \N \).
+\end{prob}
 
 
 The previous lemma reduces the problem further.
 
-\begin{problem} \label{prob: solve congruence}
-Let \( p \equiv 3 \pmod{4} \).
-Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
-Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
-Let \( I \subset O \) be an ideal with prime norm \( N \).
-We further assume \( N \) is large and coprime to \( \ell \), 4 and \( p \).
-Given a prime \( \ell \), \( p \), a basis for \( O \), \( N \) and \( \alpha \in I \) such that \( I = ON + O\alpha \), find \( \beta \in I \) such that
-\[
-    \beta \equiv \lambda \alpha \pmod{NO}
-\]
-where \(\lambda \) is coprime to \( N \) and
-\[
-    \nrd(\beta) = N\ell^e
-\]
-for some \( e \in \N \).
-\end{problem}
+\begin{prob} \label{prob: solve congruence}
+    Let \( p \equiv 3 \pmod{4} \).
+    Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
+    Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
+    Let \( I \subset O \) be an ideal with prime norm \( N \).
+    We further assume \( N \) is large and coprime to \( \ell \), 4 and \( p \).
+    Given a prime \( \ell \), \( p \), a basis for \( O \), \( N \) and \( \alpha \in I \) such that \( I = ON + O\alpha \), find \( \beta \in I \) such that
+    \[
+        \beta \equiv \lambda \alpha \pmod{NO}
+    \]
+    where \(\lambda \) is coprime to \( N \) and
+    \[
+        \nrd(\beta) = N\ell^e
+    \]
+    for some \( e \in \N \).
+\end{prob}
 
 We can now solve the problem like this
 \begin{enumerate}
@@ -486,12 +486,12 @@ The first observation is that instead of working over \( O / NO \) we can work o
 
 We have therefore reduced the problem to this.
 
-\begin{problem}
-Given \( \gamma, \alpha \in (-1, -p \, | \, \Z / N\Z) \) find \( \mu \in \Z j + \Z k \subset (-1, -p \, | \, \Z / N\Z) \) such that
-\[
-    \gamma \mu = \alpha .
-\]
-\end{problem}
+\begin{prob}
+    Given \( \gamma, \alpha \in (-1, -p \, | \, \Z / N\Z) \) find \( \mu \in \Z j + \Z k \subset (-1, -p \, | \, \Z / N\Z) \) such that
+    \[
+        \gamma \mu = \alpha .
+    \]
+\end{prob}
 
 This can be solved by finding the left action matrix of \( \gamma \) and solving a system of linear equations.
 
@@ -545,22 +545,22 @@ This can be solved by finding the left action matrix of \( \gamma \) and solving
 \section{Step 3}
 
 We have therefore reduced the problem to this.
-\begin{problem}
-Let \( p \equiv 3 \pmod{4} \).
-Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
-Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
-Let \( R = \Z[i] \).
-Let \( N \) be prime.
-Given \( \mu \in Rj \) find \( \mu' \in O \) and \(\lambda \in \Z \) such that
-\[
-    \mu' \equiv \lambda \mu \pmod{NO}
-\]
-where \( (\lambda, N) = 1 \) and
-\[
-    \nrd(\mu') = \ell^{e_1}
-\]
-for some \( e_1 \in \N \).
-\end{problem}
+\begin{prob}
+    Let \( p \equiv 3 \pmod{4} \).
+    Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
+    Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
+    Let \( R = \Z[i] \).
+    Let \( N \) be prime.
+    Given \( \mu \in Rj \) find \( \mu' \in O \) and \(\lambda \in \Z \) such that
+    \[
+        \mu' \equiv \lambda \mu \pmod{NO}
+    \]
+    where \( (\lambda, N) = 1 \) and
+    \[
+        \nrd(\mu') = \ell^{e_1}
+    \]
+    for some \( e_1 \in \N \).
+\end{prob}
 
 \begin{example}
     We will now show how to solve this problem.
