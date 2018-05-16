@@ -93,19 +93,20 @@
 
 \begin{document}
 \maketitle
+\tableofcontents
 
-\section{Computing with lattices}
+\section{Computing with quaternions}
 
 \begin{definition}[Lattice]
     Let \( B \) be quaternion algebra over \( \Q \).
-    An \emph{lattice} in \( B \) is a finitely generated \( \Z \)-submodule \( I \subset B \) with \( I\Q = B \).
+    A \emph{lattice} in \( B \) is a finitely generated \( \Z \)-submodule \( I \subset B \) with \( I\Q = B \).
 \end{definition}
 
 \begin{remark}
     The condition \( I\Q = B \) is equivalent ot saying that \( I \) contains a basis for B as a \( \Q \)-vector space.
 \end{remark}
 
-\begin{definition}[Lambda notation]
+\begin{definition}[Lambda notation for lattices]
     Let \( A \) be a \( n \times k \) rational matrix.
     Define \( \Lambda(A) \subset \Q^n \) to be the \( \Z \)-submodule
     \[
@@ -241,7 +242,7 @@ Note that \( \Lambda(A) = \Lambda(H) \) by adapting the argument in the above le
 \end{definition}
 
 \begin{remark}
-    To check if a lattice, represented by a matrix \( A \), is an order we first check if it has full rank, then if \( 1 \in O \) using the membership test from the example above and then check if the basis is multiplicatively closed as described in the code snippet below
+    To check if a lattice, represented by a matrix \( A \), is an order we first check if it has full rank, then if \( 1 \in O \) using the membership test from the example above and then check if the basis is multiplicatively closed.
 \end{remark}
 
 \begin{definition}[Order of a lattice]
@@ -381,7 +382,7 @@ Note that \( \Lambda(A) = \Lambda(H) \) by adapting the argument in the above le
 \end{remark}
 
 \begin{remark}[Calculating the norm of an ideal]
-    {\color{red} I can only prove this works when \( O_L(I) \) is maximal but in Sage they seem to use this method across the board. I guess the idea idea }
+    {\color{red} I can only prove this works when \( O_L(I) \) is maximal but in Sage and Magma they seem to use this method across the board. I guess the idea idea }
     Calculating norms is far more tricky than what we have done so far.
     Let \( B = (a, b | \Q )\).
     So \( i^2 = a \), \( j^2 = b \) and \( ij = k = -ji \).
@@ -423,7 +424,7 @@ Note that \( \Lambda(A) = \Lambda(H) \) by adapting the argument in the above le
 \end{remark}
 
 \begin{remark}[Ideals of \( M_2(\F_{p^n} \) ]
-    Let \( R =  M_2(\F_{p^n} \).
+    Let \( R =  M_2(\F_{p^n}) \).
     Then the proper ideals of \( R \) are all of the form \( I = R\alpha \) where
     \[
         \alpha =
@@ -528,20 +529,18 @@ Note that \( \Lambda(A) = \Lambda(H) \) by adapting the argument in the above le
 {\color{red} Given a \( \Z \)-basis for \( I \) how would you find \( \alpha \) in the above lemma?}
 
 \section{KPLT paper in special case}
-
+\subsection{Description of special case}
 We will now go through the KPLT paper.
+
 Theorem 9 of the paper says that if you can solve the ideal isogeny problem for a maximal order \( O \subset B_{p, \infty} \) then you can solve it for any  maximal order.
 
 
-We will focus on the case
+We will focus on the quaternion algebra with discriminant \( p \equiv 3 \pmod{4} \).
+This quaternion algebra can be written as
 \[
-    p \equiv 3 \pmod{4}
+    B = (-1, -p \, \mid \, \Q).
 \]
-thus \( B_{p, \infty} = (-1, -p \; \mid \; \Q) \), i.e.
-\[
-    i^2 = -1 \text{ and } j^2 = -p.
-\]
-The case \( p \equiv 1 \pmod{4} \) is similar.
+The case \( p \equiv 1 \pmod{4} \) is similar, but more annoying.
 
 Since we can choose to solve the isogeny problem for any maximal order we will assume
 \[
@@ -549,19 +548,19 @@ Since we can choose to solve the isogeny problem for any maximal order we will a
 \]
 Note that \( \{ (1+j) / 2, (i+k) / 2 , j, k \} \) is a \( \Z \)-basis for \( O \) in Hermite normal form.
 
-We state this formally.
+We state the problem we are trying to solve formally.
 
 \begin{problem} \label{prob: general}
 Let \( p \equiv 3 \pmod{4} \).
-Let \( B =  (-1, -p \; \mid \; \Q) \) be a quaternion algebra.
+Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
 Let \( O = \Z \langle i, (1+j) / 2 \).
-Let \( I \subset O \) be an ideal.
-Given a prime \( \ell \), \( p \), a basis for \( O \) and a basis for \( I \) find a basis for a left \( O \)-ideal \( J \) such that \( J \) has \( \ell \)-power norm.
+Let \( I \subset O \) be a left \( O \)-ideal ideal.
+Given a prime \( \ell \), \( p \) and a basis for \( I \) find a basis for a left \( O \)-ideal \( J \) such that \( J \) has \( \ell \)-power norm.
 \end{problem}
 
-\begin{lemma}[Properties of \( (-1, -p \; \mid \; \Q) \)]
+\begin{lemma}[Properties of \( (-1, -p \, \mid \, \Q) \)]
     Let \( p \equiv 3 \pmod{4} \).
-    Let \( B =  (-1, -p \; \mid \; \Q) \) be a quaternion algebra.
+    Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
     Then the multiplication table for \( B \) is
     \[
         \begin{array}{c|ccc}
@@ -587,7 +586,8 @@ Given a prime \( \ell \), \( p \), a basis for \( O \) and a basis for \( I \) f
     \begin{lstlisting}
         sage: A.<t, x, y, z, p> = PolynomialRing(QQ)
         sage: B.<i, j, k> = QuaternionAlgebra(-1, -p)
-        sage: matrix([[x * y for y in [i, j, k]] for x in [i, j, k]])
+        sage: matrix([[a * b for b in [i, j, k]]
+                       for a in [i, j, k]])
         [    -1      k     -j]
         [    -k     -p    p*i]
         [     j (-p)*i     -p]
@@ -601,7 +601,7 @@ Given a prime \( \ell \), \( p \), a basis for \( O \) and a basis for \( I \) f
 
 \begin{lemma}[]
     Let \( p \equiv 3 \pmod{4} \).
-    Let \( B =  (-1, -p \; \mid \; \Q) \) be a quaternion algebra.
+    Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
     Then \( \disc B = p \).
 \end{lemma}
 \begin{proof}
@@ -613,7 +613,7 @@ Given a prime \( \ell \), \( p \), a basis for \( O \) and a basis for \( I \) f
 
 \begin{lemma}[Maximal order in \( B_{p, \infty} \) where \( p \equiv 3 \pmod{4} \)]
     Let \( p \equiv 3 \pmod{4} \).
-    Let \( B =  (-1, -p \; \mid \; \Q) \) be a quaternion algebra.
+    Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
     Let \( O = \Z \langle i, (1+j) / 2 \).
     Then \( O \) is a maximal order.
 \end{lemma}
@@ -639,13 +639,13 @@ Given a prime \( \ell \), \( p \), a basis for \( O \) and a basis for \( I \) f
 \end{example}
 
 \begin{remark}
-    We will now define a ``distinguished quadratice subring'' of \( O \).
-    This subring will be slightly different if \( p \not\equiv 3 \pmod{4} \).
+    We will now define a ``distinguished quadratic subring'' of \( O \).
+    This subring may be slightly different if \( p \not\equiv 3 \pmod{4} \).
 \end{remark}
 
 \begin{lemma}[Distinguished quadratice subring]
     Let \( p \equiv 3 \pmod{4} \).
-    Let \( B =  (-1, -p \; \mid \; \Q) \) be a quaternion algebra.
+    Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
     Let \( O = \Z \langle i, (1+j) / 2 \).
     Let \( R = \Z[i] \subset O \).
     Then \( R \) has discriminant \( D = 4 \), \( R^\perp = Rj \) and \( R + Rj = \Z\langle i, j \rangle\) is a suborder of \( O \) of index \( D \).
@@ -661,9 +661,43 @@ Given a prime \( \ell \), \( p \), a basis for \( O \) and a basis for \( I \) f
     The discriminant is equal to the index since \( O \) is maximal so \( O = O_L(R) \).
 \end{proof}
 
+\subsection{High level overview}
+
+We first describe the special case of the problem we are trying to solve.
+\begin{problem}
+Let \( p \equiv 3 \pmod{4} \).
+Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
+Let \( O = \Z \langle i, (1+j) / 2 \).
+Let \( R = \Z \langle i , j \rangle \).
+Given a basis for a left \( O \)-ideal \( I \subset O \) and a prime number \( \ell \), find a basis for another left \( O \)-ideal \( J \subset O \) such that \( I \) and \( J \) are in the same class and \( \nrd(J) \) is a power of \( \ell \).
+\end{problem}
+
+If \( p \equiv 1 \pmod{4} \) then \( B \), \( O \) and \( R \) will be different as described in Section 2.3 of the paper.
+
+We will solve this problem like this:
+\begin{enumerate}
+    \item
+          Replace \( I \) with an ideal in the same class but with reduced norm \( N \) where \( N \) is a large prime, coprime to \( \ell \), \( |\disc R| \) and \( p \).
+    \item Find \( \alpha \in I \) such that \( I = ON + O\alpha \).
+    \item
+          Find a \( \gamma \in O \) with \[ \nrd(\gamma) = N \ell^{e_0} \] for some \( e_0 \in \N \).
+    \item
+          Find \( \mu \in Rj \subset  O \) such that \[ \gamma\mu \equiv \alpha \mod NO \] and \( \nrd(\mu) \not\equiv 0 \pmod{N} \).
+    \item
+          Find \( \mu' \in  O \) and \( \lambda \in \Z \) such that \[ \mu' \equiv \lambda \mu \mod NO \] and \[ \nrd(\mu') = \ell^{e_1} \] and \( (\lambda, N) = 1 \).
+    \item
+          Set \( \beta = \gamma \mu' = \lambda\gamma\mu \equiv \lambda \alpha \pmod{NO} \). %Then \( \beta \in I \) and \( \nrd(\beta) = \nrd(\gamma)\nrd(\mu') = N\ell^{e_0 + e_1}\).
+    \item
+          Finally \[ J \vcentcolon = I\overline{\beta}/N \] is an ideal in the same class with \( J \subset O \) and \( \nrd(J) \) is a power of \( \ell \).
+\end{enumerate}
+
+We first show that the output is correct, we will then show how to complete each of the steps.
+
+\subsection{Proof the output is correct}
+We will use the following two lemmas.
 \begin{lemma}[Finding an equivalent ideal]
     Let \( p \equiv 3 \pmod{4} \).
-    Let \( B =  (-1, -p \; \mid \; \Q) \) be a quaternion algebra.
+    Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
     Let \( O = \Z \langle i, (1+j) / 2 \).
     Let \( I \) be a left \( O \)-ideal of reduced norm \( N \).
     Let \( \alpha \in I \).
@@ -680,6 +714,53 @@ Given a prime \( \ell \), \( p \), a basis for \( O \) and a basis for \( I \) f
         I\gamma = I\overline{\alpha} / N \subset I\overline{I} \frac{1}{N} = NO \frac{1}{N} = O.
     \]
 \end{proof}
+
+\begin{lemma}
+    Let \( p \equiv 3 \pmod{4} \).
+    Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
+    Let \( O = \Z \langle i, (1+j) / 2 \).
+    Let \( \alpha \in O \).
+    Let \( N \) be prime.
+    Let \( I = ON + O\alpha \) be a left \( O \)-ideal with norm \( N \).
+    Suppose
+    \[
+        \beta \equiv \lambda \alpha \pmod{NO}
+    \]
+    where \( (lambda, N) = 1 \).
+    Then
+    \[
+        \beta \in I.
+    \]
+\end{lemma}
+\begin{proof}
+    We prove the stronger condition that \( I = ON + O\beta \).
+    We have
+    \[
+        ON + O\alpha
+        = ON + O(\lambda^{-1} \bmod{N}\beta)
+        \subset ON + O\beta .
+    \]
+    and
+    \[
+        ON + O\beta
+        = ON + O\lambda \alpha
+        \subset ON + O\alpha .
+    \]
+\end{proof}
+
+We can now prove the correctness.
+Let \( \beta \) be as in step 6.
+Then \( \beta \in I \) from Lemma ?? and \( \nrd(\beta) = \nrd(\gamma) \nrd(\mu') = N\ell^{e_0 + e_1} \).
+Now from Lemma ?? \( I\overline{\beta}/N \) has norm \( \nrd(\beta) / N = \ell^{e_0 + e_1} \).
+
+\subsection{Step 1}
+\subsection{Step 2}
+\subsection{Step 3}
+\subsection{Step 4}
+\subsection{Step 5}
+
+
+
 
 \begin{example}
     We do a sanity check of the previous lemma.
@@ -715,7 +796,7 @@ Given a prime \( \ell \), \( p \), a basis for \( O \) and a basis for \( I \) f
 So far we have reduced Problem \ref{prob: general} to the following problem.
 \begin{problem} \label{prob: prime norm}
 Let \( p \equiv 3 \pmod{4} \).
-Let \( B =  (-1, -p \; \mid \; \Q) \) be a quaternion algebra.
+Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
 Let \( O = \Z \langle i, (1+j) / 2 \).
 Let \( I \subset O \) be an ideal with prime norm \( N \).
 We further assume \( N \) is large and coprime to \( \ell \), 4 and \( p \).
@@ -725,7 +806,7 @@ Given a prime \( \ell \), \( p \), a basis for \( O \) and a basis for \( I \) f
 This is equivalent to the following problem, although I'm not sure what the most elegant proof is.
 \begin{problem} \label{prob: prime norm}
 Let \( p \equiv 3 \pmod{4} \).
-Let \( B =  (-1, -p \; \mid \; \Q) \) be a quaternion algebra.
+Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
 Let \( O = \Z \langle i, (1+j) / 2 \).
 Let \( I \subset O \) be an ideal with prime norm \( N \).
 We further assume \( N \) is large and coprime to \( \ell \), 4 and \( p \).
@@ -736,49 +817,19 @@ This problem can then be reduced using Lemma ??
 
 \begin{problem} \label{prob: ell power}
 Let \( p \equiv 3 \pmod{4} \).
-Let \( B =  (-1, -p \; \mid \; \Q) \) be a quaternion algebra.
+Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
 Let \( O = \Z \langle i, (1+j) / 2 \).
 Let \( I \subset O \) be an ideal with prime norm \( N \).
 We further assume \( N \) is large and coprime to \( \ell \), 4 and \( p \).
 Given a prime \( \ell \), \( p \), a basis for \( O \), \( N \) and \( \alpha \in I \) such that \( I = ON + O\alpha \) find \( \beta \in I \) such that \( \nrd(\beta) = N\ell^e \) for some \( e \in \N \).
 \end{problem}
 
-\begin{lemma}
-    Let \( p \equiv 3 \pmod{4} \).
-    Let \( B =  (-1, -p \; \mid \; \Q) \) be a quaternion algebra.
-    Let \( O = \Z \langle i, (1+j) / 2 \).
-    Let \( \alpha \in O \).
-    Let \( N \) be prime.
-    Let \( I = ON + O\alpha \) be a left \( O \)-ideal with norm \( N \).
-    Suppose
-    \[
-        \beta \equiv \lambda \alpha \pmod{NO}
-    \]
-    where \( (lambda, N) = 1 \).
-    Then
-    \[
-        I = ON + O\beta .
-    \]
-\end{lemma}
-\begin{proof}
-    \[
-        ON + O\alpha
-        = ON + O(\lambda^{-1} \bmod{N}\beta)
-        \subset ON + O\beta .
-    \]
-    and
-    \[
-        ON + O\beta
-        = ON + O\lambda \alpha
-        \subset ON + O\alpha .
-    \]
-\end{proof}
 
 The previous lemma reduces the problem further.
 
 \begin{problem} \label{prob: solve congruence}
 Let \( p \equiv 3 \pmod{4} \).
-Let \( B =  (-1, -p \; \mid \; \Q) \) be a quaternion algebra.
+Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
 Let \( O = \Z \langle i, (1+j) / 2 \).
 Let \( I \subset O \) be an ideal with prime norm \( N \).
 We further assume \( N \) is large and coprime to \( \ell \), 4 and \( p \).
@@ -805,10 +856,125 @@ We can now solve the problem like this
           Set \( \beta = \gamma \mu' = \lambda\gamma\mu \equiv \lambda \alpha \pmod{NO} \). Then \( \nrd(\beta) = \nrd(\gamma)\nrd(\mu') = N\ell^{e_0 + e_1}\) and \( \beta \equiv \lambda \alpha \pmod{NO} \) as required.
 \end{enumerate}
 
+\section{Step 2}
+
+We will now show how to solve step 2.
+
+The first observation is that instead of working over \( O / NO \) we can work over \( (R+Rj) / N(R+Rj) = \Z \langle i, j \rangle \).
+
+\begin{lemma}[\( R/ NR \iso S / NS \) ]
+    Let \( R \) be a ring.
+    Let \( S \subset R \) be a subring.
+    Let \( M = [R : S] \) where the index is as abelian groups.
+    Let \( N \in \N \) be coprime to \( M \).
+    Then
+    \[
+        R / NR \iso S / NS.
+    \]
+\end{lemma}
+\begin{proof}
+    See \href{https://math.stackexchange.com/questions/387931/fracsms-is-isomorphic-to-fracrmr-where-m-is-coprime-to-n}{this} question.
+\end{proof}
+
+\begin{corollary}[\( O / NO \iso (R + Rj) / N(R + Rj)\)]
+    Let \( p \equiv 3 \pmod{4} \).
+    Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
+    Let \( O = \Z \langle i, (1+j) / 2 \).
+    Let \( R = \Z[i] \).
+    Let \( N \) be a prime not dividing \( [O : R + Rj] \).
+    Then
+    \[
+        O / NO \iso (R + Rj) / N(R + Rj) = \Z \langle i, j \rangle / N \Z \langle i, j \rangle \iso M_2(\Z / N\Z.
+    \]
+\end{corollary}
+\begin{proof}
+    The first isomorphism follows directly from the corollary.
+    The isomorphism follows from the fact that \( \Z \langle i, j \rangle / N \Z \langle i, j \rangle \) is a quaternion algebra over the finite field \( \Z / N \Z \), i.e. \( \Z \langle i, j \rangle / N \Z \langle i, j \rangle = (-1, -p \, | \, \Z / N \Z ) \).
+    Every quaternion algebra over a finite field is split hence \( \Z \langle i, j \rangle / N \Z \langle i, j \rangle \iso M_2(\Z / N \Z) \).
+\end{proof}
+
+\begin{example}
+    The isomorphism
+    \[
+        O / NO \iso (-1, -p \, | \, \Z / N\Z)
+    \]
+    can be computed explicitly by unpacking all the proofs.
+    Find \( a, b \in \Z \) such that
+    \[
+        Da + Nb = 1
+    \]
+    where \( D = [O : R + Rj] \).
+    Then
+    \[
+        x + NO \mapsto Dax + NS
+    \]
+    is the isomorphism.
+\end{example}
+
+We have therefore reduced the problem to this.
+
+\begin{problem}
+Given \( \gamma, \alpha \in (-1, -p \, | \, \Z / N\Z) \) find \( \mu \in \Z j + \Z k \subset (-1, -p \, | \, \Z / N\Z) \) such that
+\[
+    \gamma \mu = \alpha .
+\]
+\end{problem}
+
+This can be solved by finding the left action matrix of \( \gamma \) and solving a system of linear equations.
+
+\begin{example}
+    -
+    \begin{lstlisting}
+        sage: F = GF(101)
+        sage: B.<i, j, k> = QuaternionAlgebra(F, -1, -p)
+        sage: gamma = 16 + 59*i
+        sage: alpha = 10*j - k
+        sage: alpha_vec = matrix(F, alpha.coefficient_tuple())
+        sage: gamma_mat = gamma.matrix(action='left')
+        sage: # Ensure our solution is in Rj
+        sage: gamma_mat = matrix(F, [gamma_mat[2], gamma_mat[3]])
+        sage: sol = gamma_mat.solve_left(alpha_vec)
+        sage: y, z = [sol[0][i] for i in [0, 1]]
+        sage: mu = y*j + z*k
+        sage: gamma * mu == alpha
+        True
+    \end{lstlisting}
+\end{example}
+
+\begin{remark}
+    A natural question is does a solution always exist to
+    \[
+        \gamma \mu = \alpha .
+    \]
+    We note that \( \gamma \) and \( \alpha \) generate nontrivial, proper ideals so \( \gamma, \alpha \) are nonzero and are nonunits.
+    We can look at the nonzero non units in \( M_2(\Z / N\Z) \) which are all of the form
+    \[
+        \begin{pmatrix}
+            ax + ay \\
+            bx + by
+        \end{pmatrix}
+    \]
+    By doing elementary row operations (which can be ``absorbed'' by \( \mu \)) we see that the question is equivalent to finding a solution to
+    \[
+        \Gamma M = A
+    \]
+    where \( \Gamma \) and \( A \) are of the form
+    \[
+        \begin{pmatrix}
+            * & * \\
+            0 & 0
+        \end{pmatrix}
+    \]
+    You can verify by hand that such a \( M \) always exists.
+\end{remark}
+
+
+\section{Step 3}
+
 We have therefore reduced the problem to this.
 \begin{problem}
 Let \( p \equiv 3 \pmod{4} \).
-Let \( B =  (-1, -p \; \mid \; \Q) \) be a quaternion algebra.
+Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
 Let \( O = \Z \langle i, (1+j) / 2 \).
 Let \( R = \Z[i] \).
 Let \( N \) be prime.
@@ -823,8 +989,68 @@ where \( (\lambda, N) = 1 \) and
 for some \( e_1 \in \N \).
 \end{problem}
 
+\begin{example}
+    We will now show how to solve this problem.
+    As input we are given a prime \( p \equiv 3 \pmod{4} \), \( \mu_0 = \beta_0j \in (R / NR)^*[j] \), and a prime \( N \neq p \) sufficiently large.
+    The goal is to find \( \lambda \in \Z \) coprime to \( N \) and \( \mu_1 \in  R + Rj \) such that \( \mu \vcentcolon = \lambda \mu_0 + N \mu_1 \) has \( \ell \) power norm
+    \[
+        \ell^e = \nrd(\mu).
+    \]
 
+    Write \( \mu_1 = \alpha_1 + \beta_1j \) where \( \alpha_1, \beta_1 \in \Z[i] \).
+    Then
+    \begin{align*}
+        \ell^e
+          & = \nrd(\mu)                                                                                                      \\
+          & = \nrd(\lambda \mu_0 + N \mu_1)                                                                                  \\
+          & = \nrd(N\alpha_1 + (\lambda\beta_0 + N\beta_1)j)                                                                 \\
+          & = \nrd(N\alpha_1) +p\nrd(\lambda\beta_0 + N\beta_1)                                                              \\
+          & = \nrd(N\alpha_1) + p\trd(\lambda \beta_0\overline{N\beta_1}) + p\nrd(\lambda\beta_0) + p\nrd(N\beta_1)          \\
+          & = N^2\nrd(\alpha_1) +  p\lambda N \trd(\beta_0\overline{\beta_1}) + p\lambda^2 \nrd(\beta_0) + pN^2\nrd(\beta_1) \\
+          & = p\lambda^2 \nrd(\beta_0) + Np\lambda \trd(\beta_0\overline{\beta_1}) + N^2(p\nrd(\beta_1) + \nrd(\alpha_1))
+    \end{align*}
+    Note that we are given all variables with subscript 0 and are solving for the variables of subscript 1.
+    Reducing modulo \( N \) gives
+    \[
+        \ell^e \equiv p\lambda^2\nrd(\beta_0) \pmod{N}.
+    \]
+    We then choose \( e \) to be even if \( p(z_0^2 + w_0^2))^{-1} \bmod{N} \) is a square modulo \( N \) and odd otherwise.
+    This ensures that \( \ell^e(p(z_0^2 + w_0^2))^{-1} \) is a square modulo \( N \) and we can solve for \( 0 <  \lambda < N\).
+    We also choose \( e \) sufficiently large (\( \ell^e >> p|D|N^4 \)).
+    Reducing modulo \( N^2 \) gives
+    \[
+        \frac{\ell^e - p\lambda^2\nrd(\beta_0)}{N}\equiv p\lambda \trd(\beta_0\overline{\beta_1}) \pmod{N^2}
+    \]
+    which is a linear equation in the coefficients of \( \beta_1 \in \Z[i]\).
+    There will be \( N \) solutions to this equation and we a solution randomly such that \( \nrd(\lambda\beta_0 + N\beta_1) < N^4 \).
 
+    The only variable left that hasn't be determined is \( \alpha_1 \) so rearranging gives
+    \[
+        \nrd(\alpha_1) = \frac{\ell^e - p\lambda^2 \nrd(\beta_0) - Np\lambda \trd(\beta_0\overline{\beta_1})}{N^2}.
+    \]
+    The integer \( e \) was chosen sufficiently large so that the right hand side is positive.
+
+    It is possible that no solution for \( \alpha_1 \) exists.
+    If this is the case then we choose a different \( \beta_1 \) from the previous step and repeat.
+    Under the assumption that the right hand side of the above equation behaves like random values around \( N^4|D|p \) as we change \( \beta_1 \) we will find a solution in polynomial time.
+\end{example}
+
+\begin{lemma}[\( \nrd(\alpha_1 + \alpha_2) - \nrd(\alpha_1) - \nrd(\alpha_2) = \trd(\alpha_1 \overline{\alpha_2}) \)]
+    \[
+        \nrd(\alpha_1 + \alpha_2) - \nrd(\alpha_1) - \nrd(\alpha_2) = \trd(\alpha_1 \overline{\alpha_2})
+    \]
+\end{lemma}
+\begin{proof}
+    -
+    \begin{lstlisting}
+        sage: A.<t_1, x_1, y_1, z_1, t_2, x_2, y_2, z_2, a, b> = PolynomialRing(QQ)
+        sage: B.<i, j, k> = QuaternionAlgebra(a, b)
+        sage: alpha_1 = t_1 + x_1 *i + y_1 * j + z_1 * k
+        sage: alpha_2 = t_2 + x_2 *i + y_2 * j + z_2 * k
+        sage: (alpha_1 + alpha_2).reduced_norm() - alpha_1.reduced_norm() - alpha_2.reduced_norm() == (alpha_1 * alpha_2.conjugate()).reduced_trace()
+        True
+    \end{lstlisting}
+\end{proof}
 
 
 
