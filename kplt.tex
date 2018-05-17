@@ -96,14 +96,14 @@
 \newcommand{\defeq}{\vcentcolon=}
 
 \setlength{\droptitle}{-7em}
-\title{KPLT paper in a special case}
+\title{KPLT paper}
 \author{Joel Laity}
 
 \begin{document}
 \maketitle
 \tableofcontents
 
-
+\section{The algorithm in a special case}
 \subsection{Description of the special case}
 
 Theorem 9 of the paper says that if you can solve the ideal isogeny problem for a single maximal order then you can solve it for any maximal order.
@@ -122,7 +122,7 @@ Note that \( \{ (1+j) / 2, (i+k) / 2 , j, k \} \) is a \( \Z \)-basis for \( O \
 
 The precise statement of the problem we wish to solve is given below.
 
-\begin{prob}
+\begin{prob} \label{prob: general}
     Let \( p \equiv 3 \pmod{4} \).
     Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
     Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
@@ -132,135 +132,57 @@ The precise statement of the problem we wish to solve is given below.
 
 If \( p \equiv 1 \pmod{4} \) then \( B \), \( O \) and \( R \) will be different as described in Section 2.3 of the paper.
 
-% \begin{lemma}[Properties of \( (-1, -p \, \mid \, \Q) \)]
-%     Let \( p \equiv 3 \pmod{4} \).
-%     Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
-%     Then the multiplication table for \( B \) is
-%     \[
-%         \begin{array}{c|ccc}
-%               & i  & j   & k  \\
-%             \hline
-%             i & -1 & k   & -j \\
-%             j & -k & -p  & pi \\
-%             k & j  & -pi & -p
-%         \end{array}
-%     \]
-
-%     The norm equation for \( B \) is
-%     \[
-%         \nrd(t + xi + yj + zk) = t^2 + x^2 + y^2p + z^2p.
-%     \]
-%     The trace equation for \( B \) is
-%     \[
-%         \trd(t + xi + yj + zk) = 2t.
-%     \]
-% \end{lemma}
-% \begin{proof}
-%     We verify with Sage.
-%     \begin{lstlisting}
-%         sage: A.<t, x, y, z, p> = PolynomialRing(QQ)
-%         sage: B.<i, j, k> = QuaternionAlgebra(-1, -p)
-%         sage: matrix([[a * b for b in [i, j, k]]
-%                        for a in [i, j, k]])
-%         [    -1      k     -j]
-%         [    -k     -p    p*i]
-%         [     j (-p)*i     -p]
-%         sage: alpha = t + x*i + y*j + z*k
-%         sage: alpha.reduced_norm()
-%         y^2*p + z^2*p + t^2 + x^2
-%         sage: alpha.reduced_trace()
-%         2*t
-%     \end{lstlisting}
-% \end{proof}
-
-% \begin{lemma}[]
-%     Let \( p \equiv 3 \pmod{4} \).
-%     Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
-%     Then \( \disc B = p \).
-% \end{lemma}
-% \begin{proof}
-%     (Sketch.)
-%     The discriminant of \( B \) is the product of the primes where \( B \) is ramified.
-%     Apparently?? \( B \) can only be ramified at primes dividing its invariants (\( a, b = -1, -p\)).
-%     Calculations with hilbert symbols then shows that \( \disc B = p \)
-% \end{proof}
-
-% \begin{lemma}[Maximal order in \( B_{p, \infty} \) where \( p \equiv 3 \pmod{4} \)]
-%     Let \( p \equiv 3 \pmod{4} \).
-%     Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
-%     Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
-%     Then \( O \) is a maximal order.
-% \end{lemma}
-% \begin{proof}
-%     Check that \( \disc O  = p = \disc B\).
-% \end{proof}
-
-% \begin{example}
-%     Our running example will have \( p = 59 \).
-%     \begin{lstlisting}
-%         sage: p = 59
-%         sage: p.mod(4) == 3
-%         True 
-%         sage: B.<i, j, k> = QuaternionAlgebra(-1, -p)
-%         sage: B.discriminant() == p
-%         True
-%         sage: B.maximal_order()
-%         Order of Quaternion Algebra (-1, -59) with base ring Rational Field with basis (1/2 + 1/2*j, 1/2*i + 1/2*k, j, k)
-%         sage: # We now verify B.maximal_order() is maximal.
-%         sage: B.maximal_order().discriminant() == B.discriminant()
-%         True
-%     \end{lstlisting}
-% \end{example}
-
-% We will now define a ``distinguished quadratic subring'' of \( O \).
-% This subring may be slightly different if \( p \not\equiv 3 \pmod{4} \).
-
-% \begin{lemma}[Distinguished quadratice subring]
-%     Let \( p \equiv 3 \pmod{4} \).
-%     Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
-%     Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
-%     Let \( R = \Z[i] \subset O \).
-%     Then \( R \) has discriminant \( D = 4 \), \( R^\perp = Rj \) and \( R + Rj = \Z\langle i, j \rangle\) is a suborder of \( O \) of index \( D \).
-%     Moreover
-%     \[
-%         \nrd(t + xi + (y + zi)j) = f(t, x) + p f(y, z)
-%     \]
-%     where \( f(t, x) = t^2 + x^2 \) is a principal quadratic form of discriminant \( D \).
-% \end{lemma}
-% \begin{proof}
-%     Note that it seems they are not normalizing their discriminants by \( 2^{-n} \) which is the usual thing to do.
-%     Hence the discriminant of \( f \) is 4 as required by the lemma.
-%     The discriminant is equal to the index since \( O \) is maximal so \( O = O_L(R) \).
-% \end{proof}
-
 
 \subsection{High level overview}
 
 
-
-We will solve this problem like this:
+We will solve Problem \ref{prob: general} like this:
 
 \begin{description}
     \item[Step 1]
     Replace \( I \) with an ideal in the same class but with reduced norm \( N \) where \( N \neq \ell \) is a large prime coprime to \( |\disc R| \) and \( p \) and such that \( \ell \) is a quadratic nonresidue modulo \( N \).
+
     \item[Step 2]
     Find \( \alpha \in I \) such that \( I = ON + O\alpha \).
+
     \item[Step 3]
-    Find \( \gamma \in O \) with \[ \nrd(\gamma) = N \ell^{e_0} \] for some \( e_0 \in \N \).
+    Find \( \gamma \in O \) with
+    \[
+        \nrd(\gamma) = N \ell^{e_0}
+    \]
+    for some \( e_0 \in \N \).
+
     \item[Step 4]
-    Find \( \mu_0 \in Rj \subset  O \) such that \[ \gamma\mu_0 \equiv \alpha \mod NO \] and \( \nrd(\mu_0) \not\equiv 0 \pmod{N} \).
+    Find \( \mu_0 \in Rj = \Z j + \Z k \subset  O \) such that
+    \[
+        \gamma\mu_0 \equiv \alpha \mod NO
+    \]
+    and \( \nrd(\mu_0) \not\equiv 0 \pmod{N} \).
+
     \item[Step 5]
-    Find \( \mu \in  O \) and \( \lambda \in \Z \) such that \[ \mu \equiv \lambda \mu_0 \mod NO \] and \[ \nrd(\mu) = \ell^{e_1} \] and \( \gcd(\lambda, N) = 1 \).
+    Find \( \mu \in  O \) and \( \lambda \in \Z \) such that
+    \[
+        \mu \equiv \lambda \mu_0 \mod NO
+    \]
+    and
+    \[
+        \nrd(\mu) = \ell^{e_1}.
+    \]
+
     \item[Step 6]
     Set \( \beta = \gamma \mu \).
-    Then \[ J = I(\overline{\beta}/N) \] is an ideal in the same class with \( J \subset O \) and \( \nrd(J) \) is a power of \( \ell \).
+    Then
+    \[
+        J = I(\overline{\beta}/N)
+    \]
+    is an ideal in the same class with \( J \subset O \) and \( \nrd(J) \) is a power of \( \ell \).
 \end{description}
 
 
-We first show that the output is correct in \S 1.3 , we will then show how to complete steps 1-6 in sections \S 1.4-1.8.
+We first show that the output is correct in \S 0.3 , we will then show how to complete steps 1-5 in sections \S 0.4-0.8.
 
 \subsection{Proof the output is correct}
-We will use the following two lemmas.
+We will use the following lemma.
 \begin{lemma}[Finding an equivalent ideal] \label{lem: change norm}
     Let \( p \equiv 3 \pmod{4} \).
     Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
@@ -268,7 +190,7 @@ We will use the following two lemmas.
     Let \( I \) be a left \( O \)-ideal of reduced norm \( N \).
     Let \( \alpha \in I \).
     Let \( \gamma = \overline{\alpha} / N \).
-    Then \( I \gamma \) is a left, non-fractional \( O \)-ideal of norm \( \nrd(\alpha) / N \).
+    Then \( I \gamma \) is a left \( O \)-ideal of norm \( \nrd(\alpha) / N \) and \( I \gamma \subset O \).
 \end{lemma}
 \begin{proof}
     First observe that
@@ -282,60 +204,17 @@ We will use the following two lemmas.
     \]
 \end{proof}
 
-\begin{lemma} \label{lem: beta in I}
-    Let \( p \equiv 3 \pmod{4} \).
-    Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
-    Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
-    Let \( \alpha \in O \).
-    Let \( N \) be prime.
-    Let \( I = ON + O\alpha \) be a left \( O \)-ideal and suppose \( I \) has norm \( N \).
-    Suppose
-    \[
-        \beta \equiv \lambda \alpha \pmod{NO}
-    \]
-    where \( (\lambda, N) = 1 \).
-    Then
-    \[
-        \beta \in I.
-    \]
-\end{lemma}
-\begin{proof}
-    We prove the stronger condition that \( I = ON + O\beta \).
-    We have
-    \[
-        ON + O\alpha
-        = ON + O(\lambda^{-1} \bmod{N}\beta)
-        \subset ON + O\beta .
-    \]
-    and
-    \[
-        ON + O\beta
-        = ON + O\lambda \alpha
-        \subset ON + O\alpha .
-    \]
-\end{proof}
-
-\begin{example}
-    We do a sanity check of the previous lemma.
-    \begin{lstlisting}
-        sage: p = 59
-        sage: B.<i, j, k> = QuaternionAlgebra(-1, -p)
-        sage: O = B.maximal_order()
-        sage: I = O.left_ideal(O.basis()).scale(2)
-        sage: alpha = sum(ZZ.random_element(10) * x for x in I.basis())
-        sage: N = I.norm()
-        sage: I.scale(alpha.conjugate() / N).norm() == alpha.reduced_norm() / N
-        True
-    \end{lstlisting}
-\end{example}
-
-We can now prove the correctness.
-Let \( \beta \) be as in step 6.
+We can now prove correctness.
+Let \( \beta \) be as in Step 6.
 Then
 \[
-    \beta = \gamma \mu = \lambda\gamma\mu_0 \equiv \lambda \alpha \pmod{NO}
+    \beta = \gamma \mu = \lambda\gamma\mu_0 \equiv \lambda \alpha \pmod{NO}.
 \]
-so \( \beta \in I \) from Lemma \ref{lem: beta in I} and \( \nrd(\beta) = \nrd(\gamma) \nrd(\mu) = N\ell^{e_0 + e_1} \).
+Since \( I = ON + O \alpha \) we know that \( \beta \in I \).
+We also know that
+\[
+    \nrd(\beta) = \nrd(\gamma) \nrd(\mu) = N\ell^{e_0 + e_1} .
+\]
 Now from Lemma \ref{lem: change norm} \( J = I\overline{\beta}/N \) has norm \( \nrd(\beta) / N = \ell^{e_0 + e_1} \) as required.
 
 \subsection{Step 1}
@@ -360,7 +239,7 @@ By Lemma \ref{lem: change norm} \( I' \) has norm \( M \) else pick another rand
 \subsection{Step 2}
 For step 2 we need to solve the following problem.
 
-\begin{prob}
+\begin{prob} \label{prob: I = ON + Oalpha}
     Let \( p \equiv 3 \pmod{4} \).
     Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
     Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
@@ -368,28 +247,34 @@ For step 2 we need to solve the following problem.
     Given a basis for a left \( O \)-ideal \( I \subset O \) with prime norm \( N \) find \( \alpha \in I \) such that \( I = ON + O\alpha \).
 \end{prob}
 
-I don't know how to solve this problem, but I can show that such an \( \alpha \) exists.
-
 \begin{lemma}[\( I = ON + O\alpha \)]
     Let \( B \) be quaternion algebra over \( \Q \).
     Let \( O \subset B \) be a maximal order.
     Let \( I \subsetneq O \) be a left \( O \)-ideal with prime norm \( N = \nrd(I) \).
-    Then \( I = ON + O \alpha \) for some \( \alpha \in B^* \).
+    Let \( \alpha \in I \) and suppose \( \alpha \not\in NO \).
+    Then
+    \[
+        I = ON + O \alpha .
+    \]
 \end{lemma}
 \begin{proof}
     {\color{red} This is an exercise in Voights book. The following proof is probably not the one he had in mind when he wrote the exercise.}
     Since \( N = \nrd(I) \) we know that \( ON \subset I \).
     Thus from the correspondence theorem \( I / NO \) is an ideal in \( O / NO \).
-    The ring \( O / NO \iso M_2(\Z / N\Z) \) and the left ideals of \( M_2(\Z / N\Z) \).
-    All the left ideals of \( M_2(\Z / N\Z) \) are principal from Lemma ?? in the appendix.
-    Thus \( I / NO \) is generated by a single element \( \alpha + NO \in I / NO \).
+    There is a algebra isomorphism \( O / NO \iso M_2(\Z / N\Z) \).
+    We will actually prove this result in Lemma \ref{lem: O / NO isomorphism} but we can steal the result from the future for now.
+    From Lemma \ref{lem: ideals of M2} we know that all the left ideals of \( M_2(\Z / N\Z) \) are principal and generated by any nonzero element.
+    Thus \(  \alpha + NO \in I / NO \) generates \( I / NO \) since \( \alpha \not\in NO \).
 
     Let \( \beta \in I \).
-    Then since \( I \) is principle \( \beta + NO = \gamma_1 \alpha + NO\) for some \( \gamma_1 + NO \in O / NO \).
+    Then since \( I \) is principle \( \beta + NO = (\gamma_1 + NO)(\alpha + NO) = \gamma_1\alpha + NO\) for some \( \gamma_1 + NO \in O / NO \).
     Thus \( \beta = \gamma_1\alpha + \gamma_2N \) for some \( \gamma_2 \in O \).
     Thus \( I \subset NO + O\alpha \).
     Since the other inclusion is obvious we have \( I =  NO + O\alpha \).
 \end{proof}
+
+Thus all we need to do to solve Problem \ref{prob: I = ON + Oalpha} is choose any \( \alpha \in I \) such that \( \alpha \not \in NO \) and then \( I = ON + O \alpha \).
+
 \subsection{Step 3}
 For step 3 we need to solve the following problem.
 
@@ -510,10 +395,21 @@ and there is a natural isomoprhism
     (\Z + \Z i + \Z j + \Z k) / N (\Z + \Z i + \Z j + \Z k) \iso (-1, -p \, |\, \Z / N \Z).
 \]
 Thus \( (R + Rj) / N(R + Rj) \) is a quaternion algebra over the finite field \( \Z / N\Z \).
-Note that any quaternion algebra over a finite field is split hence
-\[
-    (R + Rj) / N(R + Rj) \iso M_2(\Z / N \Z  ).
-\]
+Any quaternion algebra over a finite field is split, so we have proved the following lemma.
+
+\begin{lemma} \label{lem: O / NO isomorphism}
+    Let \( p \equiv 3 \pmod{4} \).
+    Let \( B =  (-1, -p \, \mid \, \Z / N \Z) \) be a quaternion algebra.
+    Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
+    Let \( R = \Z[i] \).
+    Let \( D =  [O : R + Rj] = 4\)
+    Let \( N \) be a prime not dividing \( D \).
+    Then
+    \[
+        O / NO \iso (R + Rj) / N(R + Rj) \iso M_2(\Z / N \Z  ).
+    \]
+\end{lemma}
+
 
 Thus to solve Problem \ref{prob: gamma*mu_0 = alpha} we can instead solve the same problem over the quaternion algebra \( ( -1, -p \, |\, \Z / N \Z) \).
 
@@ -567,7 +463,7 @@ For step 5 we need to solve the following problem.
     \[
         \nrd(\mu) = \ell^{e_1}
     \]
-    for some \( e_1 \in \N \) and \(\lambda \in \Z \) with \( \gcd(\lambda, N) = 1 \) such that
+    for some \( e_1 \in \N \) and \(\lambda \in \Z \) such that
     \[
         \mu \equiv \lambda \mu_0 \pmod{NO}.
     \]
@@ -598,7 +494,7 @@ We first need a lemma.
 
 We will now show how to solve Problem \ref{prob: mu = lambda * mu_0}.
 As input we are given a prime \( p \equiv 3 \pmod{4} \), \( \mu_0 = \beta_0j \in (R / NR)^*[j] \), and a prime \( N \neq p \) sufficiently large.
-The goal is to find \( \lambda \in \Z \) coprime to \( N \) and \( \mu_1 \in  R + Rj \) such that \( \mu = \lambda \mu_0 + N \mu_1 \) has \( \ell \) power norm
+The goal is to find \( \lambda \in \Z \) and \( \mu_1 \in  R + Rj \) such that \( \mu = \lambda \mu_0 + N \mu_1 \) has \( \ell \) power norm
 \[
     \nrd(\mu) = \ell^e.
 \]
@@ -648,7 +544,91 @@ It is possible that no solution for \( \alpha_1 \) exists.
 If this is the case then we choose a different \( \beta_1 \) from the previous step and repeat.
 Under the assumption that the right hand side of the above equation behaves like random values around \( N^4|D|p \) as we change \( \beta_1 \), we will find a solution in polynomial time.
 
+\appendix
+\section{Matrices over finite fields}
+\begin{lemma}[Ideals of \( M_2(\F_p) \)] \label{lem: ideals of M2}
+    Let \( p \) be prime.
+    Let \( R =  M_2(\F_p) \).
+    Let \( a, b \in \F_p \) not both equal to zero.
+    Then the set
+    \[
+        I = R
+        \begin{pmatrix}
+            a & b \\
+            0 & 0
+        \end{pmatrix}
+        = \left\{
+        \begin{pmatrix}
+            xa & xb \\
+            ya & yb
+        \end{pmatrix}
+        \mid x, y \in \F_p\right\}
+        = \{\alpha \in R \mid \begin{pmatrix}-b & a \end{pmatrix}^T \in \ker \alpha \}
+    \]
+    is a nonzero, proper, left \( R \)-ideal.
+    Moreover any nonzero, proper, left \( R \)-ideal is of this form.
+    As a consequence we have
+    \begin{enumerate}
+        \item all left ideals of \( R \) are principal,
+        \item for any proper ideal \( I \) any nonzero element in \( I \) will generate \( I \),
+        \item if \( R\alpha = R\beta \) for \( \alpha, \beta \in R \) then \( \alpha \) is associate to \( \beta \).
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    (Sketch).
+    Suppose there were an ideal \( I \) not of this form.
+    Choose any nonzero \( \alpha \in I \) and let \( \begin{pmatrix}a & b \end{pmatrix} \) be any nonzero row of \( \alpha \).
+    By multiplying of the left with elements of \( R \) we can perfrom elementary row operations on \( \alpha \) while still keeping it in \( I \).
+    Thus WLOG
+    \[
+        \alpha
+        =
+        \begin{pmatrix}
+            a & b \\
+            * & *
+        \end{pmatrix} \in I.
+    \]
+    Suppose there is some \( \beta \in I \) which has a row \(\begin{pmatrix}c & d \end{pmatrix}  \not\in \op{span}_{\F_p}\{\begin{pmatrix}a & b \end{pmatrix} \} \).
+    Then using the same trick we may assume WLOG that
+    \[
+        \beta
+        =
+        \begin{pmatrix}
+            * & * \\
+            c & d
+        \end{pmatrix} \in I.
+    \]
+    Then
+    \[
+        \begin{pmatrix}
+            a & b \\
+            c & d
+        \end{pmatrix}
+        =
+        \begin{pmatrix}
+            1 & 0 \\
+            0 & 0
+        \end{pmatrix}
+        \begin{pmatrix}
+            a & b \\
+            * & *
+        \end{pmatrix}
+        +
+        \begin{pmatrix}
+            0 & 0 \\
+            0 & 1
+        \end{pmatrix}
+        \begin{pmatrix}
+            * & * \\
+            c & d
+        \end{pmatrix}
+        \in I
+    \]
+    but this matrix has rank 2 since \(\begin{pmatrix}c & d \end{pmatrix}  \not\in \op{span}_{\F_p}\{\begin{pmatrix}a & b \end{pmatrix} \} \) so it is invertible.
+    Thus \( I = R \), a contradiction.
 
+    Thhe consequences follow almost immediatly.
+\end{proof}
 
 \end{document}
 

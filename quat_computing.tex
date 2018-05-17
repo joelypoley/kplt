@@ -103,6 +103,110 @@
 \maketitle
 \tableofcontents
 
+\section{Properties in the special case}
+
+\begin{lemma}[Properties of \( (-1, -p \, \mid \, \Q) \)]
+    Let \( p \equiv 3 \pmod{4} \).
+    Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
+    Then the multiplication table for \( B \) is
+    \[
+        \begin{array}{c|ccc}
+              & i  & j   & k  \\
+            \hline
+            i & -1 & k   & -j \\
+            j & -k & -p  & pi \\
+            k & j  & -pi & -p
+        \end{array}
+    \]
+
+    The norm equation for \( B \) is
+    \[
+        \nrd(t + xi + yj + zk) = t^2 + x^2 + y^2p + z^2p.
+    \]
+    The trace equation for \( B \) is
+    \[
+        \trd(t + xi + yj + zk) = 2t.
+    \]
+\end{lemma}
+\begin{proof}
+    We verify with Sage.
+    \begin{lstlisting}
+        sage: A.<t, x, y, z, p> = PolynomialRing(QQ)
+        sage: B.<i, j, k> = QuaternionAlgebra(-1, -p)
+        sage: matrix([[a * b for b in [i, j, k]]
+                       for a in [i, j, k]])
+        [    -1      k     -j]
+        [    -k     -p    p*i]
+        [     j (-p)*i     -p]
+        sage: alpha = t + x*i + y*j + z*k
+        sage: alpha.reduced_norm()
+        y^2*p + z^2*p + t^2 + x^2
+        sage: alpha.reduced_trace()
+        2*t
+    \end{lstlisting}
+\end{proof}
+
+\begin{lemma}[]
+    Let \( p \equiv 3 \pmod{4} \).
+    Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
+    Then \( \disc B = p \).
+\end{lemma}
+\begin{proof}
+    (Sketch.)
+    The discriminant of \( B \) is the product of the primes where \( B \) is ramified.
+    Apparently?? \( B \) can only be ramified at primes dividing its invariants (\( a, b = -1, -p\)).
+    Calculations with hilbert symbols then shows that \( \disc B = p \)
+\end{proof}
+
+\begin{lemma}[Maximal order in \( B_{p, \infty} \) where \( p \equiv 3 \pmod{4} \)]
+    Let \( p \equiv 3 \pmod{4} \).
+    Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
+    Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
+    Then \( O \) is a maximal order.
+\end{lemma}
+\begin{proof}
+    Check that \( \disc O  = p = \disc B\).
+\end{proof}
+
+\begin{example}
+    Our running example will have \( p = 59 \).
+    \begin{lstlisting}
+        sage: p = 59
+        sage: p.mod(4) == 3
+        True 
+        sage: B.<i, j, k> = QuaternionAlgebra(-1, -p)
+        sage: B.discriminant() == p
+        True
+        sage: B.maximal_order()
+        Order of Quaternion Algebra (-1, -59) with base ring Rational Field with basis (1/2 + 1/2*j, 1/2*i + 1/2*k, j, k)
+        sage: # We now verify B.maximal_order() is maximal.
+        sage: B.maximal_order().discriminant() == B.discriminant()
+        True
+    \end{lstlisting}
+\end{example}
+
+We will now define a ``distinguished quadratic subring'' of \( O \).
+This subring may be slightly different if \( p \not\equiv 3 \pmod{4} \).
+
+\begin{lemma}[Distinguished quadratice subring]
+    Let \( p \equiv 3 \pmod{4} \).
+    Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
+    Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
+    Let \( R = \Z[i] \subset O \).
+    Then \( R \) has discriminant \( D = 4 \), \( R^\perp = Rj \) and \( R + Rj = \Z\langle i, j \rangle\) is a suborder of \( O \) of index \( D \).
+    Moreover
+    \[
+        \nrd(t + xi + (y + zi)j) = f(t, x) + p f(y, z)
+    \]
+    where \( f(t, x) = t^2 + x^2 \) is a principal quadratic form of discriminant \( D \).
+\end{lemma}
+\begin{proof}
+    Note that it seems they are not normalizing their discriminants by \( 2^{-n} \) which is the usual thing to do.
+    Hence the discriminant of \( f \) is 4 as required by the lemma.
+    The discriminant is equal to the index since \( O \) is maximal so \( O = O_L(R) \).
+\end{proof}
+
+
 \section{Computing with quaternions}
 
 \begin{definition}[Lattice]
