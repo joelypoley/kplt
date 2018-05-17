@@ -123,16 +123,6 @@ Since we can choose to solve the isogeny problem for any maximal order we will a
 \]
 Note that \( \{ (1+j) / 2, (i+k) / 2 , j, k \} \) is a \( \Z \)-basis for \( O \) in Hermite normal form.
 
-We state the problem we are trying to solve formally.
-
-\begin{prob} \label{prob: general}
-    Let \( p \equiv 3 \pmod{4} \).
-    Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
-    Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
-    Let \( I \subset O \) be a left \( O \)-ideal ideal.
-    Given a prime \( \ell \), \( p \) and a basis for \( I \) find a basis for a left \( O \)-ideal \( J \) such that \( J \) has \( \ell \)-power norm.
-\end{prob}
-
 \begin{lemma}[Properties of \( (-1, -p \, \mid \, \Q) \)]
     Let \( p \equiv 3 \pmod{4} \).
     Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
@@ -247,23 +237,23 @@ This subring may be slightly different if \( p \not\equiv 3 \pmod{4} \).
 If \( p \equiv 1 \pmod{4} \) then \( B \), \( O \) and \( R \) will be different as described in Section 2.3 of the paper.
 
 We will solve this problem like this:
-\begin{enumerate}
-    \item
-          Replace \( I \) with an ideal in the same class but with reduced norm \( N \) where \( N \) is a large prime, coprime to \( \ell \), \( |\disc R| \) and \( p \).
-    \item
-          Find \( \alpha \in I \) such that \( I = ON + O\alpha \).
-    \item
-          Find \( \gamma \in O \) with \[ \nrd(\gamma) = N \ell^{e_0} \] for some \( e_0 \in \N \).
-    \item
-          Find \( \mu_0 \in Rj \subset  O \) such that \[ \gamma\mu_0 \equiv \alpha \mod NO \] and \( \nrd(\mu_0) \not\equiv 0 \pmod{N} \).
-    \item
-          Find \( \mu \in  O \) and \( \lambda \in \Z \) such that \[ \mu \equiv \lambda \mu_0 \mod NO \] and \[ \nrd(\mu) = \ell^{e_1} \] and \( \gcd(\lambda, N) = 1 \).
-    \item
-          Set \( \beta = \gamma \mu = \lambda\gamma\mu_0 \equiv \lambda \alpha \pmod{NO} \).
-          Then \[ J \vcentcolon = I\overline{\beta}/N \] is an ideal in the same class with \( J \subset O \) and \( \nrd(J) \) is a power of \( \ell \).
-\end{enumerate}
+\begin{description}
+    \item[Step 1]
+    Replace \( I \) with an ideal in the same class but with reduced norm \( N \) where \( N \) is a large prime, coprime to \( \ell \), \( |\disc R| \) and \( p \) and such that \( \ell \) is a quadratic nonresidue modulo \( N \).
+    \item[Step 2]
+    Find \( \alpha \in I \) such that \( I = ON + O\alpha \).
+    \item[Step 3]
+    Find \( \gamma \in O \) with \[ \nrd(\gamma) = N \ell^{e_0} \] for some \( e_0 \in \N \).
+    \item[Step 4]
+    Find \( \mu_0 \in Rj \subset  O \) such that \[ \gamma\mu_0 \equiv \alpha \mod NO \] and \( \nrd(\mu_0) \not\equiv 0 \pmod{N} \).
+    \item[Step 5]
+    Find \( \mu \in  O \) and \( \lambda \in \Z \) such that \[ \mu \equiv \lambda \mu_0 \mod NO \] and \[ \nrd(\mu) = \ell^{e_1} \] and \( \gcd(\lambda, N) = 1 \).
+    \item[Step 6]
+    Set \( \beta = \gamma \mu = \lambda\gamma\mu_0 \equiv \lambda \alpha \pmod{NO} \).
+    Then \[ J \vcentcolon = I\overline{\beta}/N \] is an ideal in the same class with \( J \subset O \) and \( \nrd(J) \) is a power of \( \ell \).
+\end{description}
 
-We first show that the output is correct, we will then show how to complete each of the steps.
+We first show that the output is correct in \S 1.3 , we will then show how to complete steps 1-6 in sections \S 1.4-1.8.
 
 \subsection{Proof the output is correct}
 We will use the following two lemmas.
@@ -321,20 +311,6 @@ We will use the following two lemmas.
     \]
 \end{proof}
 
-We can now prove the correctness.
-Let \( \beta \) be as in step 6.
-Then \( \beta \in I \) from Lemma \ref{lem: beta in I} and \( \nrd(\beta) = \nrd(\gamma) \nrd(\mu) = N\ell^{e_0 + e_1} \).
-Now from Lemma \ref{lem: change norm} \( I\overline{\beta}/N \) has norm \( \nrd(\beta) / N = \ell^{e_0 + e_1} \) as required.
-
-\subsection{Step 1}
-\subsection{Step 2}
-\subsection{Step 3}
-\subsection{Step 4}
-\subsection{Step 5}
-
-
-
-
 \begin{example}
     We do a sanity check of the previous lemma.
     \begin{lstlisting}
@@ -349,104 +325,155 @@ Now from Lemma \ref{lem: change norm} \( I\overline{\beta}/N \) has norm \( \nrd
     \end{lstlisting}
 \end{example}
 
-\begin{example}
-    Given a left \( O \)-ideal \( I \) we show how to compute another ideal \( J \subset O \) in the same class but with prime norm.
-    Generate a random element \( \alpha \in I \) by taking random linear combination of the basis elements where the coefficients are bounded by some bound \( m \).
-    If \( \nrd(\alpha) = NM \), where \( M \) is prime then return \( J = I \overline{\alpha} / N \), else pick another random element an continue.
-\end{example}
+We can now prove the correctness.
+Let \( \beta \) be as in step 6.
+Then \( \beta \in I \) from Lemma \ref{lem: beta in I} and \( \nrd(\beta) = \nrd(\gamma) \nrd(\mu) = N\ell^{e_0 + e_1} \).
+Now from Lemma \ref{lem: change norm} \( I\overline{\beta}/N \) has norm \( \nrd(\beta) / N = \ell^{e_0 + e_1} \) as required.
 
+\subsection{Step 1}
+For step 1 we need to solve the following problem.
 
-\begin{example}
-    Given \( O = \Z \langle i, (1+j) / 2 \) and an integer \( M \) we show how to find \( \gamma \in O \) such that \( \nrd(\gamma) = M \).
-
-    First choose \( (y, z) \in [-m , m]^2 \) at random until \( r = M - pf(y, z) = M - py^2 - pz^2\) is prime.
-    Then use Cornaccia's algorithm to find \( t, x \in \Z \) such that \(  t^2 + x^2 = r.\)
-    Finally \( \nrd(t + xi + yj + zk) = t^2 + x^2 + py^2 + pz^2 = r + py^2 + pz^2 = M - py^2 - pz^2 py^2 + pz^2 = M\).
-    Moreover \( t + xi + yj + zk \in O \) because \( t, x, y, z \in \Z \) and \( \Z \langle i ,j, k \rangle \subset O \).
-\end{example}
-
-
-So far we have reduced Problem \ref{prob: general} to the following problem.
-\begin{prob} \label{prob: prime norm}
+\begin{prob}
     Let \( p \equiv 3 \pmod{4} \).
     Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
     Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
-    Let \( I \subset O \) be an ideal with prime norm \( N \).
-    We further assume \( N \) is large and coprime to \( \ell \), 4 and \( p \).
-    Given a prime \( \ell \), \( p \), a basis for \( O \) and a basis for \( I \) find a basis for a left \( O \)-ideal \( J \) such that \( J \) has \( \ell \)-power norm.
+    Let \( R = \Z \langle i , j \rangle \).
+    Given a basis for a left \( O \)-ideal \( I \subset O \) find a basis for another left \( O \)-ideal \( I' \subset O \) such that \( I \) and \( I' \) are in the same class and \( \nrd(I') \) is a large prime.
 \end{prob}
 
-This is equivalent to the following problem, although I'm not sure what the most elegant proof is.
-\begin{prob} \label{prob: prime norm}
+Given a left \( O \)-ideal \( I \) we show how to compute another ideal \( J \subset O \) in the same class but with prime norm.
+Generate a random element \( \alpha \in I \) by taking random linear combination of the basis elements where the coefficients are bounded by some bound \( m \).
+Calculate the norm of \( \alpha \) and if \( \nrd(\alpha) = NM \) where \( M \) is prime then return \( I' = I \overline{\alpha} / N \).
+By Lemma \ref{lem: change norm} \( I' \) has norm \( M \) else pick another random element and continue.
+
+{\color{red} It is unclear to me how to analyse the running time of this.}
+
+
+\subsection{Step 2}
+For step 2 we need to solve the following problem.
+
+\begin{prob}
     Let \( p \equiv 3 \pmod{4} \).
     Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
     Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
-    Let \( I \subset O \) be an ideal with prime norm \( N \).
-    We further assume \( N \) is large and coprime to \( \ell \), 4 and \( p \).
-    Given a prime \( \ell \), \( p \), a basis for \( O \), \( N \) and \( \alpha \in I \) such that \( I = ON + O\alpha \) find a basis for a left \( O \)-ideal \( J \) such that \( J \) has \( \ell \)-power norm.
+    Let \( R = \Z \langle i , j \rangle \).
+    Given a basis for a left \( O \)-ideal \( I \subset O \) with prime norm \( N \) find \( \alpha \in I \) such that \( I = ON + O\alpha \).
 \end{prob}
 
-This problem can then be reduced using Lemma ??
+I don't know how to solve this problem, but I can show that such an \( \alpha \) exists.
 
-\begin{prob} \label{prob: ell power}
+\begin{lemma}[\( I = ON + O\alpha \)]
+    Let \( B \) be quaternion algebra over \( \Q \).
+    Let \( O \subset B \) be a maximal order.
+    Let \( I \subsetneq O \) be a left \( O \)-ideal with prime norm \( N = \nrd(I) \).
+    Then \( I = ON + O \alpha \) for some \( \alpha \in B^* \).
+\end{lemma}
+\begin{proof}
+    {\color{red} This is an exercise in Voights book. The following proof is probably not the one he had in mind when he wrote the exercise.}
+    Since \( N = \nrd(I) \) we know that \( ON \subset I \).
+    Thus from the correspondence theorem \( I / NO \) is an ideal in \( O / NO \).
+    The ring \( O / NO \iso M_2(\Z / N\Z) \) and the left ideals of \( M_2(\Z / N\Z) \).
+    All the left ideals of \( M_2(\Z / N\Z) \) are principal from Lemma ?? in the appendix.
+    Thus \( I / NO \) is generated by a single element \( \alpha + NO \in I / NO \).
+
+    Let \( \beta \in I \).
+    Then since \( I \) is principle \( \beta + NO = \gamma_1 \alpha + NO\) for some \( \gamma_1 + NO \in O / NO \).
+    Thus \( \beta = \gamma_1\alpha + \gamma_2N \) for some \( \gamma_2 \in O \).
+    Thus \( I \subset NO + O\alpha \).
+    Since the other inclusion is obvious we have \( I =  NO + O\alpha \).
+\end{proof}
+\subsection{Step 3}
+For step 3 we need to solve the following problem.
+
+\begin{prob}
     Let \( p \equiv 3 \pmod{4} \).
     Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
     Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
-    Let \( I \subset O \) be an ideal with prime norm \( N \).
-    We further assume \( N \) is large and coprime to \( \ell \), 4 and \( p \).
-    Given a prime \( \ell \), \( p \), a basis for \( O \), \( N \) and \( \alpha \in I \) such that \( I = ON + O\alpha \) find \( \beta \in I \) such that \( \nrd(\beta) = N\ell^e \) for some \( e \in \N \).
-\end{prob}
-
-
-The previous lemma reduces the problem further.
-
-\begin{prob} \label{prob: solve congruence}
-    Let \( p \equiv 3 \pmod{4} \).
-    Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
-    Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
-    Let \( I \subset O \) be an ideal with prime norm \( N \).
-    We further assume \( N \) is large and coprime to \( \ell \), 4 and \( p \).
-    Given a prime \( \ell \), \( p \), a basis for \( O \), \( N \) and \( \alpha \in I \) such that \( I = ON + O\alpha \), find \( \beta \in I \) such that
+    Let \( R = \Z \langle i , j \rangle \).
+    Let \( N \in \N \) be prime.
+    Let \( \ell \neq N \) be prime.
+    Find \( \gamma \in O \) with
     \[
-        \beta \equiv \lambda \alpha \pmod{NO}
+        \nrd(\gamma) = N\ell^{e_0}
     \]
-    where \(\lambda \) is coprime to \( N \) and
-    \[
-        \nrd(\beta) = N\ell^e
-    \]
-    for some \( e \in \N \).
+    for some \( e_0 \in \N \). {\color{red} Sufficiently large?}
 \end{prob}
 
-We can now solve the problem like this
-\begin{enumerate}
-    \item
-          Find a random \( \gamma \in O \) with \( \nrd(\gamma) = N \ell^e_0 \) using Lemma ??
-    \item
-          Find \( \mu_0 \in Rj \subset  O \) such that \( \gamma\mu_0 \equiv \alpha \mod NO \) using linear algebra.
-    \item
-          Find \( \mu' \in  O \) and \( \lambda \in \Z \) such that \( \mu' \equiv \lambda \mu_0 \mod NO \) and \( \nrd(\mu') = \ell^{e_1} \) and \( (\lambda, N) = 1 \) using techniques yet to be described.
-    \item
-          Set \( \beta = \gamma \mu' = \lambda\gamma\mu_0 \equiv \lambda \alpha \pmod{NO} \). Then \( \nrd(\beta) = \nrd(\gamma)\nrd(\mu') = N\ell^{e_0 + e_1}\) and \( \beta \equiv \lambda \alpha \pmod{NO} \) as required.
-\end{enumerate}
+Given any integer \( M \) we show how to find \( \gamma \in O \) such that \( \nrd(\gamma) = M \). First choose \( (y, z) \in [-m , m]^2 \) at random until
+\[
+    r = M - pf(y, z) = M - py^2 - pz^2
+\]
+is prime.
+Then use Cornaccia's algorithm to find \( t, x \in \Z \) such that \(  t^2 + x^2 = r.\)
+Finally
+\begin{align*}
+    \nrd(t + xi + yj + zk)
+      & = t^2 + x^2 + py^2 + pz^2       \\
+      & = r + py^2 + pz^2               \\
+      & = M - py^2 - pz^2 + py^2 + pz^2 \\
+      & = M.
+\end{align*}
+Moreover \( t + xi + yj + zk \in O \) because \( t, x, y, z \in \Z \) and \( \Z \langle i ,j\rangle \subset O \).
 
-\section{Step 2}
+{\color{red} It is unclear to me how to analyse the running time of this, or how to choose \( m \).}
 
-We will now show how to solve step 2.
+\subsection{Step 4}
+For step 4 we need to solve the following problem.
 
-The first observation is that instead of working over \( O / NO \) we can work over \( (R+Rj) / N(R+Rj) = \Z \langle i, j \rangle \).
+\begin{prob} \label{prob: gamma*mu_0 = alpha}
+    Let \( p \equiv 3 \pmod{4} \).
+    Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
+    Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
+    Let \( R = \Z \langle i , j \rangle \).
+    Let \( N \in \N \) be prime.
+    Let \( \alpha \in O \).
+    Let \( \gamma \in O \).
+    Find \( \mu_0 \in Rj \subset  O \) such that
+    \[
+        \gamma\mu_0 \equiv \alpha \mod NO
+    \]
+    and \( \nrd(\mu_0) \not\equiv 0 \pmod{N} \).
+\end{prob}
+
+The first observation is that instead of working over \( O / NO \) we can work over \( (R+Rj) / N(R+Rj) = \Z \langle i, j \rangle / N \Z \langle i, j \rangle\).
 
 \begin{lemma}[\( R/ NR \iso S / NS \) ]
     Let \( R \) be a ring.
     Let \( S \subset R \) be a subring.
     Let \( M = [R : S] \) where the index is as abelian groups.
     Let \( N \in \N \) be coprime to \( M \).
-    Then
-    \[
-        R / NR \iso S / NS.
-    \]
+    Let \( a, b \in \Z \) such that \( Ma + Nb = 1 \).
+    Then the map
+    \begin{align*}
+          & S / NS \to R / NR         \\
+          & s + NS \mapsto s + NR     \\
+          & Mar + NS \mapsfrom r + NR
+    \end{align*}
+    is an isomorphism.
 \end{lemma}
 \begin{proof}
-    See \href{https://math.stackexchange.com/questions/387931/fracsms-is-isomorphic-to-fracrmr-where-m-is-coprime-to-n}{this} question.
+    From the second isomorphism theorem for rings the map
+    \begin{align*}
+          & \frac{S}{S \cap NR} \to \frac{S + NR}{NR} \\
+          & s + S \cap NR \mapsto s + NR
+    \end{align*}
+    is an isomorphism.
+    Thus it remains to show that \( S \cap NR = NS \) and \( S + NR = R \).
+
+    Clearly \( NS \subset S \cap NR \).
+    Let \( x \in S \cap NR \).
+    Then \( x = Ny \) for \( y \in R \) and \( Ny \in S \).
+    So \( Ny + S = 0 + S \) in \( R / S \), where the quotient is as abelian groups.
+    Hence \( |y + S| \mid N \).
+    Since \( |R / S| = M \) we also know that \( |y + S| \mid M \) so \( |y + S| \mid \gcd(N, M) = 1 \), which implies that \( y \in S \).
+    Thus \( x = Ny \in NS \) so \( NS = S \cap NR \).
+
+    For the second equality let \( r \in R \).
+    Choose \( a, b \in \Z \) such that \( Na + Mb = 1 \).
+    Then \( Nar + Mbr = r \).
+    Now \( Nar \in NR \) and \( Mbr \in S \) since \( |r + S| \mid M \).
+    Thus \( r \in S + NR \).
+    Therefore \( S + NR = R \).
 \end{proof}
 
 \begin{corollary}[\( O / NO \iso (R + Rj) / N(R + Rj)\)]
@@ -454,46 +481,49 @@ The first observation is that instead of working over \( O / NO \) we can work o
     Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
     Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
     Let \( R = \Z[i] \).
-    Let \( N \) be a prime not dividing \( [O : R + Rj] \).
+    Let \( D =  [O : R + Rj] = 4\)
+    Let \( N \) be a prime not dividing \( D \).
+    Let \( a, b \in \Z \) such that \( Da + Nb = 1 \).
     Then
-    \[
-        O / NO \iso (R + Rj) / N(R + Rj) = \Z \langle i, j \rangle / N \Z \langle i, j \rangle \iso M_2(\Z / N\Z.
-    \]
+    \begin{align*}
+          & \frac{R + Rj}{N(R + Rj)} \to O / NO \\
+          & x + N(R + Rj)\mapsto x + NO         \\
+          & Dax + N(R + Rj) \mapsfrom x + NO
+    \end{align*}
+    is an isomorphism
 \end{corollary}
-\begin{proof}
-    The first isomorphism follows directly from the corollary.
-    The isomorphism follows from the fact that \( \Z \langle i, j \rangle / N \Z \langle i, j \rangle \) is a quaternion algebra over the finite field \( \Z / N \Z \), i.e. \( \Z \langle i, j \rangle / N \Z \langle i, j \rangle = (-1, -p \, | \, \Z / N \Z ) \).
-    Every quaternion algebra over a finite field is split hence \( \Z \langle i, j \rangle / N \Z \langle i, j \rangle \iso M_2(\Z / N \Z) \).
-\end{proof}
 
-\begin{example}
-    The isomorphism
-    \[
-        O / NO \iso (-1, -p \, | \, \Z / N\Z)
-    \]
-    can be computed explicitly by unpacking all the proofs.
-    Find \( a, b \in \Z \) such that
-    \[
-        Da + Nb = 1
-    \]
-    where \( D = [O : R + Rj] \).
-    Then
-    \[
-        x + NO \mapsto Dax + NS
-    \]
-    is the isomorphism.
-\end{example}
+We care about constructing an isomorphism to \( (R + Rj) / N(R + Rj) \) because \( R = \Z[i] \) so
+\[
+    (R + Rj) / N(R + Rj) \iso (\Z + \Z i + \Z j + \Z k) / N (\Z + \Z i + \Z j + \Z k)
+\]
+and there is a natural isomoprhism
+\[
+    (\Z + \Z i + \Z j + \Z k) / N (\Z + \Z i + \Z j + \Z k) \iso (-1, -p \, |\, \Z / N \Z).
+\]
+Thus \( (R + Rj) / N(R + Rj) \) is a quaternion algebra over the finite field \( \Z / N\Z \).
+Note that any quaternion algebra over a finite field is split hence
+\[
+    (R + Rj) / N(R + Rj) \iso M_2(\Z / N \Z  ).
+\]
 
-We have therefore reduced the problem to this.
+Thus to solve Problem \ref{prob: gamma*mu_0 = alpha} we can instead solve the same problem over the quaternion algebra \( ( -1, -p \, |\, \Z / N \Z) \).
 
 \begin{prob}
-    Given \( \gamma, \alpha \in (-1, -p \, | \, \Z / N\Z) \) find \( \mu \in \Z j + \Z k \subset (-1, -p \, | \, \Z / N\Z) \) such that
+    Let \( p \equiv 3 \pmod{4} \).
+    Let \( N \neq p\) be prime.
+    Let \( B =  (-1, -p \, \mid \, \Z / N \Z) \) be a quaternion algebra.
+    Let \( \alpha, \gamma \in B \).
+    Find \( \mu_0 \in \op{span}_{\Z / N / \Z}\{j, k\} \subset  B \) such that
     \[
-        \gamma \mu = \alpha .
+        \gamma\mu_0 \equiv \alpha \mod NO
     \]
+    and \( \nrd(\mu_0) \neq 0 \).
 \end{prob}
 
-This can be solved by finding the left action matrix of \( \gamma \) and solving a system of linear equations.
+This problem can be solved by finding the left action matrix of \( \gamma \) and solving a system of linear equations.
+
+The code below demonstrates how you would do this.
 
 \begin{example}
     -
@@ -514,103 +544,33 @@ This can be solved by finding the left action matrix of \( \gamma \) and solving
     \end{lstlisting}
 \end{example}
 
-\begin{remark}
-    A natural question is does a solution always exist to
-    \[
-        \gamma \mu = \alpha .
-    \]
-    We note that \( \gamma \) and \( \alpha \) generate nontrivial, proper ideals so \( \gamma, \alpha \) are nonzero and are nonunits.
-    We can look at the nonzero non units in \( M_2(\Z / N\Z) \) which are all of the form
-    \[
-        \begin{pmatrix}
-            ax + ay \\
-            bx + by
-        \end{pmatrix}
-    \]
-    By doing elementary row operations (which can be ``absorbed'' by \( \mu \)) we see that the question is equivalent to finding a solution to
-    \[
-        \Gamma M = A
-    \]
-    where \( \Gamma \) and \( A \) are of the form
-    \[
-        \begin{pmatrix}
-            * & * \\
-            0 & 0
-        \end{pmatrix}
-    \]
-    You can verify by hand that such a \( M \) always exists.
-\end{remark}
+\subsection{Step 5}
+For step 5 we need to solve the following problem.
 
-
-\section{Step 3}
-
-We have therefore reduced the problem to this.
-\begin{prob}
+\begin{prob} \label{prob: mu = lambda * mu_0}
     Let \( p \equiv 3 \pmod{4} \).
     Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
     Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
     Let \( R = \Z[i] \).
     Let \( N \) be prime.
-    Given \( \mu \in Rj \) find \( \mu' \in O \) and \(\lambda \in \Z \) such that
+    Given \( \mu_0 \in Rj \) with \( \nrd(\mu_0) \not\equiv 0 \pmod{N} \) find \( \mu \in O \) with
     \[
-        \mu' \equiv \lambda \mu \pmod{NO}
+        \nrd(\mu) = \ell^{e_1}
     \]
-    where \( (\lambda, N) = 1 \) and
+    for some \( e_1 \in \N \) and \(\lambda \in \Z \) with \( \gcd(\lambda, N) = 1 \) such that
     \[
-        \nrd(\mu') = \ell^{e_1}
+        \mu \equiv \lambda \mu_0 \pmod{NO}.
     \]
-    for some \( e_1 \in \N \).
 \end{prob}
 
-\begin{example}
-    We will now show how to solve this problem.
-    As input we are given a prime \( p \equiv 3 \pmod{4} \), \( \mu_0 = \beta_0j \in (R / NR)^*[j] \), and a prime \( N \neq p \) sufficiently large.
-    The goal is to find \( \lambda \in \Z \) coprime to \( N \) and \( \mu_1 \in  R + Rj \) such that \( \mu \vcentcolon = \lambda \mu_0 + N \mu_1 \) has \( \ell \) power norm
-    \[
-        \ell^e = \nrd(\mu).
-    \]
-
-    Write \( \mu_1 = \alpha_1 + \beta_1j \) where \( \alpha_1, \beta_1 \in \Z[i] \).
-    Then
-    \begin{align*}
-        \ell^e
-          & = \nrd(\mu)                                                                                                      \\
-          & = \nrd(\lambda \mu_0 + N \mu_1)                                                                                  \\
-          & = \nrd(N\alpha_1 + (\lambda\beta_0 + N\beta_1)j)                                                                 \\
-          & = \nrd(N\alpha_1) +p\nrd(\lambda\beta_0 + N\beta_1)                                                              \\
-          & = \nrd(N\alpha_1) + p\trd(\lambda \beta_0\overline{N\beta_1}) + p\nrd(\lambda\beta_0) + p\nrd(N\beta_1)          \\
-          & = N^2\nrd(\alpha_1) +  p\lambda N \trd(\beta_0\overline{\beta_1}) + p\lambda^2 \nrd(\beta_0) + pN^2\nrd(\beta_1) \\
-          & = p\lambda^2 \nrd(\beta_0) + Np\lambda \trd(\beta_0\overline{\beta_1}) + N^2(p\nrd(\beta_1) + \nrd(\alpha_1))
-    \end{align*}
-    Note that we are given all variables with subscript 0 and are solving for the variables of subscript 1.
-    Reducing modulo \( N \) gives
-    \[
-        \ell^e \equiv p\lambda^2\nrd(\beta_0) \pmod{N}.
-    \]
-    We then choose \( e \) to be even if \( p(z_0^2 + w_0^2))^{-1} \bmod{N} \) is a square modulo \( N \) and odd otherwise.
-    This ensures that \( \ell^e(p(z_0^2 + w_0^2))^{-1} \) is a square modulo \( N \) and we can solve for \( 0 <  \lambda < N\).
-    We also choose \( e \) sufficiently large (\( \ell^e >> p|D|N^4 \)).
-    Reducing modulo \( N^2 \) gives
-    \[
-        \frac{\ell^e - p\lambda^2\nrd(\beta_0)}{N}\equiv p\lambda \trd(\beta_0\overline{\beta_1}) \pmod{N^2}
-    \]
-    which is a linear equation in the coefficients of \( \beta_1 \in \Z[i]\).
-    There will be \( N \) solutions to this equation and we a solution randomly such that \( \nrd(\lambda\beta_0 + N\beta_1) < N^4 \).
-
-    The only variable left that hasn't be determined is \( \alpha_1 \) so rearranging gives
-    \[
-        \nrd(\alpha_1) = \frac{\ell^e - p\lambda^2 \nrd(\beta_0) - Np\lambda \trd(\beta_0\overline{\beta_1})}{N^2}.
-    \]
-    The integer \( e \) was chosen sufficiently large so that the right hand side is positive.
-
-    It is possible that no solution for \( \alpha_1 \) exists.
-    If this is the case then we choose a different \( \beta_1 \) from the previous step and repeat.
-    Under the assumption that the right hand side of the above equation behaves like random values around \( N^4|D|p \) as we change \( \beta_1 \) we will find a solution in polynomial time.
-\end{example}
-
+We first need a lemma.
 \begin{lemma}[\( \nrd(\alpha_1 + \alpha_2) - \nrd(\alpha_1) - \nrd(\alpha_2) = \trd(\alpha_1 \overline{\alpha_2}) \)]
+    Let \( B \) be a quaternion algebra.
+    Let \( \alpha_1, \alpha_2 \in B \).
+    Then
     \[
-        \nrd(\alpha_1 + \alpha_2) - \nrd(\alpha_1) - \nrd(\alpha_2) = \trd(\alpha_1 \overline{\alpha_2})
+        \nrd(\alpha_1 + \alpha_2) - \nrd(\alpha_1) - \nrd(\alpha_2)
+        = \trd(\alpha_1 \overline{\alpha_2})
     \]
 \end{lemma}
 \begin{proof}
@@ -626,6 +586,49 @@ We have therefore reduced the problem to this.
 \end{proof}
 
 
+We will now show how to solve this problem \ref{prob: mu = lambda * mu_0}.
+As input we are given a prime \( p \equiv 3 \pmod{4} \), \( \mu_0 = \beta_0j \in (R / NR)^*[j] \), and a prime \( N \neq p \) sufficiently large.
+The goal is to find \( \lambda \in \Z \) coprime to \( N \) and \( \mu_1 \in  R + Rj \) such that \( \mu = \lambda \mu_0 + N \mu_1 \) has \( \ell \) power norm
+\[
+    \nrd(\mu) = \ell^e.
+\]
+
+Write \( \mu_1 = \alpha_1 + \beta_1j \) where \( \alpha_1, \beta_1 \in \Z[i] \).
+Then
+\begin{align*}
+    \ell^e
+      & = \nrd(\mu)                                                                                                      \\
+      & = \nrd(\lambda \mu_0 + N \mu_1)                                                                                  \\
+      & = \nrd(N\alpha_1 + (\lambda\beta_0 + N\beta_1)j)                                                                 \\
+      & = \nrd(N\alpha_1) +p\nrd(\lambda\beta_0 + N\beta_1)                                                              \\
+      & = \nrd(N\alpha_1) + p\trd(\lambda \beta_0\overline{N\beta_1}) + p\nrd(\lambda\beta_0) + p\nrd(N\beta_1)          \\
+      & = N^2\nrd(\alpha_1) +  p\lambda N \trd(\beta_0\overline{\beta_1}) + p\lambda^2 \nrd(\beta_0) + pN^2\nrd(\beta_1) \\
+      & = p\lambda^2 \nrd(\beta_0) + Np\lambda \trd(\beta_0\overline{\beta_1}) + N^2(p\nrd(\beta_1) + \nrd(\alpha_1))
+\end{align*}
+Note that we are given all variables with subscript 0 and are solving for the variables with subscript 1.
+Reducing modulo \( N \) gives
+\[
+    \ell^e \equiv p\lambda^2\nrd(\beta_0) \pmod{N}.
+\]
+We then choose \( e \) to be even if \( (p\nrd(\beta_0))^{-1} \bmod{N} \) is a square modulo \( N \) and odd otherwise.
+This ensures that \( \ell^e(p\nrd(\beta_0))^{-1} \) is a square modulo \( N \) and we can solve for \( 0 <  \lambda < N\).
+We also choose \( e \) sufficiently large (\( \ell^e >> p|D|N^4 \)).
+Reducing modulo \( N^2 \) gives
+\[
+    \frac{\ell^e - p\lambda^2\nrd(\beta_0)}{N}\equiv p\lambda \trd(\beta_0\overline{\beta_1}) \pmod{N^2}
+\]
+which is a linear equation in the coefficients of \( \beta_1 \in \Z[i]\).
+There will be \( N \) solutions to this equation and we a solution randomly such that \( \nrd(\lambda\beta_0 + N\beta_1) < N^4 \).
+
+The only variable left that hasn't be determined is \( \alpha_1 \) so rearranging gives
+\[
+    \nrd(\alpha_1) = \frac{\ell^e - p\lambda^2 \nrd(\beta_0) - Np\lambda \trd(\beta_0\overline{\beta_1})}{N^2}.
+\]
+The integer \( e \) was chosen sufficiently large so that the right hand side is positive.
+
+It is possible that no solution for \( \alpha_1 \) exists.
+If this is the case then we choose a different \( \beta_1 \) from the previous step and repeat.
+Under the assumption that the right hand side of the above equation behaves like random values around \( N^4|D|p \) as we change \( \beta_1 \) we will find a solution in polynomial time.
 
 
 
