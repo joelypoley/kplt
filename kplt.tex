@@ -104,127 +104,23 @@
 \tableofcontents
 
 
-\section{Description of the special case}
+\subsection{Description of the special case}
 
-Theorem 9 of the paper says that if you can solve the ideal isogeny problem for a maximal order \( O \subset B_{p, \infty} \) then you can solve it for any  maximal order.
+Theorem 9 of the paper says that if you can solve the ideal isogeny problem for a single maximal order then you can solve it for any maximal order.
+We only describe the algorithm for a quaternion algebra with discriminant \( p \equiv 3 \pmod{4} \). The case \( p \equiv 1 \pmod{4} \) is similar, but more annoying.
 
-
-We only describe the algorithm for a quaternion algebra with discriminant \( p \equiv 3 \pmod{4} \).
-These quaternion algebras can be written as
+Any quaternion algebra \( B \) with discriminant \( p \equiv 3 \pmod{4} \) is isomorphic to \( (-1, -p \, \mid \, \Q) \), that is \( B = \op{span}_\Q\{1, i, j, k\} \) with
 \[
-    B = (-1, -p \, \mid \, \Q).
+    i^2 = -1 \text{, } j^2 = -p \text{ and } ij = k = -ji .
 \]
-The case \( p \equiv 1 \pmod{4} \) is similar, but more annoying.
 
-Since we can choose to solve the isogeny problem for any maximal order we will assume
+Since we can choose to solve the isogeny problem for any maximal order we will assume that the order is
 \[
     O = \Z \langle i, (1+j) / 2 \rangle = \op{span}_\Z \{ (1+j) / 2, (i+k) / 2 , j, k \}.
 \]
 Note that \( \{ (1+j) / 2, (i+k) / 2 , j, k \} \) is a \( \Z \)-basis for \( O \) in Hermite normal form.
 
-\begin{lemma}[Properties of \( (-1, -p \, \mid \, \Q) \)]
-    Let \( p \equiv 3 \pmod{4} \).
-    Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
-    Then the multiplication table for \( B \) is
-    \[
-        \begin{array}{c|ccc}
-              & i  & j   & k  \\
-            \hline
-            i & -1 & k   & -j \\
-            j & -k & -p  & pi \\
-            k & j  & -pi & -p
-        \end{array}
-    \]
-
-    The norm equation for \( B \) is
-    \[
-        \nrd(t + xi + yj + zk) = t^2 + x^2 + y^2p + z^2p.
-    \]
-    The trace equation for \( B \) is
-    \[
-        \trd(t + xi + yj + zk) = 2t.
-    \]
-\end{lemma}
-\begin{proof}
-    We verify with Sage.
-    \begin{lstlisting}
-        sage: A.<t, x, y, z, p> = PolynomialRing(QQ)
-        sage: B.<i, j, k> = QuaternionAlgebra(-1, -p)
-        sage: matrix([[a * b for b in [i, j, k]]
-                       for a in [i, j, k]])
-        [    -1      k     -j]
-        [    -k     -p    p*i]
-        [     j (-p)*i     -p]
-        sage: alpha = t + x*i + y*j + z*k
-        sage: alpha.reduced_norm()
-        y^2*p + z^2*p + t^2 + x^2
-        sage: alpha.reduced_trace()
-        2*t
-    \end{lstlisting}
-\end{proof}
-
-\begin{lemma}[]
-    Let \( p \equiv 3 \pmod{4} \).
-    Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
-    Then \( \disc B = p \).
-\end{lemma}
-\begin{proof}
-    (Sketch.)
-    The discriminant of \( B \) is the product of the primes where \( B \) is ramified.
-    Apparently?? \( B \) can only be ramified at primes dividing its invariants (\( a, b = -1, -p\)).
-    Calculations with hilbert symbols then shows that \( \disc B = p \)
-\end{proof}
-
-\begin{lemma}[Maximal order in \( B_{p, \infty} \) where \( p \equiv 3 \pmod{4} \)]
-    Let \( p \equiv 3 \pmod{4} \).
-    Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
-    Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
-    Then \( O \) is a maximal order.
-\end{lemma}
-\begin{proof}
-    Check that \( \disc O  = p = \disc B\).
-\end{proof}
-
-\begin{example}
-    Our running example will have \( p = 59 \).
-    \begin{lstlisting}
-        sage: p = 59
-        sage: p.mod(4) == 3
-        True 
-        sage: B.<i, j, k> = QuaternionAlgebra(-1, -p)
-        sage: B.discriminant() == p
-        True
-        sage: B.maximal_order()
-        Order of Quaternion Algebra (-1, -59) with base ring Rational Field with basis (1/2 + 1/2*j, 1/2*i + 1/2*k, j, k)
-        sage: # We now verify B.maximal_order() is maximal.
-        sage: B.maximal_order().discriminant() == B.discriminant()
-        True
-    \end{lstlisting}
-\end{example}
-
-We will now define a ``distinguished quadratic subring'' of \( O \).
-This subring may be slightly different if \( p \not\equiv 3 \pmod{4} \).
-
-\begin{lemma}[Distinguished quadratice subring]
-    Let \( p \equiv 3 \pmod{4} \).
-    Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
-    Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
-    Let \( R = \Z[i] \subset O \).
-    Then \( R \) has discriminant \( D = 4 \), \( R^\perp = Rj \) and \( R + Rj = \Z\langle i, j \rangle\) is a suborder of \( O \) of index \( D \).
-    Moreover
-    \[
-        \nrd(t + xi + (y + zi)j) = f(t, x) + p f(y, z)
-    \]
-    where \( f(t, x) = t^2 + x^2 \) is a principal quadratic form of discriminant \( D \).
-\end{lemma}
-\begin{proof}
-    Note that it seems they are not normalizing their discriminants by \( 2^{-n} \) which is the usual thing to do.
-    Hence the discriminant of \( f \) is 4 as required by the lemma.
-    The discriminant is equal to the index since \( O \) is maximal so \( O = O_L(R) \).
-\end{proof}
-
-\section{The algorithm}
-\subsection{High level overview}
+The precise statement of the problem we wish to solve is given below.
 
 \begin{prob}
     Let \( p \equiv 3 \pmod{4} \).
@@ -236,10 +132,117 @@ This subring may be slightly different if \( p \not\equiv 3 \pmod{4} \).
 
 If \( p \equiv 1 \pmod{4} \) then \( B \), \( O \) and \( R \) will be different as described in Section 2.3 of the paper.
 
+% \begin{lemma}[Properties of \( (-1, -p \, \mid \, \Q) \)]
+%     Let \( p \equiv 3 \pmod{4} \).
+%     Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
+%     Then the multiplication table for \( B \) is
+%     \[
+%         \begin{array}{c|ccc}
+%               & i  & j   & k  \\
+%             \hline
+%             i & -1 & k   & -j \\
+%             j & -k & -p  & pi \\
+%             k & j  & -pi & -p
+%         \end{array}
+%     \]
+
+%     The norm equation for \( B \) is
+%     \[
+%         \nrd(t + xi + yj + zk) = t^2 + x^2 + y^2p + z^2p.
+%     \]
+%     The trace equation for \( B \) is
+%     \[
+%         \trd(t + xi + yj + zk) = 2t.
+%     \]
+% \end{lemma}
+% \begin{proof}
+%     We verify with Sage.
+%     \begin{lstlisting}
+%         sage: A.<t, x, y, z, p> = PolynomialRing(QQ)
+%         sage: B.<i, j, k> = QuaternionAlgebra(-1, -p)
+%         sage: matrix([[a * b for b in [i, j, k]]
+%                        for a in [i, j, k]])
+%         [    -1      k     -j]
+%         [    -k     -p    p*i]
+%         [     j (-p)*i     -p]
+%         sage: alpha = t + x*i + y*j + z*k
+%         sage: alpha.reduced_norm()
+%         y^2*p + z^2*p + t^2 + x^2
+%         sage: alpha.reduced_trace()
+%         2*t
+%     \end{lstlisting}
+% \end{proof}
+
+% \begin{lemma}[]
+%     Let \( p \equiv 3 \pmod{4} \).
+%     Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
+%     Then \( \disc B = p \).
+% \end{lemma}
+% \begin{proof}
+%     (Sketch.)
+%     The discriminant of \( B \) is the product of the primes where \( B \) is ramified.
+%     Apparently?? \( B \) can only be ramified at primes dividing its invariants (\( a, b = -1, -p\)).
+%     Calculations with hilbert symbols then shows that \( \disc B = p \)
+% \end{proof}
+
+% \begin{lemma}[Maximal order in \( B_{p, \infty} \) where \( p \equiv 3 \pmod{4} \)]
+%     Let \( p \equiv 3 \pmod{4} \).
+%     Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
+%     Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
+%     Then \( O \) is a maximal order.
+% \end{lemma}
+% \begin{proof}
+%     Check that \( \disc O  = p = \disc B\).
+% \end{proof}
+
+% \begin{example}
+%     Our running example will have \( p = 59 \).
+%     \begin{lstlisting}
+%         sage: p = 59
+%         sage: p.mod(4) == 3
+%         True 
+%         sage: B.<i, j, k> = QuaternionAlgebra(-1, -p)
+%         sage: B.discriminant() == p
+%         True
+%         sage: B.maximal_order()
+%         Order of Quaternion Algebra (-1, -59) with base ring Rational Field with basis (1/2 + 1/2*j, 1/2*i + 1/2*k, j, k)
+%         sage: # We now verify B.maximal_order() is maximal.
+%         sage: B.maximal_order().discriminant() == B.discriminant()
+%         True
+%     \end{lstlisting}
+% \end{example}
+
+% We will now define a ``distinguished quadratic subring'' of \( O \).
+% This subring may be slightly different if \( p \not\equiv 3 \pmod{4} \).
+
+% \begin{lemma}[Distinguished quadratice subring]
+%     Let \( p \equiv 3 \pmod{4} \).
+%     Let \( B =  (-1, -p \, \mid \, \Q) \) be a quaternion algebra.
+%     Let \( O = \Z \langle i, (1+j) / 2 \rangle \).
+%     Let \( R = \Z[i] \subset O \).
+%     Then \( R \) has discriminant \( D = 4 \), \( R^\perp = Rj \) and \( R + Rj = \Z\langle i, j \rangle\) is a suborder of \( O \) of index \( D \).
+%     Moreover
+%     \[
+%         \nrd(t + xi + (y + zi)j) = f(t, x) + p f(y, z)
+%     \]
+%     where \( f(t, x) = t^2 + x^2 \) is a principal quadratic form of discriminant \( D \).
+% \end{lemma}
+% \begin{proof}
+%     Note that it seems they are not normalizing their discriminants by \( 2^{-n} \) which is the usual thing to do.
+%     Hence the discriminant of \( f \) is 4 as required by the lemma.
+%     The discriminant is equal to the index since \( O \) is maximal so \( O = O_L(R) \).
+% \end{proof}
+
+
+\subsection{High level overview}
+
+
+
 We will solve this problem like this:
+
 \begin{description}
     \item[Step 1]
-    Replace \( I \) with an ideal in the same class but with reduced norm \( N \) where \( N \) is a large prime, coprime to \( \ell \), \( |\disc R| \) and \( p \) and such that \( \ell \) is a quadratic nonresidue modulo \( N \).
+    Replace \( I \) with an ideal in the same class but with reduced norm \( N \) where \( N \neq \ell \) is a large prime coprime to \( |\disc R| \) and \( p \) and such that \( \ell \) is a quadratic nonresidue modulo \( N \).
     \item[Step 2]
     Find \( \alpha \in I \) such that \( I = ON + O\alpha \).
     \item[Step 3]
@@ -249,9 +252,10 @@ We will solve this problem like this:
     \item[Step 5]
     Find \( \mu \in  O \) and \( \lambda \in \Z \) such that \[ \mu \equiv \lambda \mu_0 \mod NO \] and \[ \nrd(\mu) = \ell^{e_1} \] and \( \gcd(\lambda, N) = 1 \).
     \item[Step 6]
-    Set \( \beta = \gamma \mu = \lambda\gamma\mu_0 \equiv \lambda \alpha \pmod{NO} \).
-    Then \[ J \vcentcolon = I\overline{\beta}/N \] is an ideal in the same class with \( J \subset O \) and \( \nrd(J) \) is a power of \( \ell \).
+    Set \( \beta = \gamma \mu \).
+    Then \[ J = I(\overline{\beta}/N) \] is an ideal in the same class with \( J \subset O \) and \( \nrd(J) \) is a power of \( \ell \).
 \end{description}
+
 
 We first show that the output is correct in \S 1.3 , we will then show how to complete steps 1-6 in sections \S 1.4-1.8.
 
@@ -327,8 +331,12 @@ We will use the following two lemmas.
 
 We can now prove the correctness.
 Let \( \beta \) be as in step 6.
-Then \( \beta \in I \) from Lemma \ref{lem: beta in I} and \( \nrd(\beta) = \nrd(\gamma) \nrd(\mu) = N\ell^{e_0 + e_1} \).
-Now from Lemma \ref{lem: change norm} \( I\overline{\beta}/N \) has norm \( \nrd(\beta) / N = \ell^{e_0 + e_1} \) as required.
+Then
+\[
+    \beta = \gamma \mu = \lambda\gamma\mu_0 \equiv \lambda \alpha \pmod{NO}
+\]
+so \( \beta \in I \) from Lemma \ref{lem: beta in I} and \( \nrd(\beta) = \nrd(\gamma) \nrd(\mu) = N\ell^{e_0 + e_1} \).
+Now from Lemma \ref{lem: change norm} \( J = I\overline{\beta}/N \) has norm \( \nrd(\beta) / N = \ell^{e_0 + e_1} \) as required.
 
 \subsection{Step 1}
 For step 1 we need to solve the following problem.
@@ -544,6 +552,8 @@ The code below demonstrates how you would do this.
     \end{lstlisting}
 \end{example}
 
+If no solution exists then repeat the previous step to find a different \( \gamma \).
+
 \subsection{Step 5}
 For step 5 we need to solve the following problem.
 
@@ -578,15 +588,15 @@ We first need a lemma.
     \begin{lstlisting}
         sage: A.<t_1, x_1, y_1, z_1, t_2, x_2, y_2, z_2, a, b> = PolynomialRing(QQ)
         sage: B.<i, j, k> = QuaternionAlgebra(a, b)
-        sage: alpha_1 = t_1 + x_1 *i + y_1 * j + z_1 * k
-        sage: alpha_2 = t_2 + x_2 *i + y_2 * j + z_2 * k
-        sage: (alpha_1 + alpha_2).reduced_norm() - alpha_1.reduced_norm() - alpha_2.reduced_norm() == (alpha_1 * alpha_2.conjugate()).reduced_trace()
+        sage: w_1 = t_1 + x_1 * i + y_1 * j + z_1 * k
+        sage: w_2 = t_2 + x_2 * i + y_2 * j + z_2 * k
+        sage: (w_1 + w_2).reduced_norm() - w_1.reduced_norm() - w_2.reduced_norm() == (w_1 * w_2.conjugate()).reduced_trace()
         True
     \end{lstlisting}
 \end{proof}
 
 
-We will now show how to solve this problem \ref{prob: mu = lambda * mu_0}.
+We will now show how to solve Problem \ref{prob: mu = lambda * mu_0}.
 As input we are given a prime \( p \equiv 3 \pmod{4} \), \( \mu_0 = \beta_0j \in (R / NR)^*[j] \), and a prime \( N \neq p \) sufficiently large.
 The goal is to find \( \lambda \in \Z \) coprime to \( N \) and \( \mu_1 \in  R + Rj \) such that \( \mu = \lambda \mu_0 + N \mu_1 \) has \( \ell \) power norm
 \[
@@ -606,13 +616,19 @@ Then
       & = p\lambda^2 \nrd(\beta_0) + Np\lambda \trd(\beta_0\overline{\beta_1}) + N^2(p\nrd(\beta_1) + \nrd(\alpha_1))
 \end{align*}
 Note that we are given all variables with subscript 0 and are solving for the variables with subscript 1.
+
+The last line of the equation above is a polynomial in \( N \).
+We can therefore solve the equation above by ``building up'' to the solution.
+First we find a solution modulo \( N \), then modulo \( N^2 \), and finally we solve the entire equation.
+
 Reducing modulo \( N \) gives
 \[
     \ell^e \equiv p\lambda^2\nrd(\beta_0) \pmod{N}.
 \]
 We then choose \( e \) to be even if \( (p\nrd(\beta_0))^{-1} \bmod{N} \) is a square modulo \( N \) and odd otherwise.
 This ensures that \( \ell^e(p\nrd(\beta_0))^{-1} \) is a square modulo \( N \) and we can solve for \( 0 <  \lambda < N\).
-We also choose \( e \) sufficiently large (\( \ell^e >> p|D|N^4 \)).
+We also choose \( e \) sufficiently large (\( \ell^e = O(p|D|N^4) \)).
+
 Reducing modulo \( N^2 \) gives
 \[
     \frac{\ell^e - p\lambda^2\nrd(\beta_0)}{N}\equiv p\lambda \trd(\beta_0\overline{\beta_1}) \pmod{N^2}
@@ -620,15 +636,17 @@ Reducing modulo \( N^2 \) gives
 which is a linear equation in the coefficients of \( \beta_1 \in \Z[i]\).
 There will be \( N \) solutions to this equation and we a solution randomly such that \( \nrd(\lambda\beta_0 + N\beta_1) < N^4 \).
 
-The only variable left that hasn't be determined is \( \alpha_1 \) so rearranging gives
+The only variable left that hasn't be determined is \( \alpha_1 \).
+We rearrange the equation \( \ell^e = \nrd(N\alpha_1) +p\nrd(\lambda\beta_0 + N\beta_1) \) and get
 \[
-    \nrd(\alpha_1) = \frac{\ell^e - p\lambda^2 \nrd(\beta_0) - Np\lambda \trd(\beta_0\overline{\beta_1})}{N^2}.
+    \nrd(\alpha_1)
+    = \frac{\ell^e - p\nrd(\lambda\beta_0 + N\beta_1)}{N^2}.
 \]
 The integer \( e \) was chosen sufficiently large so that the right hand side is positive.
 
 It is possible that no solution for \( \alpha_1 \) exists.
 If this is the case then we choose a different \( \beta_1 \) from the previous step and repeat.
-Under the assumption that the right hand side of the above equation behaves like random values around \( N^4|D|p \) as we change \( \beta_1 \) we will find a solution in polynomial time.
+Under the assumption that the right hand side of the above equation behaves like random values around \( N^4|D|p \) as we change \( \beta_1 \), we will find a solution in polynomial time.
 
 
 
