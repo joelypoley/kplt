@@ -11,6 +11,8 @@ from kplt import solve_congruence
 from kplt import strong_approximation 
 from kplt import ell_power_equiv 
 
+set_random_seed(0)
+
 class IdealsTest(unittest.TestCase):
 
     def test_prime_norm_representative(self):
@@ -77,9 +79,8 @@ class IdealsTest(unittest.TestCase):
         ell = Integer(3)
         O = B.maximal_order()
         i, j, k = B.gens()
-        alpha = Integer(1)/Integer(2) - (Integer(1)/Integer(2))*i + (Integer(3)/Integer(2))*j - (Integer(3)/Integer(2))*k
-        N = 2300
-        I = left_ideal([O.random_element(), 2300], O)
+        alpha = 1 + 2 * j
+        I = left_ideal([alpha, 13], O)
         J = ell_power_equiv(I, O, ell)
         self.assertTrue(J.left_order() == O)
         self.assertTrue(Integer(J.norm()).prime_factors() == [ell])

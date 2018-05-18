@@ -88,7 +88,7 @@ def prime_norm_representative(I, O, D, ell):
         print('Warning: The ideal I does not have a minkowski basis'
               'precomputed and Sage can not do it for you.')
 
-    m = 100  # TODO: Change this to a proper bound.
+    m = 1000  # TODO: Change this to a proper bound.
     B = I.quaternion_algebra()
     p = B.discriminant()
     if mod(p, 4) != 3 or not is_prime(p):
@@ -107,8 +107,7 @@ def prime_norm_representative(I, O, D, ell):
     while not is_prime(normalized_norm) or normalized_norm.divides(
             D) or normalized_norm == ell or normalized_norm == p or mod(
                 ell, normalized_norm).is_square():
-        alpha = sum(
-            (ZZ.random_element(-m, m + 1) * alpha_i for alpha_i in I.basis()))
+        alpha = random_combination(I.basis(), bound=m)
         normalized_norm = Integer(alpha.reduced_norm() / N)
 
     # Now we have an element alpha of prime norm the ideal J = I*gamma has
@@ -173,7 +172,7 @@ def element_of_norm(M, O):
     i = B.gen(0)
     j = B.gen(1)
     q, p = [Integer(-i**2), Integer(-j**2)]
-    m = 1000
+    m = 100 # TODO: Replace with proper bound.
     r = 0
     sol = None
     x_2 = ZZ.random_element(x=m)
@@ -310,13 +309,14 @@ def strong_approximation(mu_0, N, O, ell):
     """Find mu in O with nrd(mu) = ell^e and mu = lambda * mu_0 mod NO"""
     ell = Integer(ell)
     N = Integer(N)
+    #print(N)
     B = O.quaternion_algebra()
     p = B.discriminant()
     i, j, k = B.gens()
     t_0, x_0, y_0, z_0 = mu_0.coefficient_tuple()
     assert t_0 == x_0 == 0
     beta_0 = y_0 + z_0 * i
-    e = 1000 if (
+    e = 100 if (
         ~mod(p * Integer(beta_0.reduced_norm()), N)).is_square() else 101
     lamb = Integer(
         (ell**e * ~mod(p * Integer(beta_0.reduced_norm()), N)).sqrt())
@@ -325,7 +325,8 @@ def strong_approximation(mu_0, N, O, ell):
     while mu is None:
         assert N.divides(ell**e - p * lamb**2 * Integer(beta_0.reduced_norm()))
         lhs = Integer((ell**e - p * lamb**2 * Integer(beta_0.reduced_norm())) / N)
-        z_1 = ZZ.random_element(0, N**2)
+        #z_1 = ZZ.random_element(0, N**2)
+        z_1 = ZZ.random_element(0, N)
         b = Integer(lhs - p * lamb * 2 * z_0 * z_1)
         y_1 = b * ~mod(2 * Integer(y_0) * p * lamb, N**2)
         beta_1 = Integer(y_1) + Integer(z_1) * i
@@ -335,6 +336,8 @@ def strong_approximation(mu_0, N, O, ell):
 
         assert (N**2).divides(ell**e - p * (lamb * beta_0 + N * beta_1).reduced_norm())
         r = (ell**e - p * (lamb * beta_0 + N * beta_1).reduced_norm()) / N**2
+        assert r > 0
+        # TODO: Ensure the r is postive and in the right range.
 
         sol = cornacchia(1, r)
         if sol is not None:
