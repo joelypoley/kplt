@@ -88,7 +88,7 @@ def prime_norm_representative(I, O, D, ell):
         print('Warning: The ideal I does not have a minkowski basis'
               'precomputed and Sage can not do it for you.')
 
-    m = 1000  # TODO: Change this to a proper bound.
+    m = 100  # TODO: Change this to a proper bound.
     B = I.quaternion_algebra()
     p = B.discriminant()
     if mod(p, 4) != 3 or not is_prime(p):
@@ -224,8 +224,6 @@ def find_generators(I):
     return N, alpha
 
 
-
-
 def solve_congruence(gamma, alpha, D, N, O):
     """Solve gamma * mu = alpha mod NO for mu in Zj + Zk and mu != 0 mod N.
 
@@ -253,7 +251,7 @@ def solve_congruence(gamma, alpha, D, N, O):
 
     def phi(alpha):
         t, x, y, z = [
-            D * a * Integer(alpha_i) for alpha_i in alpha.coefficient_tuple()
+            Integer(D * a * alpha_i) for alpha_i in alpha.coefficient_tuple()
         ]
         return t + x * i_ff + y * j_ff + z * k_ff
 
@@ -273,3 +271,92 @@ def solve_congruence(gamma, alpha, D, N, O):
     return sum(
         Integer(coeff) * elem
         for coeff, elem in zip(mu_ff.coefficient_tuple(), [1, i, j, k]))
+
+
+def solve_ideal_equation(gamma, I, D, N, O):
+    d, a, b = xgcd(D, N)
+    assert d == 1
+    a, b = [Integer(x) for x in O.quaternion_algebra().invariants()]
+    F = GF(N)
+    B_ff = QuaternionAlgebra(F, a, b)
+    # The suffix _ff means that this element is over a finite field, not the
+    # rationals.
+    i_ff, j_ff, k_ff = B_ff.gens()
+
+    def phi(alpha):
+        t, x, y, z = [
+            Integer(D * a * alpha_i) for alpha_i in alpha.coefficient_tuple()
+        ]
+        return t + x * i_ff + y * j_ff + z * k_ff
+
+    gamma_ff = phi(gamma)
+    gamma_ff_mat = gamma_ff.matrix(action='left')
+
+    I_basis_ff = [phi(alpha).coefficient_tuple() for alpha in I.basis()]
+    lin_system = matrix(F, [gamma_ff_mat[2], gamma_ff_mat[3]] + I_basis_ff)
+    sol = lin_system.left_kernel().basis()[0]
+    y, z = sol[0], sol[1]
+    mu_ff = y * j_ff + z * k_ff
+
+    B = O.quaternion_algebra()
+    i, j, k = B.gens()
+    return sum(
+        Integer(coeff) * elem
+        for coeff, elem in zip(mu_ff.coefficient_tuple(), [1, i, j, k]))
+     
+
+
+def strong_approximation(mu_0, N, O, ell):
+    """Find mu in O with nrd(mu) = ell^e and mu = lambda * mu_0 mod NO"""
+    ell = Integer(ell)
+    N = Integer(N)
+    B = O.quaternion_algebra()
+    p = B.discriminant()
+    i, j, k = B.gens()
+    t_0, x_0, y_0, z_0 = mu_0.coefficient_tuple()
+    assert t_0 == x_0 == 0
+    beta_0 = y_0 + z_0 * i
+    e = 1000 if (
+        ~mod(p * Integer(beta_0.reduced_norm()), N)).is_square() else 101
+    lamb = Integer(
+        (ell**e * ~mod(p * Integer(beta_0.reduced_norm()), N)).sqrt())
+    assert mod(ell**e, N) == mod(lamb**2 * Integer(mu_0.reduced_norm()), N)
+    mu = None
+    while mu is None:
+        assert N.divides(ell**e - p * lamb**2 * Integer(beta_0.reduced_norm()))
+        lhs = Integer((ell**e - p * lamb**2 * Integer(beta_0.reduced_norm())) / N)
+        z_1 = ZZ.random_element(0, N**2)
+        b = Integer(lhs - p * lamb * 2 * z_0 * z_1)
+        y_1 = b * ~mod(2 * Integer(y_0) * p * lamb, N**2)
+        beta_1 = Integer(y_1) + Integer(z_1) * i
+
+        assert mod(lhs, N**2) == mod(
+            p * lamb * (beta_0 * beta_1.conjugate()).reduced_trace(), N**2)
+
+        assert (N**2).divides(ell**e - p * (lamb * beta_0 + N * beta_1).reduced_norm())
+        r = (ell**e - p * (lamb * beta_0 + N * beta_1).reduced_norm()) / N**2
+
+        sol = cornacchia(1, r)
+        if sol is not None:
+            t_1, x_1 = sol
+            alpha_1 = t_1 + x_1 * i 
+            mu_1 = alpha_1 + beta_1 * j
+            mu = lamb * mu_0 + N * mu_1
+            assert mu.reduced_norm() == ell**e
+            break
+     
+    return mu, lamb 
+
+
+def ell_power_equiv(I, O, ell, print_progress=False):
+    """Solve ell isogeny problem"""
+    ell = Integer(ell)
+    D = 4
+    I = prime_norm_representative(I, O, D, ell)
+    N, alpha = find_generators(I)
+    gamma = element_of_norm(N * ell**50, O)
+    mu_0 = solve_ideal_equation(gamma, I, D, N, O)
+    mu, _ = strong_approximation(mu_0, N, O, ell)
+    beta = gamma * mu
+    J = I.scale(beta.conjugate() / N)
+    return J
