@@ -13,7 +13,7 @@ class IdealsTest(unittest.TestCase):
         B = QuaternionAlgebra(59)
         O = B.maximal_order()
         I = O.left_ideal(O.basis()).scale(2)
-        J = prime_norm_representative(I, O)
+        J = prime_norm_representative(I, O, 4, 2)
         self.assertTrue(J.norm() in Primes() and J.left_order() == O)
 
     def test_element_of_norm(self):

@@ -39,35 +39,57 @@ def is_minkowski_basis(basis):
         for alpha_i in basis)
 
 
-def prime_norm_representative(I, O):
+def prime_norm_representative(I, O, D, ell):
     """
     Given a maximal order `O` and a left `O`-ideal return another
-    left `O` J in the same class, but with prime norm.
+    left `O`-ideal `J` in the same class, but with prime norm `N`.
 
+    This corresponds to Step 1 in the notes. So given an ideal `I` it returns
+    an ideal in the same class but with reduced norm `N` where `N` != `ell` is
+    a large prime coprime to D and p and such that `ell` is a quadratic
+    nonresidue module `N`.
+
+    
     Args:
         I: A left O-ideal.
-        O: A maxmimal order in a quaternion algebra.
+        O: A maximal order in a quaternion algebra.
+        D: An integer.
+        ell: A prime.
     Returns:
-        Another left O-ideal in the same class with prime norm.
+        Another left `O`-ideal in the same class with prime norm `N`. `N` will
+        be coprime to `D` and `ell` and `ell` and `ell` will be a nonquadratic
+        residue module `N`. 
 
     """
+    # Check preconditions.
     if not is_minkowski_basis(I.basis()):
         print('Warning: The ideal I does not have a minkowski basis'
               'precomputed and Sage can not do it for you.')
-    m = 10  # TODO: Change this to a proper bound.
+
+    m = 1000  # TODO: Change this to a proper bound.
     B = I.quaternion_algebra()
-    if mod(B.discriminant(), 4) != 3:
+    p = B.discriminant()
+    if mod(p, 4) != 3 or not is_prime(p):
         raise NotImplementedError('The quaternion algebra must have'
-                                  ' discriminant p = 3 mod 4')
+                                  ' prime discriminant p == 3 mod 4')
+
+    if O != B.maximal_order():
+        raise NotImplementedError(
+            'The order O must be a special order. I.e. O must satisfy'
+            ' O.quaternion_algebra().maximal_order() == O.')
+
+    N = I.norm()
     alpha = B(0)
+    normalized_norm = Integer(alpha.reduced_norm() / N)
     # Choose random elements in I until one is found with prime norm.
-    while normalized_norm(alpha, I) not in Primes():
+    while not is_prime(normalized_norm) or normalized_norm.divides(
+            D) or normalized_norm == ell or normalized_norm == p or mod(ell, normalized_norm).is_square():
         alpha = sum(
             (ZZ.random_element(-m, m + 1) * alpha_i for alpha_i in I.basis()))
+        normalized_norm = Integer(alpha.reduced_norm() / N)
 
     # Now we have an element alpha of prime norm the ideal J = I*gamma has
     # prime norm where gamma = conjguate(alpha) / N(I).
-    N = I.norm()
     gamma = alpha.conjugate() / N
     J_basis = [alpha_i * gamma for alpha_i in I.basis()]
     J = O.left_ideal(J_basis)
@@ -126,7 +148,7 @@ def element_of_norm(M, O):
     i = B.gen(0)
     j = B.gen(1)
     q, p = [Integer(-i**2), Integer(-j**2)]
-    m = 10000
+    m = 1000
     r = 0
     sol = None
     x_2 = ZZ.random_element(x=m)
@@ -149,4 +171,3 @@ def element_of_norm(M, O):
     beta = x_2 + y_2 * i
     assert Integer((alpha + beta * j).reduced_norm()) == M
     return alpha + beta * j
-
