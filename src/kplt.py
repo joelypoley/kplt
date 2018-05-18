@@ -224,9 +224,6 @@ def find_generators(I):
     return N, alpha
 
 
-def construct_isomorphism(O, N, D):
-    """Construct an isomorphism from O / NO to Z<i, j>/NZ<i, j>."""
-    # d = Da + Nb
 
 
 def solve_congruence(gamma, alpha, D, N, O):
