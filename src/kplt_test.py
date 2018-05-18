@@ -7,6 +7,7 @@ from kplt import prime_norm_representative
 from kplt import element_of_norm
 from kplt import find_generators
 from kplt import left_ideal
+from kplt import solve_congruence 
 
 class IdealsTest(unittest.TestCase):
 
@@ -24,6 +25,19 @@ class IdealsTest(unittest.TestCase):
         N, alpha = find_generators(I)
         J = left_ideal([N, alpha], O)
         self.assertTrue(J == I)
+
+    def test_solve_congruence(self):
+        B = QuaternionAlgebra(59)
+        O = B.maximal_order()
+        i, j, k = B.gens()
+        gamma = 16 + 69*i
+        alpha = 10*j -k
+        N = 101
+        D = 4
+        mu = solve_congruence(gamma, alpha, D, N, O)
+        self.assertTrue(mu in B)
+        NO = O.left_ideal(O.basis()).scale(N)
+        self.assertTrue(Integer((gamma*mu - alpha) in NO))
 
     def test_element_of_norm(self):
         B = QuaternionAlgebra(59)
