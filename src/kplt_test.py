@@ -90,8 +90,9 @@ class IdealsTest(unittest.TestCase):
         i, j, k = B.gens()
         gens = [(1 + k) / 2, (i + j) / 2, j, k]
         O = B.quaternion_order(gens)
-        alpha = -1 / 2 + 6 * j + 119 / 2 * k
-        I = left_ideal([alpha], O)
+        alpha = 2 * i - 2 * j + 2 * k
+        assert alpha in O
+        I = left_ideal([alpha, 24], O)
         J = ell_power_equiv(I, O, ell)
         self.assertTrue(J.left_order() == O)
         self.assertTrue(Integer(J.norm()).prime_factors() == [ell])

@@ -6,6 +6,7 @@ from sage.rings.integer_ring import ZZ
 from sage.rings.integer import Integer
 from sage.arith.misc import is_prime
 from sage.arith.misc import xgcd
+from sage.arith.misc import gcd
 from sage.arith.misc import two_squares
 from sage.arith.functions import lcm
 from sage.sets.primes import Primes
@@ -79,7 +80,11 @@ def left_ideal(gens, O):
     basis = (quaternion_algebra_cython.
              rational_quaternions_from_integral_matrix_and_denom(B, H, d))
 
-    return O.left_ideal(basis)
+    I = O.left_ideal(basis)
+
+    assert all(x in O for x in I.basis())
+    assert all (x * y in O for x in O.basis() for y in I.basis())
+    return I
 
 
 def random_combination(basis, bound=1000):
@@ -161,6 +166,10 @@ def prime_norm_representative(I, O, D, ell):
     gamma = alpha.conjugate() / N
     J_basis = [alpha_i * gamma for alpha_i in I.basis()]
     J = O.left_ideal(J_basis)
+
+    assert is_prime(Integer(J.norm()))
+    assert not mod(ell, Integer(J.norm())).is_square()
+    assert gcd(Integer(J.norm()), D) == 1
     return J
 
 
@@ -177,11 +186,14 @@ def solve_norm_equation(q, r):
     if q == 1:
         try:
             sol = two_squares(r)
+            assert sol[0]**2 + q* sol[1]**2 == r
             return sol
         except ValueError:
             return None
     else:
-        return cornacchia(q, r)
+        sol = cornacchia(q, r)
+        assert True if sol in None else sol[0]**2 + q* sol[1]**2 == r
+        return sol
 
 
 def element_of_norm(M, O):
@@ -248,9 +260,7 @@ def find_generators(I):
         alpha = random_combination(I.basis())
 
     J = left_ideal([N, alpha], O)
-    if not J == I:
-        raise RuntimeError('Oh dear. The algorithm failed.')
-
+    assert J == I
     return N, alpha
 
 
@@ -353,10 +363,10 @@ def strong_approximation(mu_0, N, O, ell):
             alpha_1 = t_1 + x_1 * i
             mu_1 = alpha_1 + beta_1 * j
             mu = lamb * mu_0 + N * mu_1
-            assert mu.reduced_norm() == ell**e
             break
 
     assert mu - lamb * mu_0 in O.left_ideal(O.basis()).scale(N)
+    assert mu.reduced_norm() == ell**e
     return mu
 
 
@@ -382,6 +392,9 @@ def special_ell_power_equiv(I, O, ell, print_progress=False):
     mu = strong_approximation(mu_0, N, O, ell)
     beta = gamma * mu
     J = I.scale(beta.conjugate() / N)
+    assert J.left_order() == O
+    assert Integer(J.norm()).prime_factors() == [ell]
+    assert [x in O for x in J.basis()]
     return beta, J
 
 
@@ -394,4 +407,7 @@ def ell_power_equiv(J, O, ell, print_progress=False):
     gamma_1, I_1 = special_ell_power_equiv(I, O_special, ell)
     gamma_2, I_2 = special_ell_power_equiv(K, O_special, ell)
     gamma = gamma_1.conjugate() * gamma_2 / Integer(I.norm())
+    assert J.left_order() == O
+    assert Integer(J.norm()).prime_factors() == [ell]
+    assert [x in O for x in J.basis()]
     return J.scale(gamma.conjugate() / Integer(J.norm()))
