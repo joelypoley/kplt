@@ -3,6 +3,7 @@ from __future__ import print_function
 import unittest
 
 from sage.all import *
+
 from kplt import prime_norm_representative
 from kplt import element_of_norm
 from kplt import find_generators

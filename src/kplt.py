@@ -1,8 +1,17 @@
 from __future__ import print_function
 
-from sage.all import *
 from sage.algebras.quatalg.quaternion_algebra import quaternion_algebra_cython
+from sage.rings.finite_rings.integer_mod import mod
+from sage.rings.integer_ring import ZZ
+from sage.rings.integer import Integer
+from sage.arith.misc import is_prime
+from sage.arith.misc import xgcd
+from sage.arith.misc import two_squares 
+from sage.sets.primes import Primes
+from sage.rings.finite_rings.finite_field_constructor import FiniteField as GF
 from cornacchia import cornacchia
+from sage.algebras.quatalg.quaternion_algebra import QuaternionAlgebra
+from sage.matrix.constructor import matrix
 
 
 def left_ideal(gens, O):
