@@ -12,11 +12,11 @@ def left_ideal(gens, O):
 
     all_gens = [x * y for x in O.basis() for y in gens]
     B = O.quaternion_algebra()
-    Z, d = quaternion_algebra_cython.integral_matrix_and_denom_from_rational_quaternions(
-        all_gens)
+    Z, d = (quaternion_algebra_cython.
+            integral_matrix_and_denom_from_rational_quaternions(all_gens))
     H = Z.hermite_form(include_zero_rows=False)
-    basis = quaternion_algebra_cython.rational_quaternions_from_integral_matrix_and_denom(
-        B, H, d)
+    basis = (quaternion_algebra_cython.
+             rational_quaternions_from_integral_matrix_and_denom(B, H, d))
 
     return O.left_ideal(list(basis))
 
@@ -172,7 +172,7 @@ def element_of_norm(M, O):
     i = B.gen(0)
     j = B.gen(1)
     q, p = [Integer(-i**2), Integer(-j**2)]
-    m = 100 # TODO: Replace with proper bound.
+    m = 100  # TODO: Replace with proper bound.
     r = 0
     sol = None
     x_2 = ZZ.random_element(x=m)
@@ -302,7 +302,6 @@ def solve_ideal_equation(gamma, I, D, N, O):
     return sum(
         Integer(coeff) * elem
         for coeff, elem in zip(mu_ff.coefficient_tuple(), [1, i, j, k]))
-     
 
 
 def strong_approximation(mu_0, N, O, ell):
@@ -324,7 +323,8 @@ def strong_approximation(mu_0, N, O, ell):
     mu = None
     while mu is None:
         assert N.divides(ell**e - p * lamb**2 * Integer(beta_0.reduced_norm()))
-        lhs = Integer((ell**e - p * lamb**2 * Integer(beta_0.reduced_norm())) / N)
+        lhs = Integer(
+            (ell**e - p * lamb**2 * Integer(beta_0.reduced_norm())) / N)
         #z_1 = ZZ.random_element(0, N**2)
         z_1 = ZZ.random_element(0, N)
         b = Integer(lhs - p * lamb * 2 * z_0 * z_1)
@@ -334,7 +334,8 @@ def strong_approximation(mu_0, N, O, ell):
         assert mod(lhs, N**2) == mod(
             p * lamb * (beta_0 * beta_1.conjugate()).reduced_trace(), N**2)
 
-        assert (N**2).divides(ell**e - p * (lamb * beta_0 + N * beta_1).reduced_norm())
+        assert (N**2).divides(ell**e - p *
+                              (lamb * beta_0 + N * beta_1).reduced_norm())
         r = (ell**e - p * (lamb * beta_0 + N * beta_1).reduced_norm()) / N**2
         assert r > 0
         # TODO: Ensure the r is postive and in the right range.
@@ -342,13 +343,14 @@ def strong_approximation(mu_0, N, O, ell):
         sol = cornacchia(1, r)
         if sol is not None:
             t_1, x_1 = sol
-            alpha_1 = t_1 + x_1 * i 
+            alpha_1 = t_1 + x_1 * i
             mu_1 = alpha_1 + beta_1 * j
             mu = lamb * mu_0 + N * mu_1
             assert mu.reduced_norm() == ell**e
             break
-     
-    return mu, lamb 
+
+    assert mu - lamb*mu_0 in O.left_ideal(O.basis()).scale(N)
+    return mu, lamb
 
 
 def ell_power_equiv(I, O, ell, print_progress=False):
