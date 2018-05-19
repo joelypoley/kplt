@@ -18,7 +18,7 @@ def left_ideal(gens, O):
     basis = (quaternion_algebra_cython.
              rational_quaternions_from_integral_matrix_and_denom(B, H, d))
 
-    return O.left_ideal(list(basis))
+    return O.left_ideal(basis)
 
 
 def random_combination(basis, bound=1000):
