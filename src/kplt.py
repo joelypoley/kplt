@@ -63,13 +63,13 @@ def is_minkowski_basis(basis):
 
 def prime_norm_representative(I, O, D, ell):
     """
-    Given a maximal order `O` and a left `O`-ideal return another
-    left `O`-ideal `J` in the same class, but with prime norm `N`.
+    Given a maximal order O and a left O-ideal return another
+    left O-ideal J in the same class, but with prime norm N.
 
-    This corresponds to Step 1 in the notes. So given an ideal `I` it returns
-    an ideal in the same class but with reduced norm `N` where `N` != `ell` is
-    a large prime coprime to D and p and such that `ell` is a quadratic
-    nonresidue module `N`.
+    This corresponds to Step 1 in the notes. So given an ideal I it returns
+    an ideal in the same class but with reduced norm N where N != ell is
+    a large prime coprime to D and p and such that ell is a quadratic
+    nonresidue module N.
 
 
     Args:
@@ -78,9 +78,9 @@ def prime_norm_representative(I, O, D, ell):
         D: An integer.
         ell: A prime.
     Returns:
-        Another left `O`-ideal in the same class with prime norm `N`. `N` will
-        be coprime to `D` and `ell` and `ell` and `ell` will be a nonquadratic
-        residue module `N`. 
+        Another left O-ideal in the same class with prime norm N. N will
+        be coprime to D and ell and ell and ell will be a nonquadratic
+        residue module N. 
 
     """
     # Check preconditions.
