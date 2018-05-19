@@ -297,15 +297,13 @@ def strong_approximation(mu_0, N, O, ell):
         assert N.divides(ell**e - p * lamb**2 * Integer(beta_0.reduced_norm()))
         lhs = Integer(
             (ell**e - p * lamb**2 * Integer(beta_0.reduced_norm())) / N)
-        #z_1 = ZZ.random_element(0, N**2)
-        z_1 = ZZ.random_element(0, N)
+        z_1 = ZZ.random_element(0, N**2)
         b = Integer(lhs - p * lamb * 2 * z_0 * z_1)
         y_1 = b * ~mod(2 * Integer(y_0) * p * lamb, N**2)
         beta_1 = Integer(y_1) + Integer(z_1) * i
 
         assert mod(lhs, N**2) == mod(
             p * lamb * (beta_0 * beta_1.conjugate()).reduced_trace(), N**2)
-
         assert (N**2).divides(ell**e - p *
                               (lamb * beta_0 + N * beta_1).reduced_norm())
         r = (ell**e - p * (lamb * beta_0 + N * beta_1).reduced_norm()) / N**2
