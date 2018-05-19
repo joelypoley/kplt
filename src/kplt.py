@@ -6,13 +6,30 @@ from sage.rings.integer_ring import ZZ
 from sage.rings.integer import Integer
 from sage.arith.misc import is_prime
 from sage.arith.misc import xgcd
-from sage.arith.misc import two_squares 
+from sage.arith.misc import two_squares
 from sage.arith.functions import lcm
 from sage.sets.primes import Primes
 from sage.rings.finite_rings.finite_field_constructor import FiniteField as GF
 from cornacchia import cornacchia
 from sage.algebras.quatalg.quaternion_algebra import QuaternionAlgebra
 from sage.matrix.constructor import matrix
+
+
+def ideal_product(I, J):
+    """Returns IJ."""
+    assert I.right_order() == J.left_order()
+    # Don't really know why I have to do this.
+    mat_1 = matrix([x.coefficient_tuple() for x in I.right_order().basis()])
+    mat_2 = matrix([x.coefficient_tuple() for x in I.left_order().basis()])
+    matcoeff = mat_2 * ~mat_1
+    N = lcm(x.denominator() for x in matcoeff.coefficients())
+
+    K = left_ideal([n * x * y for x in I.basis() for y in J.basis()],
+                   I.left_order())
+
+    assert K.left_order() == I.left_order()
+    assert K.right_order() == J.right_order()
+    return K
 
 
 def connecting_ideal(O_1, O_2):
@@ -31,18 +48,14 @@ def connecting_ideal(O_1, O_2):
     mat_2 = matrix([x.coefficient_tuple() for x in O_2.basis()])
     matcoeff = mat_2 * ~mat_1
     N = lcm(x.denominator() for x in matcoeff.coefficients())
-    J = left_ideal(
-        [N * x for x in O_2.basis()] +
-        [N * x * y for x in O_1.basis() for y in O_2.basis()],
-        O_1
-    )
+    J = left_ideal([N * x for x in O_2.basis()] +
+                   [N * x * y for x in O_1.basis() for y in O_2.basis()], O_1)
 
     assert J.left_order() == O_1
     assert J.right_order() == O_2
     assert all(x in O_1 for x in J.basis())
 
     return J
-
 
 
 def left_ideal(gens, O):
@@ -347,7 +360,7 @@ def strong_approximation(mu_0, N, O, ell):
     return mu
 
 
-def ell_power_equiv(I, O, ell, print_progress=False):
+def special_ell_power_equiv(I, O, ell, print_progress=False):
     """Solve ell isogeny problem.
 
     Args:
@@ -369,4 +382,16 @@ def ell_power_equiv(I, O, ell, print_progress=False):
     mu = strong_approximation(mu_0, N, O, ell)
     beta = gamma * mu
     J = I.scale(beta.conjugate() / N)
-    return J
+    return beta, J
+
+
+def ell_power_equiv(J, O, ell, print_progress=False):
+    B = O.quaternion_algebra()
+    assert is_prime(B.discriminant()) and mod(B.discriminant(), 4) == 3
+    O_special = B.maximal_order()
+    I = connecting_ideal(O_special, O)
+    K = ideal_product(I, J)
+    gamma_1, I_1 = special_ell_power_equiv(I, O_special, ell)
+    gamma_2, I_2 = special_ell_power_equiv(K, O_special, ell)
+    gamma = gamma_1.conjugate() * gamma_2 / Integer(I.norm())
+    return J.scale(gamma.conjugate() / Integer(J.norm()))
