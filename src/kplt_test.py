@@ -11,10 +11,21 @@ from kplt import left_ideal
 from kplt import strong_approximation 
 from kplt import ell_power_equiv 
 from kplt import solve_ideal_equation
+from kplt import connecting_ideal
 
 set_random_seed(0)
 
 class IdealsTest(unittest.TestCase):
+
+    def test_connecting_ideal(self):
+        B = QuaternionAlgebra(59)
+        i, j, k = B.gens()
+        O_1 = B.maximal_order()
+        O_2 = B.quaternion_order([(1 + k) / 2, (i + j) / 2, j, k], check=True)
+        J = connecting_ideal(O_1, O_2)
+        self.assertTrue(J.left_order() == O_1)
+        self.assertTrue(J.right_order() == O_2)
+        self.assertTrue(all(x in O_1 for x in J.basis()))
 
     def test_prime_norm_representative(self):
         B = QuaternionAlgebra(59)

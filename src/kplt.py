@@ -7,11 +7,41 @@ from sage.rings.integer import Integer
 from sage.arith.misc import is_prime
 from sage.arith.misc import xgcd
 from sage.arith.misc import two_squares 
+from sage.arith.functions import lcm
 from sage.sets.primes import Primes
 from sage.rings.finite_rings.finite_field_constructor import FiniteField as GF
 from cornacchia import cornacchia
 from sage.algebras.quatalg.quaternion_algebra import QuaternionAlgebra
 from sage.matrix.constructor import matrix
+
+
+def connecting_ideal(O_1, O_2):
+    """Returns an 0_1, O_2-connecting ideal.
+
+    Args:
+        O_1: A maximal order in a rational quaternion algebra.
+        O_2: A maximal order in the same quaternion algebra.
+
+    Returns:
+        An ideal I that is a left O_1 ideal and a right O_2 ideal. Moreover I
+        is a subset of O_1.
+    """
+    mat_1 = matrix([x.coefficient_tuple() for x in O_1.basis()])
+    mat_2 = matrix([x.coefficient_tuple() for x in O_2.basis()])
+    matcoeff = mat_2 * ~mat_1
+    N = lcm(x.denominator() for x in matcoeff.coefficients())
+    J = left_ideal(
+        [N * x for x in O_2.basis()] +
+        [N * x * y for x in O_1.basis() for y in O_2.basis()],
+        O_1
+    )
+
+    assert J.left_order() == O_1
+    assert J.right_order() == O_2
+    assert all(x in O_1 for x in J.basis())
+
+    return J
+
 
 
 def left_ideal(gens, O):
@@ -212,7 +242,7 @@ def find_generators(I):
 
 def solve_ideal_equation(gamma, I, D, N, O):
     """Find mu_0 in Rj such that (O* gamma / NO)[mu_0] = I / NO.
-        
+
     Args:
         gamma: An element of O.
         I: A left O-ideal.
@@ -254,14 +284,14 @@ def solve_ideal_equation(gamma, I, D, N, O):
         for coeff, elem in zip(mu_ff.coefficient_tuple(), [1, i, j, k]))
 
     assert 0 != mu_0
-    assert gamma*mu_0 in I
+    assert gamma * mu_0 in I
 
     return mu_0
 
 
 def strong_approximation(mu_0, N, O, ell):
     """Find mu in O with nrd(mu) = ell^e and mu = lambda * mu_0 mod NO
-    
+
     Args:
         mu_0: An element of Rj.
         N: A prime.
@@ -312,7 +342,7 @@ def strong_approximation(mu_0, N, O, ell):
             assert mu.reduced_norm() == ell**e
             break
 
-    assert mu - lamb*mu_0 in O.left_ideal(O.basis()).scale(N)
+    assert mu - lamb * mu_0 in O.left_ideal(O.basis()).scale(N)
     return mu
 
 
