@@ -7,9 +7,9 @@ from kplt import prime_norm_representative
 from kplt import element_of_norm
 from kplt import find_generators
 from kplt import left_ideal
-from kplt import solve_congruence 
 from kplt import strong_approximation 
 from kplt import ell_power_equiv 
+from kplt import solve_ideal_equation
 
 set_random_seed(0)
 
@@ -30,19 +30,6 @@ class IdealsTest(unittest.TestCase):
         J = left_ideal([N, alpha], O)
         self.assertTrue(J == I)
 
-    def test_solve_congruence(self):
-        B = QuaternionAlgebra(59)
-        O = B.maximal_order()
-        i, j, k = B.gens()
-        gamma = 16 + 69*i
-        alpha = 10*j + 2*k
-        N = 101
-        D = 4
-        mu = solve_congruence(gamma, alpha, D, N, O)
-        self.assertTrue(mu in B)
-        NO = O.left_ideal(O.basis()).scale(N)
-        self.assertTrue((gamma*mu - alpha) in NO)
-
     def test_strong_approximation(self):
         B = QuaternionAlgebra(59)
         ell = 3
@@ -51,8 +38,9 @@ class IdealsTest(unittest.TestCase):
         gamma = 16 + 69*i
         alpha = 10*j + 2*k
         N = 101
+        I = left_ideal([N, alpha], O)
         D = 4
-        mu_0 = solve_congruence(gamma, alpha, D, N, O)
+        mu_0 = solve_ideal_equation(gamma, I, D, N, O)
         mu = strong_approximation(mu_0, N, O, ell)
         self.assertTrue(Integer(mu.reduced_norm()).prime_factors() == [ell])
 
