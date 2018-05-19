@@ -26,21 +26,6 @@ def random_combination(basis, bound=1000):
     return sum(ZZ.random_element(-bound, bound + 1) * x_i for x_i in basis)
 
 
-def normalized_norm(alpha, I):
-    """
-    Returns the normalized norm N(alpha) / N(I). Using the notation in the
-    paper, it computes q_I(alpha).
-
-    Args:
-        alpha: An element of I.
-        I: An fractional ideal.  
-
-    Returns:
-        An Integer.
-    """
-    return Integer(alpha.reduced_norm() / I.norm())
-
-
 def one_norm(alpha):
     """Returns the 1-norm of alpha.
         Args:
