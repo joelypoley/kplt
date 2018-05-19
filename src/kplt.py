@@ -118,19 +118,6 @@ def prime_norm_representative(I, O, D, ell):
     return J
 
 
-def f(x, y, q):
-    """Computes the principal form f(x, y) in the paper.
-    Args:
-        x: A Sage integer.
-        y: A Sage integer.  
-        q: i^2 if p = 3 mod 4.
-
-    Returns:
-        A Sage integer.
-    """
-    return x**2 + q * y**2
-
-
 def solve_norm_equation(q, r):
     """ Solves x^2 + q*y^2 = r.
 
@@ -180,7 +167,7 @@ def element_of_norm(M, O):
     while True:
         x_2 = ZZ.random_element(-m, m + 1)
         y_2 = ZZ.random_element(-m, m + 1)
-        r = M - p * f(x_2, y_2, q)
+        r = M - p * (x_2**2 + q * y_2**2)
 
         if r not in Primes():  # Can replace with easily factorable.
             continue
