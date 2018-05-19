@@ -150,7 +150,7 @@ def solve_norm_equation(q, r):
         except ValueError:
             return None
     else:
-        raise NotImplementedError('q must be equal to 1 and was ' + str(q))
+        return cornacchia(q, r)
 
 
 def element_of_norm(M, O):
@@ -186,7 +186,7 @@ def element_of_norm(M, O):
             continue
 
         # The norm equation is N(x + iy) = x^2 + qy^2.
-        sol = cornacchia(q, r)
+        sol = solve_norm_equation(q, r)
         if sol is not None:
             break
 
@@ -340,7 +340,7 @@ def strong_approximation(mu_0, N, O, ell):
         assert r > 0
         # TODO: Ensure the r is postive and in the right range.
 
-        sol = cornacchia(1, r)
+        sol = solve_norm_equation(1, r)
         if sol is not None:
             t_1, x_1 = sol
             alpha_1 = t_1 + x_1 * i
