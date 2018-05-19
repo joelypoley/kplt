@@ -350,7 +350,7 @@ def strong_approximation(mu_0, N, O, ell):
             break
 
     assert mu - lamb*mu_0 in O.left_ideal(O.basis()).scale(N)
-    return mu, lamb
+    return mu
 
 
 def ell_power_equiv(I, O, ell, print_progress=False):
@@ -361,7 +361,7 @@ def ell_power_equiv(I, O, ell, print_progress=False):
     N, alpha = find_generators(I)
     gamma = element_of_norm(N * ell**50, O)
     mu_0 = solve_ideal_equation(gamma, I, D, N, O)
-    mu, _ = strong_approximation(mu_0, N, O, ell)
+    mu = strong_approximation(mu_0, N, O, ell)
     beta = gamma * mu
     J = I.scale(beta.conjugate() / N)
     return J

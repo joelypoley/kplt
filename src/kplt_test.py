@@ -53,10 +53,8 @@ class IdealsTest(unittest.TestCase):
         N = 101
         D = 4
         mu_0 = solve_congruence(gamma, alpha, D, N, O)
-        mu, lamb = strong_approximation(mu_0, N, O, ell)
+        mu = strong_approximation(mu_0, N, O, ell)
         self.assertTrue(Integer(mu.reduced_norm()).prime_factors() == [ell])
-        NO = O.left_ideal(O.basis()).scale(N)
-        self.assertTrue(mu - lamb*mu_0 in NO)
 
     def test_element_of_norm(self):
         B = QuaternionAlgebra(59)
