@@ -645,6 +645,48 @@ Note that \( \Lambda(A) = \Lambda(H) \) by adapting the argument in the above le
 \end{proof}
 
 
+\begin{lemma}[Computing connecting ideals]
+    Let \( B \) be a rational quaternion algebra.
+    Let \( O_1 = \op{span}_\Z \{\alpha_1, \alpha_2, \alpha_3, \alpha_4 \}, O_2 = \op{span}_\Z \{\beta_1, \beta_2, \beta_3, \beta_4 \} \) be maximal orders in \( B \).
+    Let \( d \) be the lowest common multiple of the denominators of the entries in the matrix
+    \[
+        \begin{pmatrix}
+            [\alpha_1] \\  \vdots \\ [\alpha_4]
+        \end{pmatrix}
+        \begin{pmatrix}
+            [\beta_1] \\  \vdots \\ [\beta_4]
+        \end{pmatrix}^{-1}.
+    \]
+    Then \( d O_1 \subset O_2 \) and
+    \[
+        I = \span_\Z \{d\alpha_i\beta_j \mid i, j \in \{1, \dots , 4\} \}
+    \]
+    is an \( O_1, O_2 \)-ideal.
+\end{lemma}
+\begin{proof}
+    Note that \( \alpha_1, \dots , \alpha_4 \) is a basis for \( \Q^4 \) since \( O \) is a full as a lattice.
+    So there exists \( c_{ij} \in \Q \) such that
+    \[
+        \beta_i = \sum_{j} c_{ij} \alpha_j
+    \]
+    for each \( i \in \{1, 2, 3, 4\} \).
+    Let \( d = \lcm(\{c_{ij} \mid 1 \leq i , j \leq 4 \}) \) then
+    \[
+        d\beta_i \in O_1
+    \]
+    for all \( i \).
+    Thus
+    \[
+        I = \op{span}_\Z \{d\alpha_j \beta_i \mid 1 \leq i, j \leq 4 \} \subset O_1.
+    \]
+    Finally it's clear that
+    \[
+        O_1 \subset O_L(I)
+    \]
+    and since \( O_1 \) is maximal \( I \) is a left \( O_1 \)-ideal.
+    Similarly \( I \) is a  a right \( O_2 \)-ideal.
+\end{proof}
+
 
 
 
