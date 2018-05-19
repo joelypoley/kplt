@@ -25,7 +25,7 @@ def ideal_product(I, J):
     matcoeff = mat_2 * ~mat_1
     N = lcm(x.denominator() for x in matcoeff.coefficients())
 
-    K = left_ideal([n * x * y for x in I.basis() for y in J.basis()],
+    K = left_ideal([N * x * y for x in I.basis() for y in J.basis()],
                    I.left_order())
 
     assert K.left_order() == I.left_order()
