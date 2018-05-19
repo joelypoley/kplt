@@ -651,15 +651,15 @@ Note that \( \Lambda(A) = \Lambda(H) \) by adapting the argument in the above le
     Let \( d \) be the lowest common multiple of the denominators of the entries in the matrix
     \[
         \begin{pmatrix}
-            [\alpha_1] \\  \vdots \\ [\alpha_4]
+            [\beta_1] \\  \vdots \\ [\beta_4]
         \end{pmatrix}
         \begin{pmatrix}
-            [\beta_1] \\  \vdots \\ [\beta_4]
+            [\alpha_1] \\  \vdots \\ [\alpha_4]
         \end{pmatrix}^{-1}.
     \]
     Then \( d O_1 \subset O_2 \) and
     \[
-        I = \span_\Z \{d\alpha_i\beta_j \mid i, j \in \{1, \dots , 4\} \}
+        I = \op{span}_\Z \{d\alpha_i\beta_j \mid i, j \in \{1, \dots , 4\} \}
     \]
     is an \( O_1, O_2 \)-ideal.
 \end{lemma}
@@ -670,7 +670,7 @@ Note that \( \Lambda(A) = \Lambda(H) \) by adapting the argument in the above le
         \beta_i = \sum_{j} c_{ij} \alpha_j
     \]
     for each \( i \in \{1, 2, 3, 4\} \).
-    Let \( d = \lcm(\{c_{ij} \mid 1 \leq i , j \leq 4 \}) \) then
+    Let \( d = \op{lcm}(\{c_{ij} \mid 1 \leq i , j \leq 4 \}) \) then
     \[
         d\beta_i \in O_1
     \]
@@ -685,6 +685,28 @@ Note that \( \Lambda(A) = \Lambda(H) \) by adapting the argument in the above le
     \]
     and since \( O_1 \) is maximal \( I \) is a left \( O_1 \)-ideal.
     Similarly \( I \) is a  a right \( O_2 \)-ideal.
+    Now we just need to observe that
+    \[
+        \begin{pmatrix}
+            [\beta_1] \\  \vdots \\ [\beta_4]
+        \end{pmatrix}
+        =
+        \begin{pmatrix}
+            [\alpha_1] \\  \vdots \\ [\alpha_4]
+        \end{pmatrix}
+        c_{ij})_{i,j}
+    \]
+    so
+    \[
+        \begin{pmatrix}
+            [\beta_1] \\  \vdots \\ [\beta_4]
+        \end{pmatrix}
+        \begin{pmatrix}
+            [\alpha_1] \\  \vdots \\ [\alpha_4]
+        \end{pmatrix}^{-1}
+        = (c_{ij})_{i,j}.
+    \]
+
 \end{proof}
 
 
