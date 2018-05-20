@@ -204,7 +204,7 @@ def solve_norm_equation(q, r):
         return sol
 
 
-def element_of_norm(M, O):
+def element_of_norm(M, O, bound=100):
     """Finds an element of B with norm M.
 
     This corresponds to Step 3 of the algorithm in the notes.
