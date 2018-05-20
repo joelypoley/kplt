@@ -107,6 +107,45 @@ class IdealsTest(unittest.TestCase):
         self.assertTrue([x in O for x in J.basis()])
 
 
+class StressTest(unittest.TestCase):
+    def setUp(self):
+        self.startTime = time.time()
+
+    def tearDown(self):
+        t = time.time() - self.startTime
+        print("%s: %.3f" % (self.id(), t))
+
+    def test_prime_norm_representative(self):
+        primes_generator = (x for x in Primes() if mod(x, 4) == 3)
+        bound = 1000000
+        for p in primes_generator:
+            if p > bound: break
+            B = QuaternionAlgebra(p)
+            O = B.maximal_order()
+            alpha = O.random_element()
+            if alpha.reduced_norm() == 0: 
+                continue
+            I = left_ideal([alpha, choice(Integer(alpha.reduced_norm()).divisors())], O)
+            J = prime_norm_representative(I, O, 4, 2)
+            N = J.norm()
+            if I == O: print('I == O')
+            M = N * Integer(2)**50
+            print('p = ', p, 'M = ', M)
+            start = time.time()
+            gamma = element_of_norm(M, O)
+            end = time.time() - start 
+            self.assertTrue(gamma.reduced_norm() == M)
+
+
+    # def test_element_of_norm(self):
+    #     B = QuaternionAlgebra(59)
+    #     O = B.maximal_order()
+    #     I = O.left_ideal(O.basis()).scale(2)
+    #     M = 200001
+        
+
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(IdealsTest)
+    suite_2 = unittest.TestLoader().loadTestsFromTestCase(StressTest)
     unittest.TextTestRunner(verbosity=0).run(suite)
+    unittest.TextTestRunner(verbosity=0).run(suite_2)

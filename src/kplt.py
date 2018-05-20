@@ -284,7 +284,7 @@ def solve_ideal_equation(gamma, I, D, N, O):
     Returns:
         mu_0 in Rj such that 0 != gamma * mu_0 in I.
     """
-    d, a, b = xgcd(D, N)
+    d, c, _ = xgcd(D, N)
     assert d == 1
     a, b = [Integer(x) for x in O.quaternion_algebra().invariants()]
     F = GF(N)
@@ -295,7 +295,7 @@ def solve_ideal_equation(gamma, I, D, N, O):
 
     def phi(alpha):
         t, x, y, z = [
-            Integer(D * a * alpha_i) for alpha_i in alpha.coefficient_tuple()
+            Integer(D * c * alpha_i) for alpha_i in alpha.coefficient_tuple()
         ]
         return t + x * i_ff + y * j_ff + z * k_ff
 
