@@ -15,6 +15,7 @@ def cornacchia(d, m):
         The soution (x, y) as a tuple of sage integers or None if there is no
         solution.
     """
+    #print(m)
     if (m <= 0):
         raise ValueError('m must be greater than 0 but m was ' + str(m))
 

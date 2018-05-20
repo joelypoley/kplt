@@ -1,5 +1,6 @@
 from __future__ import print_function
 
+from sage.all import *
 from sage.algebras.quatalg.quaternion_algebra import quaternion_algebra_cython
 from sage.rings.finite_rings.integer_mod import mod
 from sage.rings.integer_ring import ZZ
@@ -137,9 +138,8 @@ def prime_norm_representative(I, O, D, ell):
     # Check preconditions.
     if not is_minkowski_basis(I.basis()):
         print('Warning: The ideal I does not have a minkowski basis'
-              'precomputed and Sage can not do it for you.')
+              ' precomputed and Sage can not do it for you.')
 
-    m = 1000  # TODO: Change this to a proper bound.
     B = I.quaternion_algebra()
     p = B.discriminant()
     if mod(p, 4) != 3 or not is_prime(p):
@@ -155,11 +155,19 @@ def prime_norm_representative(I, O, D, ell):
     alpha = B(0)
     normalized_norm = Integer(alpha.reduced_norm() / N)
     # Choose random elements in I until one is found with prime norm.
+    m_power = 3
+    m = Integer(2)**m_power # TODO: Change this to a proper bound.
+    count = 0
     while not is_prime(normalized_norm) or normalized_norm.divides(
             D) or normalized_norm == ell or normalized_norm == p or mod(
                 ell, normalized_norm).is_square():
+        if count > 4 * m_power:
+            m_power += 1
+            m = Integer(2)**m_power
+            count = 0
         alpha = random_combination(I.basis(), bound=m)
         normalized_norm = Integer(alpha.reduced_norm() / N)
+        count += 1
 
     # Now we have an element alpha of prime norm the ideal J = I*gamma has
     # prime norm where gamma = conjguate(alpha) / N(I).
@@ -204,40 +212,39 @@ def element_of_norm(M, O):
     Args:
         M: A sage integer.
         O: A maximal order in a quaternion algebra.
+        bound: The values 0 <= x_2, y_2 <= 100 will be tried. If no solution is
+            found then the function returns None.
 
     Returns:
-        gamma in B such that gamma.reduced_norm() == M
+        gamma in B such that gamma.reduced_norm() == M or None if there is no
+        solution in the box [0, bound]**2.
     """
     B = O.quaternion_algebra()
     if mod(B.discriminant(), 4) != 3:
         raise NotImplementedError('The quaternion algebra must have'
                                   ' discriminant p = 3 mod 4')
-    i = B.gen(0)
-    j = B.gen(1)
-    q, p = [Integer(-i**2), Integer(-j**2)]
-    m = 100  # TODO: Replace with proper bound.
-    r = 0
-    sol = None
-    x_2 = ZZ.random_element(x=m)
-    y_2 = ZZ.random_element(x=m)
-    while True:
-        x_2 = ZZ.random_element(-m, m + 1)
-        y_2 = ZZ.random_element(-m, m + 1)
-        r = M - p * (x_2**2 + q * y_2**2)
+    a, b = B.invariants()
+    i, j, _ = B.gens()
+    q, p = -Integer(a), -Integer(b)
+    for x_2 in range(bound+1):
+        for y_2 in range(bound+1):
+            r = M - p * (x_2**2 + q * y_2**2)
 
-        if r not in Primes():  # Can replace with easily factorable.
-            continue
+            if r not in Primes():  # Can replace with easily factorable.
+                continue
 
-        # The norm equation is N(x + iy) = x^2 + qy^2.
-        sol = solve_norm_equation(q, r)
-        if sol is not None:
-            break
+            # The norm equation is N(x + iy) = x^2 + qy^2.
+            sol = solve_norm_equation(q, r)
+            if sol is not None:
+                x_1, y_1 = sol
+                alpha = x_1 + y_1 * i
+                beta = x_2 + y_2 * i
+                assert Integer((alpha + beta * j).reduced_norm()) == M
+                return alpha + beta * j
 
-    x_1, y_1 = sol
-    alpha = x_1 + y_1 * i
-    beta = x_2 + y_2 * i
-    assert Integer((alpha + beta * j).reduced_norm()) == M
-    return alpha + beta * j
+    return None
+
+    
 
 
 def find_generators(I):
@@ -308,7 +315,7 @@ def solve_ideal_equation(gamma, I, D, N, O):
         for coeff, elem in zip(mu_ff.coefficient_tuple(), [1, i, j, k]))
 
     assert 0 != mu_0
-    assert gamma * mu_0 in I
+    assert gamma * mu_0 in I, "gamma = " + str(gamma) + " m_0 = " + str(mu_0) + " I = " + str(I) + " O = " + str(O)
 
     return mu_0
 

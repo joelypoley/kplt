@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 import unittest
+import time
 
 from sage.all import *
 
@@ -17,6 +18,13 @@ set_random_seed(0)
 
 
 class IdealsTest(unittest.TestCase):
+    def setUp(self):
+        self.startTime = time.time()
+
+    def tearDown(self):
+        t = time.time() - self.startTime
+        print("%s: %.3f" % (self.id(), t))
+
     def test_connecting_ideal(self):
         B = QuaternionAlgebra(59)
         i, j, k = B.gens()
@@ -100,4 +108,5 @@ class IdealsTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    suite = unittest.TestLoader().loadTestsFromTestCase(IdealsTest)
+    unittest.TextTestRunner(verbosity=0).run(suite)
