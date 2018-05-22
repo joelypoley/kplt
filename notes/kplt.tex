@@ -480,7 +480,9 @@ Note that we are given all variables with subscript 0 and are solving for the va
 
 The last line of the equation above is a polynomial in \( N \).
 We can therefore solve the equation above by ``building up'' to the solution.
-First we find a solution modulo \( N \), then modulo \( N^2 \), and finally we solve the entire equation.
+For example, to solve \( a + bN + cN^2 = d \) for \( a, b, c, d, \in \Z \) you can first set \( a = (d \bmod{N}) \) (so \( 0\leq a < N \)) and then rearrange to get \( b + cN = (d-a) / N \).
+Finally you can set \( b = (d-a) / N \bmod{N} \) and solve for \( c \).
+This is not guaranteed to work but it seems to work enough of the time and we will use a similar technique to solve the aligned equation above.
 
 Reducing modulo \( N \) gives
 \[
@@ -490,12 +492,16 @@ We then choose \( e \) to be even if \( (p\nrd(\beta_0))^{-1} \bmod{N} \) is a s
 This ensures that \( \ell^e(p\nrd(\beta_0))^{-1} \) is a square modulo \( N \) and we can solve for \( 0 <  \lambda < N\).
 We also choose \( e \) sufficiently large (\( \ell^e = O(p|D|N^4) \)).
 
-Reducing modulo \( N^2 \) gives
+We know that \( \ell^e - p\lambda^2 \nrd(\beta_0) \equiv 0 \pmod{N} \) by construction so we can rearrange the terms in the equation above and divide by \( N \) to get
 \[
-    \frac{\ell^e - p\lambda^2\nrd(\beta_0)}{N}\equiv p\lambda \trd(\beta_0\overline{\beta_1}) \pmod{N^2}
+    \frac{\ell^e - p\lambda^2 \nrd(\beta_0)}{N} = p\lambda \trd(\beta_0\overline{\beta_1}) + N(p\nrd(\beta_1) + \nrd(\alpha_1)).
+\]
+We then reduce this modulo \( N \) and get
+\[
+    \frac{\ell^e - p\lambda^2\nrd(\beta_0)}{N}\equiv p\lambda \trd(\beta_0\overline{\beta_1}) \pmod{N}
 \]
 which is a linear equation in the coefficients of \( \beta_1 \in \Z[i]\).
-There will be \( N \) solutions to this equation and we a solution randomly such that \( \nrd(\lambda\beta_0 + N\beta_1) < N^4 \).
+There will be \( N \) solutions to this equation and we choose a solution randomly such that \( \nrd(\lambda\beta_0 + N\beta_1) < N^4 \).
 
 The only variable left that hasn't be determined is \( \alpha_1 \).
 We rearrange the equation \( \ell^e = \nrd(N\alpha_1) +p\nrd(\lambda\beta_0 + N\beta_1) \) and get
