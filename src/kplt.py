@@ -109,7 +109,6 @@ def one_norm(alpha):
 
 def is_minkowski_basis(basis):
     """Checks if the basis is Minkowski."""
-    # TODO: Ask Steven about Minkowskiness.
     return all(
         one_norm(alpha_i) <= one_norm(
             sum(alpha_j for alpha_j in basis if alpha_j != alpha_i))
