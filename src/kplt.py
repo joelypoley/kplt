@@ -290,6 +290,32 @@ def solve_ideal_equation(gamma, I, D, N, O):
 
     return mu_0
 
+def solve_linear_congruence(a, b, c, n):
+    """Returns a solution to ax+by=c mod n."""
+    a = Integer(a)
+    b = Integer(b)
+    x = Integer(c)
+    n = Integer(n)
+    x = ZZ.random_element(0, n)
+    y= (c - a*x) * ~mod(b, n)
+    y = Integer(mod(y, n))
+    assert mod(a*x + b*y, n) == mod(c, n)
+    return x, y
+
+def put_in_interval(x, a, b, n):
+    """Returns x' = x mod n in the interval [a, b]."""
+    x = Integer(x)
+    n = Integer(n)
+    if b - a < n:
+        raise ValueError("Not possible " + str(b-a) + " "+ str(n))
+
+    k = ceil((a - x) / n)
+    x_prime = x + n * k
+
+    assert mod(x, n) == mod(x_prime, n)
+    assert a <= x_prime <= b
+    
+    return x_prime
 
 def strong_approximation(mu_0, N, O, ell):
     """Find mu in O with nrd(mu) = ell^e and mu = lambda * mu_0 mod NO
