@@ -17,25 +17,6 @@ from sage.algebras.quatalg.quaternion_algebra import QuaternionAlgebra
 from sage.matrix.constructor import matrix
 
 
-def ideal_product_class(I, J):
-    """Returns an ideal K the class [IJ] such that K is a subset of O_L(I)."""
-    assert I.right_order() == J.left_order()
-    return I*J
-    # Don't really know why I have to do this.
-    # TODO: remove this matcoeff stuff and see if it still works.
-    mat_1 = matrix([x.coefficient_tuple() for x in I.right_order().basis()])
-    mat_2 = matrix([x.coefficient_tuple() for x in I.left_order().basis()])
-    matcoeff = mat_2 * ~mat_1
-    N = lcm(x.denominator() for x in matcoeff.coefficients())
-
-    K = left_ideal([N * x * y for x in I.basis() for y in J.basis()],
-                   I.left_order())
-
-    assert K.left_order() == I.left_order()
-    assert K.right_order() == J.right_order()
-    return K
-
-
 def connecting_ideal(O_1, O_2):
     """Returns an 0_1, O_2-connecting ideal.
 
