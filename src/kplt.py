@@ -355,8 +355,6 @@ def strong_approximation(mu_0, N, O, ell):
             p * lamb * (beta_0 * beta_1.conjugate()).reduced_trace(), N)
 
         # Now we calculate r.
-        assert (N**2).divides(ell**e - p *
-                              (lamb * beta_0 + N * beta_1).reduced_norm())
         r = Integer(
             (ell**e - p * (lamb * beta_0 + N * beta_1).reduced_norm()) / N**2)
 
