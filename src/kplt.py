@@ -18,7 +18,7 @@ from sage.matrix.constructor import matrix
 
 
 def connecting_ideal(O_1, O_2):
-    """Returns an 0_1, O_2-connecting ideal.
+    """Returns an O_1, O_2-connecting ideal.
 
     Args:
         O_1: A maximal order in a rational quaternion algebra.
@@ -32,8 +32,7 @@ def connecting_ideal(O_1, O_2):
     mat_2 = matrix([x.coefficient_tuple() for x in O_2.basis()])
     matcoeff = mat_2 * ~mat_1
     d = lcm(x.denominator() for x in matcoeff.coefficients())
-    J = left_ideal([d * x for x in O_2.basis()] +
-                   [d * x * y for x in O_1.basis() for y in O_2.basis()], O_1)
+    J = left_ideal([d * x * y for x in O_1.basis() for y in O_2.basis()], O_1)
 
     assert J.left_order() == O_1
     assert J.right_order() == O_2
