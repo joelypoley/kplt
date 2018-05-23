@@ -314,7 +314,6 @@ def put_in_interval(x, a, b, n):
 
     assert mod(x, n) == mod(x_prime, n)
     assert a <= x_prime <= b
-    
     return x_prime
 
 def strong_approximation(mu_0, N, O, ell):
@@ -323,7 +322,7 @@ def strong_approximation(mu_0, N, O, ell):
     Args:
         mu_0: An element of Rj.
         N: A prime.
-        O: A special order.
+        O: An order contaning 1, i, j, k.
         ell: A prime.
 
     Returns:
@@ -331,35 +330,51 @@ def strong_approximation(mu_0, N, O, ell):
     """
     ell = Integer(ell)
     N = Integer(N)
-    #print(N)
     B = O.quaternion_algebra()
     p = B.discriminant()
     i, j, k = B.gens()
     t_0, x_0, y_0, z_0 = mu_0.coefficient_tuple()
     assert t_0 == x_0 == 0
     beta_0 = y_0 + z_0 * i
-    e = 100 if (
-        ~mod(p * Integer(beta_0.reduced_norm()), N)).is_square() else 101
+    e = 2 * ceil(log(N**4 * (p+1) / 2, ell)) + (0 if (
+        ~mod(p * Integer(beta_0.reduced_norm()), N)).is_square() else 1)
+    e_max = e+2*(2*ceil(log(p, ell))+2)
+
+    # First we solve for lambda.
     lamb = Integer(
         (ell**e * ~mod(p * Integer(beta_0.reduced_norm()), N)).sqrt())
     assert mod(ell**e, N) == mod(lamb**2 * Integer(mu_0.reduced_norm()), N)
+
     mu = None
-    while mu is None:
+    count = 0
+    count_max = 5 * e
+    while e < e_max:
+        # Then we solve for beta_1.
         assert N.divides(ell**e - p * lamb**2 * Integer(beta_0.reduced_norm()))
         lhs = Integer(
             (ell**e - p * lamb**2 * Integer(beta_0.reduced_norm())) / N)
-        z_1 = ZZ.random_element(0, N**2)
-        b = Integer(lhs - p * lamb * 2 * z_0 * z_1)
-        y_1 = b * ~mod(2 * Integer(y_0) * p * lamb, N**2)
+        y_1, z_1 = solve_linear_congruence(2 * Integer(y_0) * p * lamb, p * lamb * 2 * z_0, lhs, N)
+        y_1 = put_in_interval(y_1, -2*lamb * y_0 - N/2, -2*lamb * y_0 + N**2/2, N)
+        z_1 = put_in_interval(z_1, -2*lamb * z_0 - N/2, -2*lamb * z_0 + N**2/2, N)
         beta_1 = Integer(y_1) + Integer(z_1) * i
+        assert mod(lhs, N) == mod(
+            p * lamb * (beta_0 * beta_1.conjugate()).reduced_trace(), N)
 
-        assert mod(lhs, N**2) == mod(
-            p * lamb * (beta_0 * beta_1.conjugate()).reduced_trace(), N**2)
+        # Now we calculate r.
         assert (N**2).divides(ell**e - p *
                               (lamb * beta_0 + N * beta_1).reduced_norm())
-        r = (ell**e - p * (lamb * beta_0 + N * beta_1).reduced_norm()) / N**2
-        assert r > 0
-        # TODO: Ensure the r is postive and in the right range.
+        r = Integer((ell**e - p * (lamb * beta_0 + N * beta_1).reduced_norm()) / N**2)
+
+        # In the paper they say that r can be the product of a prime and a
+        # smooth square. For simplicity I will just wait for r prime.
+        if not is_prime(r):
+            count += 1
+            if count > count_max:
+                print('Increasing', e, e_max)
+                e += 2
+                count_max = 0
+
+            continue
 
         sol = solve_norm_equation(1, r)
         if sol is not None:
@@ -367,11 +382,19 @@ def strong_approximation(mu_0, N, O, ell):
             alpha_1 = t_1 + x_1 * i
             mu_1 = alpha_1 + beta_1 * j
             mu = lamb * mu_0 + N * mu_1
-            break
+            assert mu - lamb * mu_0 in O.left_ideal(O.basis()).scale(N)
+            assert mu.reduced_norm() == ell**e
+            return mu
 
-    assert mu - lamb * mu_0 in O.left_ideal(O.basis()).scale(N)
-    assert mu.reduced_norm() == ell**e
-    return mu
+        # Again this is sort of a random heuristic.
+        count += 1
+        if count > count_max:
+            e += 2
+            count_max = 0
+
+    return None
+
+
 
 
 def special_ell_power_equiv(I, O, ell, print_progress=False):
