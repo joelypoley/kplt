@@ -117,65 +117,58 @@ def is_minkowski_basis(basis):
 
 def prime_norm_representative(I, O, D, ell):
     """
-    Given a maximal order O and a left O-ideal return another
-    left O-ideal J in the same class, but with prime norm N.
+    Given an order O and a left O-ideal I return another
+    left O-ideal J in the same class, but with prime norm.
 
     This corresponds to Step 1 in the notes. So given an ideal I it returns
     an ideal in the same class but with reduced norm N where N != ell is
-    a large prime coprime to D and p and such that ell is a quadratic
+    a large prime coprime to both D and p, and ell is a quadratic
     nonresidue module N.
 
 
     Args:
         I: A left O-ideal.
-        O: A maximal order in a quaternion algebra.
+        O: An order in a quaternion algebra.
         D: An integer.
         ell: A prime.
     Returns:
         Another left O-ideal in the same class with prime norm N. N will
-        be coprime to D and ell and ell and ell will be a nonquadratic
-        residue module N. 
+        be coprime to both D and p, and ell will be a nonquadratic residue
+        module N. 
 
     """
-    # Check preconditions.
     if not is_minkowski_basis(I.basis()):
         print('Warning: The ideal I does not have a minkowski basis'
               ' precomputed and Sage can not do it for you.')
 
-    B = I.quaternion_algebra()
-    p = B.discriminant()
-    if mod(p, 4) != 3 or not is_prime(p):
-        raise NotImplementedError('The quaternion algebra must have'
-                                  ' prime discriminant p == 3 mod 4')
-
-    if O != B.maximal_order():
-        raise NotImplementedError(
-            'The order O must be a special order. I.e. O must satisfy'
-            ' O.quaternion_algebra().maximal_order() == O.')
-
-    N = I.norm()
+    nrd_I = I.norm()
     alpha = B(0)
-    normalized_norm = Integer(alpha.reduced_norm() / N)
-    # Choose random elements in I until one is found with prime norm.
+    normalized_norm = Integer(alpha.reduced_norm() / nrd_I)
+    # Choose random elements in I until one is found with norm N*nrd(I) where N
+    # is prime.
     m_power = 3
-    m = Integer(2)**m_power # TODO: Change this to a proper bound.
+    m = Integer(2)**m_power  # TODO: Change this to a proper bound.
     count = 0
     while not is_prime(normalized_norm) or normalized_norm.divides(
             D) or normalized_norm == ell or normalized_norm == p or mod(
                 ell, normalized_norm).is_square():
+        # Make a new random element.
+        alpha = random_combination(I.basis(), bound=m)
+        normalized_norm = Integer(alpha.reduced_norm() / nrd_I)
+
+
+        # Increase the box we search in if we've been trying for too long. Note
+        # this was just a random heuristic I came up with, it's not in the
+        # paper.
+        count += 1
         if count > 4 * m_power:
             m_power += 1
             m = Integer(2)**m_power
             count = 0
-        alpha = random_combination(I.basis(), bound=m)
-        normalized_norm = Integer(alpha.reduced_norm() / N)
-        count += 1
 
-    # Now we have an element alpha of prime norm the ideal J = I*gamma has
-    # prime norm where gamma = conjguate(alpha) / N(I).
-    gamma = alpha.conjugate() / N
-    J_basis = [alpha_i * gamma for alpha_i in I.basis()]
-    J = O.left_ideal(J_basis)
+    # We now have an element alpha with norm N*nrd(I) where N is prime. The
+    # ideal J = I*gamma has prime norm where gamma = conjugate(alpha) / nrd(I).
+    J = I.scale(gamma)
 
     assert is_prime(Integer(J.norm()))
     assert not mod(ell, Integer(J.norm())).is_square()
