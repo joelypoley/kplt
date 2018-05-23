@@ -47,7 +47,7 @@ class IdealsTest(unittest.TestCase):
         O = B.maximal_order()
         i, j, k = B.gens()
         N = next_prime(100000)
-        mu_0 = 16*j + 24 * k
+        mu_0 = 16 * j + 24 * k
         mu = strong_approximation(mu_0, N, O, ell)
         self.assertTrue(Integer(mu.reduced_norm()).prime_factors() == [ell])
 
@@ -92,10 +92,10 @@ class IdealsTest(unittest.TestCase):
         self.assertTrue(J.left_order() == O)
         self.assertTrue(Integer(J.norm()).prime_factors() == [ell])
         self.assertTrue([x in O for x in J.basis()])
-        
+
 
 if __name__ == '__main__':
-    # We do this instead of unittest.main() so that the time for each test is 
+    # We do this instead of unittest.main() so that the time for each test is
     # printed.
     suite = unittest.TestLoader().loadTestsFromTestCase(IdealsTest)
     unittest.TextTestRunner(verbosity=0).run(suite)

@@ -69,7 +69,7 @@ def left_ideal(gens, O):
     I = O.left_ideal(basis)
 
     assert all(x in O for x in I.basis())
-    assert all (x * y in O for x in O.basis() for y in I.basis())
+    assert all(x * y in O for x in O.basis() for y in I.basis())
     assert I.left_order() == O
     return I
 
@@ -141,7 +141,6 @@ def prime_norm_representative(I, O, D, ell):
         alpha = random_combination(I.basis(), bound=m)
         normalized_norm = Integer(alpha.reduced_norm() / nrd_I)
 
-
         # Increase the box we search in if we've been trying for too long. Note
         # this was just a random heuristic I came up with, it's not in the
         # paper.
@@ -153,7 +152,7 @@ def prime_norm_representative(I, O, D, ell):
 
     # We now have an element alpha with norm N*nrd(I) where N is prime. The
     # ideal J = I*gamma has prime norm where gamma = conjugate(alpha) / nrd(I).
-    gamma = alpha.conjugate() / nrd_I 
+    gamma = alpha.conjugate() / nrd_I
     J = I.scale(gamma)
 
     assert is_prime(Integer(J.norm()))
@@ -175,13 +174,13 @@ def solve_norm_equation(q, r):
     if q == 1:
         try:
             sol = two_squares(r)
-            assert sol[0]**2 + q* sol[1]**2 == r
+            assert sol[0]**2 + q * sol[1]**2 == r
             return sol
         except ValueError:
             return None
     else:
         sol = cornacchia(q, r)
-        assert True if sol in None else sol[0]**2 + q* sol[1]**2 == r
+        assert True if sol in None else sol[0]**2 + q * sol[1]**2 == r
         return sol
 
 
@@ -204,8 +203,8 @@ def element_of_norm(M, O, bound=100):
     a, b = B.invariants()
     i, j, k = B.gens()
     q, p = -Integer(a), -Integer(b)
-    for y in range(bound+1):
-        for z in range(bound+1):
+    for y in range(bound + 1):
+        for z in range(bound + 1):
             r = M - p * (y**2 + q * z**2)
 
             if not is_prime(r):  # Can replace with easily factorizable.
@@ -215,7 +214,7 @@ def element_of_norm(M, O, bound=100):
             sol = solve_norm_equation(q, r)
             if sol is not None:
                 t, x = sol
-                gamma = t + x*i + y*j + z*k
+                gamma = t + x * i + y * j + z * k
                 assert Integer((gamma).reduced_norm()) == M
                 return gamma
 
@@ -264,7 +263,8 @@ def solve_ideal_equation(gamma, I, D, N, O):
     sol = lin_system.left_kernel().basis()[0]
     y, z = sol[0], sol[1]
     mu_ff = y * j_ff + z * k_ff
-    assert vector(F, (gamma_ff * mu_ff).coefficient_tuple()) in span(I_basis_ff, F)
+    assert vector(F, (gamma_ff * mu_ff).coefficient_tuple()) in span(
+        I_basis_ff, F)
 
     B = O.quaternion_algebra()
     i, j, k = B.gens()
@@ -273,9 +273,10 @@ def solve_ideal_equation(gamma, I, D, N, O):
         for coeff, elem in zip(mu_ff.coefficient_tuple(), [1, i, j, k]))
 
     assert 0 != mu_0
-    assert gamma * mu_0 in I, "gamma = " + str(gamma) + " m_0 = " + str(mu_0) + " I = " + str(I) + " O = " + str(O)
+    assert gamma * mu_0 in I
 
     return mu_0
+
 
 def solve_linear_congruence(a, b, c, n):
     """Returns a solution to ax+by=c mod n."""
@@ -284,17 +285,18 @@ def solve_linear_congruence(a, b, c, n):
     x = Integer(c)
     n = Integer(n)
     x = ZZ.random_element(0, n)
-    y= (c - a*x) * ~mod(b, n)
+    y = (c - a * x) * ~mod(b, n)
     y = Integer(mod(y, n))
-    assert mod(a*x + b*y, n) == mod(c, n)
+    assert mod(a * x + b * y, n) == mod(c, n)
     return x, y
+
 
 def put_in_interval(x, a, b, n):
     """Returns x' = x mod n in the interval [a, b]."""
     x = Integer(x)
     n = Integer(n)
     if b - a < n:
-        raise ValueError("Not possible " + str(b-a) + " "+ str(n))
+        raise ValueError("Not possible " + str(b - a) + " " + str(n))
 
     k = ceil((a - x) / n)
     x_prime = x + n * k
@@ -302,6 +304,7 @@ def put_in_interval(x, a, b, n):
     assert mod(x, n) == mod(x_prime, n)
     assert a <= x_prime <= b
     return x_prime
+
 
 def strong_approximation(mu_0, N, O, ell):
     """Find mu in O with nrd(mu) = ell^e and mu = lambda * mu_0 mod NO
@@ -323,11 +326,11 @@ def strong_approximation(mu_0, N, O, ell):
     t_0, x_0, y_0, z_0 = mu_0.coefficient_tuple()
     assert t_0 == x_0 == 0
     beta_0 = y_0 + z_0 * i
-    # TODO: gracefully handle the case where 
+    # TODO: gracefully handle the case where
     # ~mod(p * Integer(beta_0.reduced_norm()), N) does not exist.
-    e = 2 * ceil(log(N**4 * (p+1) / 2, ell)) + (0 if (
+    e = 2 * ceil(log(N**4 * (p + 1) / 2, ell)) + (0 if (
         ~mod(p * Integer(beta_0.reduced_norm()), N)).is_square() else 1)
-    e_max = e+2*(2*ceil(log(p, ell))+2)
+    e_max = e + 2 * (2 * ceil(log(p, ell)) + 2)
 
     # First we solve for lambda.
     lamb = Integer(
@@ -342,9 +345,12 @@ def strong_approximation(mu_0, N, O, ell):
         assert N.divides(ell**e - p * lamb**2 * Integer(beta_0.reduced_norm()))
         lhs = Integer(
             (ell**e - p * lamb**2 * Integer(beta_0.reduced_norm())) / N)
-        y_1, z_1 = solve_linear_congruence(2 * Integer(y_0) * p * lamb, p * lamb * 2 * z_0, lhs, N)
-        y_1 = put_in_interval(y_1, -2*lamb * y_0 - N/2, -2*lamb * y_0 + N**2/2, N)
-        z_1 = put_in_interval(z_1, -2*lamb * z_0 - N/2, -2*lamb * z_0 + N**2/2, N)
+        y_1, z_1 = solve_linear_congruence(2 * Integer(y_0) * p * lamb,
+                                           p * lamb * 2 * z_0, lhs, N)
+        y_1 = put_in_interval(y_1, -2 * lamb * y_0 - N / 2,
+                              -2 * lamb * y_0 + N**2 / 2, N)
+        z_1 = put_in_interval(z_1, -2 * lamb * z_0 - N / 2,
+                              -2 * lamb * z_0 + N**2 / 2, N)
         beta_1 = Integer(y_1) + Integer(z_1) * i
         assert mod(lhs, N) == mod(
             p * lamb * (beta_0 * beta_1.conjugate()).reduced_trace(), N)
@@ -352,7 +358,8 @@ def strong_approximation(mu_0, N, O, ell):
         # Now we calculate r.
         assert (N**2).divides(ell**e - p *
                               (lamb * beta_0 + N * beta_1).reduced_norm())
-        r = Integer((ell**e - p * (lamb * beta_0 + N * beta_1).reduced_norm()) / N**2)
+        r = Integer(
+            (ell**e - p * (lamb * beta_0 + N * beta_1).reduced_norm()) / N**2)
 
         # In the paper they say that r can be the product of a prime and a
         # smooth square. For simplicity I will just wait for r prime.
@@ -384,8 +391,6 @@ def strong_approximation(mu_0, N, O, ell):
     return None
 
 
-
-
 def special_ell_power_equiv(I, O, ell, print_progress=False):
     """Solve ell isogeny problem.
 
@@ -406,7 +411,8 @@ def special_ell_power_equiv(I, O, ell, print_progress=False):
     N = Integer(I_prime.norm())
     gamma = element_of_norm(N * ell**20, O)
     # TODO: handle failure to find gamma better.
-    if gamma is None: raise ValueError('Couldn\'t find element of correct norm')
+    if gamma is None:
+        raise ValueError('Couldn\'t find element of correct norm')
     mu_0 = solve_ideal_equation(gamma, I_prime, D, N, O)
     mu = strong_approximation(mu_0, N, O, ell)
     assert gamma * mu in I_prime
@@ -427,7 +433,7 @@ def ell_power_equiv(J, O, ell, print_progress=False):
 
     O_special = B.maximal_order()
     I = connecting_ideal(O_special, O)
-    K = I*J
+    K = I * J
     I_1, gamma_1 = special_ell_power_equiv(I, O_special, ell)
     I_2, gamma_2 = special_ell_power_equiv(K, O_special, ell)
     gamma = gamma_1 * gamma_2.conjugate() * K.norm()
