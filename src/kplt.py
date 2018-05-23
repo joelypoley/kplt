@@ -235,32 +235,6 @@ def element_of_norm(M, O, bound=100):
 
     return None
 
-    
-
-
-def find_generators(I):
-    """Finds N, alpha in I such that I = ON + O*alpha
-
-    This corresponds to Step 2 of the algorithm in the notes.
-
-    Args:
-        I: An ideal.
-
-    Returns:
-        A tuple (N, alpha) where N is a Sage integer and alpha is in I.
-    """
-    O = I.left_order()
-    B = I.quaternion_algebra()
-    N = I.norm()
-    alpha = I.basis()[0]
-    while alpha.reduced_norm() == 0 or Integer(alpha.reduced_norm()).divides(
-            N**2):
-        alpha = random_combination(I.basis())
-
-    J = left_ideal([N, alpha], O)
-    assert J == I
-    return N, alpha
-
 
 def solve_ideal_equation(gamma, I, D, N, O):
     """Find mu_0 in Rj such that (O* gamma / NO)[mu_0] = I / NO.
