@@ -244,20 +244,26 @@ def solve_ideal_equation(gamma, I, D, N, O):
         I: A left O-ideal.
         D: The index [O : R + Rj].
         N: The norm of I. Must be prime.
-        O: A special order in a quaternion algebra.
+        O: An order in a rational quaternion algebra containing 1, i, j, k.
 
     Returns:
         mu_0 in Rj such that 0 != gamma * mu_0 in I.
     """
+    assert N == I.norm()
+    assert is_prime(N)
+
     d, c, _ = xgcd(D, N)
     assert d == 1
+
     a, b = [Integer(x) for x in O.quaternion_algebra().invariants()]
+
     F = GF(N)
     # The suffix _ff means that this element is over a finite field, not the
     # rationals.
     B_ff = QuaternionAlgebra(F, a, b)
     i_ff, j_ff, k_ff = B_ff.gens()
 
+    # phi is homomorphism O -> (a, b | F) with kernel NO.
     def phi(alpha):
         t, x, y, z = [
             Integer(D * c * alpha_i) for alpha_i in alpha.coefficient_tuple()
@@ -266,12 +272,12 @@ def solve_ideal_equation(gamma, I, D, N, O):
 
     gamma_ff = phi(gamma)
     gamma_ff_mat = gamma_ff.matrix(action='left')
-
     I_basis_ff = [phi(alpha).coefficient_tuple() for alpha in I.basis()]
     lin_system = matrix(F, [gamma_ff_mat[2], gamma_ff_mat[3]] + I_basis_ff)
     sol = lin_system.left_kernel().basis()[0]
     y, z = sol[0], sol[1]
     mu_ff = y * j_ff + z * k_ff
+    assert vector(F, (gamma_ff * mu_ff).coefficient_tuple()) in span(I_basis_ff, F)
 
     B = O.quaternion_algebra()
     i, j, k = B.gens()
