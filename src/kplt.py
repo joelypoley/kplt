@@ -409,7 +409,7 @@ def special_ell_power_equiv(I, O, ell, print_progress=False):
     I_prime, beta_I_prime = prime_norm_representative(I, O, D, ell)
     N = Integer(I_prime.norm())
     gamma = element_of_norm(N * ell**20, O)
-    # TODO: handle failure to find gamma better.
+    # TODO: Handle failure to find gamma better.
     if gamma is None:
         raise ValueError('Couldn\'t find element of correct norm')
     mu_0 = solve_ideal_equation(gamma, I_prime, D, N, O)
