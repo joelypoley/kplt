@@ -17,10 +17,12 @@ from sage.algebras.quatalg.quaternion_algebra import QuaternionAlgebra
 from sage.matrix.constructor import matrix
 
 
-def ideal_product(I, J):
-    """Returns IJ."""
+def ideal_product_class(I, J):
+    """Returns an ideal K the class [IJ] such that K is a subset of O_L(I)."""
     assert I.right_order() == J.left_order()
+    return I*J
     # Don't really know why I have to do this.
+    # TODO: remove this matcoeff stuff and see if it still works.
     mat_1 = matrix([x.coefficient_tuple() for x in I.right_order().basis()])
     mat_2 = matrix([x.coefficient_tuple() for x in I.left_order().basis()])
     matcoeff = mat_2 * ~mat_1
@@ -132,16 +134,18 @@ def prime_norm_representative(I, O, D, ell):
         D: An integer.
         ell: A prime.
     Returns:
-        Another left O-ideal in the same class with prime norm N. N will
-        be coprime to both D and p, and ell will be a nonquadratic residue
-        module N. 
-
+        A pair (J, gamma) where J = I * gamma is a left O-ideal in the same
+        class with prime norm N. N will be coprime to both D and p, and ell
+        will be a nonquadratic residue module N.
     """
+    # TODO: Change so O is not an argument.
     if not is_minkowski_basis(I.basis()):
         print('Warning: The ideal I does not have a minkowski basis'
               ' precomputed and Sage can not do it for you.')
 
     nrd_I = I.norm()
+    B = I.quaternion_algebra()
+    p = B.discriminant()
     alpha = B(0)
     normalized_norm = Integer(alpha.reduced_norm() / nrd_I)
     # Choose random elements in I until one is found with norm N*nrd(I) where N
@@ -168,12 +172,13 @@ def prime_norm_representative(I, O, D, ell):
 
     # We now have an element alpha with norm N*nrd(I) where N is prime. The
     # ideal J = I*gamma has prime norm where gamma = conjugate(alpha) / nrd(I).
+    gamma = alpha.conjugate() / nrd_I 
     J = I.scale(gamma)
 
     assert is_prime(Integer(J.norm()))
     assert not mod(ell, Integer(J.norm())).is_square()
     assert gcd(Integer(J.norm()), D) == 1
-    return J
+    return J, gamma
 
 
 def solve_norm_equation(q, r):
@@ -216,7 +221,7 @@ def element_of_norm(M, O, bound=100):
     """
     B = O.quaternion_algebra()
     a, b = B.invariants()
-    i, j, _ = B.gens()
+    i, j, k = B.gens()
     q, p = -Integer(a), -Integer(b)
     for y in range(bound+1):
         for z in range(bound+1):
@@ -336,6 +341,8 @@ def strong_approximation(mu_0, N, O, ell):
     t_0, x_0, y_0, z_0 = mu_0.coefficient_tuple()
     assert t_0 == x_0 == 0
     beta_0 = y_0 + z_0 * i
+    # TODO: gracefully handle the case where 
+    # ~mod(p * Integer(beta_0.reduced_norm()), N) does not exist.
     e = 2 * ceil(log(N**4 * (p+1) / 2, ell)) + (0 if (
         ~mod(p * Integer(beta_0.reduced_norm()), N)).is_square() else 1)
     e_max = e+2*(2*ceil(log(p, ell))+2)
@@ -407,34 +414,44 @@ def special_ell_power_equiv(I, O, ell, print_progress=False):
         print_progress: True if you want to print progress.
 
     Returns:
-        An ideal non-fractional ideal J in the same class as I that has ell
-        power norm.
+        A pair (J, delta) where J = I*delta and J is a
+        nonfractional ideal in the same class as I that has ell power norm.
     """
+    assert all(x in O for x in I.basis())
     ell = Integer(ell)
     D = 4
-    I = prime_norm_representative(I, O, D, ell)
-    N, alpha = find_generators(I)
-    gamma = element_of_norm(N * ell**50, O)
-    mu_0 = solve_ideal_equation(gamma, I, D, N, O)
+    I_prime, beta_I_prime = prime_norm_representative(I, O, D, ell)
+    N = Integer(I_prime.norm())
+    gamma = element_of_norm(N * ell**20, O)
+    # TODO: handle failure to find gamma better.
+    if gamma is None: raise ValueError('Couldn\'t find element of correct norm')
+    mu_0 = solve_ideal_equation(gamma, I_prime, D, N, O)
     mu = strong_approximation(mu_0, N, O, ell)
-    beta = gamma * mu
-    J = I.scale(beta.conjugate() / N)
+    assert gamma * mu in I_prime
+    beta = (gamma * mu).conjugate() / N
+    J = I_prime.scale(beta)
+    delta = beta_I_prime * beta
     assert J.left_order() == O
     assert Integer(J.norm()).prime_factors() == [ell]
     assert [x in O for x in J.basis()]
-    return beta, J
+    return J, delta
 
 
 def ell_power_equiv(J, O, ell, print_progress=False):
     B = O.quaternion_algebra()
-    assert is_prime(B.discriminant()) and mod(B.discriminant(), 4) == 3
+    if not is_prime(B.discriminant()) or not mod(B.discriminant(), 4) == 3:
+        raise NotImplementedError('The quaternion algebra must have prime'
+                                  ' discrimint p = 3 mod 4.')
+
     O_special = B.maximal_order()
     I = connecting_ideal(O_special, O)
-    K = ideal_product(I, J)
-    gamma_1, I_1 = special_ell_power_equiv(I, O_special, ell)
-    gamma_2, I_2 = special_ell_power_equiv(K, O_special, ell)
-    gamma = gamma_1.conjugate() * gamma_2 / Integer(I.norm())
-    assert J.left_order() == O
-    assert Integer(J.norm()).prime_factors() == [ell]
-    assert [x in O for x in J.basis()]
-    return J.scale(gamma.conjugate() / Integer(J.norm()))
+    K = I*J
+    I_1, gamma_1 = special_ell_power_equiv(I, O_special, ell)
+    I_2, gamma_2 = special_ell_power_equiv(K, O_special, ell)
+    gamma = gamma_1 * gamma_2.conjugate() * K.norm()
+    assert gamma in J
+    J_2 = J.scale(gamma.conjugate() / Integer(J.norm()))
+    assert J_2.left_order() == O
+    assert Integer(J_2.norm()).prime_factors() == [ell]
+    assert [x in O for x in J_2.basis()]
+    return J_2
