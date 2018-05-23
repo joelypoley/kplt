@@ -454,4 +454,4 @@ def ell_power_equiv(J, O, ell, print_progress=False):
     assert J_2.left_order() == O
     assert Integer(J_2.norm()).prime_factors() == [ell]
     assert [x in O for x in J_2.basis()]
-    return J_2
+    return J_2, gamma.conjugate() / Integer(J.norm())
