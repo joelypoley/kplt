@@ -391,7 +391,7 @@ def strong_approximation(mu_0, N, O, ell):
 
 
 def special_ell_power_equiv(I, O, ell, print_progress=False):
-    """Solve ell isogeny problem.
+    """Solve ell isogeny problem where O is a special order.
 
     Args:
         I: A left O-ideal.
@@ -400,8 +400,9 @@ def special_ell_power_equiv(I, O, ell, print_progress=False):
         print_progress: True if you want to print progress.
 
     Returns:
-        A pair (J, delta) where J = I*delta and J is a
-        nonfractional ideal in the same class as I that has ell power norm.
+        A pair (J, delta) where J = I*delta, delta is in the quaternion algebra
+        and J is a nonfractional ideal in the same class as I that has ell
+        power norm.
     """
     assert all(x in O for x in I.basis())
     ell = Integer(ell)
@@ -425,6 +426,22 @@ def special_ell_power_equiv(I, O, ell, print_progress=False):
 
 
 def ell_power_equiv(J, O, ell, print_progress=False):
+    """Solve ell isogeny problem.
+
+    This function only works in quaternion algebras with prime discriminant
+    p = 3 mod 4.
+
+    Args:
+        J: A left O-ideal.
+        O: An order in a quaternion algebra.
+        ell: A prime.
+        print_progress: True if you want to print progress.
+
+    Returns:
+        A pair (J, delta) where J = I*delta, delta is in the quaternion algebra
+        and J is a nonfractional ideal in the same class as I that has ell
+        power norm.
+    """
     B = O.quaternion_algebra()
     if not is_prime(B.discriminant()) or not mod(B.discriminant(), 4) == 3:
         raise NotImplementedError('The quaternion algebra must have prime'
