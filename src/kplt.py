@@ -45,7 +45,6 @@ def connecting_ideal(O_1, O_2):
         An ideal I that is a left O_1 ideal and a right O_2 ideal. Moreover I
         is a subset of O_1.
     """
-    # I don't really understand why this code works.
     mat_1 = matrix([x.coefficient_tuple() for x in O_1.basis()])
     mat_2 = matrix([x.coefficient_tuple() for x in O_2.basis()])
     matcoeff = mat_2 * ~mat_1
