@@ -46,14 +46,6 @@ class IdealsTest(unittest.TestCase):
         ell = 3
         O = B.maximal_order()
         i, j, k = B.gens()
-        # gamma = 16 + 68 * i
-        # alpha = 2
-        # I = left_ideal([alpha], O)
-        # J = prime_norm_representative(I, O, 4, 2)
-        # N = J.norm()
-        # print(N)
-        # D = 4
-        # mu_0 = solve_ideal_equation(gamma, J, D, N, O)
         N = next_prime(100000)
         mu_0 = 16*j + 24 * k
         mu = strong_approximation(mu_0, N, O, ell)
@@ -103,5 +95,7 @@ class IdealsTest(unittest.TestCase):
         
 
 if __name__ == '__main__':
+    # We do this instead of unittest.main() so that the time for each test is 
+    # printed.
     suite = unittest.TestLoader().loadTestsFromTestCase(IdealsTest)
     unittest.TextTestRunner(verbosity=0).run(suite)
