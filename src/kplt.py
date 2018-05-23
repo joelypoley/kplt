@@ -207,35 +207,31 @@ def element_of_norm(M, O, bound=100):
     Args:
         M: A sage integer.
         O: A maximal order in a quaternion algebra.
-        bound: The values 0 <= x_2, y_2 <= 100 will be tried. If no solution is
-            found then the function returns None.
+        bound: The values 0 <= y, z <= bound will be tried. If no solution
+            is found then the function returns None.
 
     Returns:
         gamma in B such that gamma.reduced_norm() == M or None if there is no
         solution in the box [0, bound]**2.
     """
     B = O.quaternion_algebra()
-    if mod(B.discriminant(), 4) != 3:
-        raise NotImplementedError('The quaternion algebra must have'
-                                  ' discriminant p = 3 mod 4')
     a, b = B.invariants()
     i, j, _ = B.gens()
     q, p = -Integer(a), -Integer(b)
-    for x_2 in range(bound+1):
-        for y_2 in range(bound+1):
-            r = M - p * (x_2**2 + q * y_2**2)
+    for y in range(bound+1):
+        for z in range(bound+1):
+            r = M - p * (y**2 + q * z**2)
 
-            if r not in Primes():  # Can replace with easily factorable.
+            if not is_prime(r):  # Can replace with easily factorizable.
                 continue
 
             # The norm equation is N(x + iy) = x^2 + qy^2.
             sol = solve_norm_equation(q, r)
             if sol is not None:
-                x_1, y_1 = sol
-                alpha = x_1 + y_1 * i
-                beta = x_2 + y_2 * i
-                assert Integer((alpha + beta * j).reduced_norm()) == M
-                return alpha + beta * j
+                t, x = sol
+                gamma = t + x*i + y*j + z*k
+                assert Integer((gamma).reduced_norm()) == M
+                return gamma
 
     return None
 
