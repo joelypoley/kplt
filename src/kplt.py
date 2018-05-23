@@ -257,6 +257,7 @@ def solve_ideal_equation(gamma, I, D, N, O):
     assert N == I.norm()
     assert is_prime(N)
 
+    # d = D*c + N*_
     d, c, _ = xgcd(D, N)
     assert d == 1
 
