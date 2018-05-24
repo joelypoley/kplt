@@ -462,10 +462,9 @@ def ell_power_equiv(J, O, ell, print_progress=False):
     K = I * J
     I_1, gamma_1 = special_ell_power_equiv(I, O_special, ell)
     I_2, gamma_2 = special_ell_power_equiv(K, O_special, ell)
-    gamma = gamma_1 * gamma_2.conjugate() * K.norm()
-    assert gamma in J
-    J_2 = J.scale(gamma.conjugate() / Integer(J.norm()))
+    gamma = gamma_1.conjugate() * gamma_2 * I.norm()
+    J_2 = J.scale(gamma)
     assert J_2.left_order() == O
     assert Integer(J_2.norm()).prime_factors() == [ell]
     assert [x in O for x in J_2.basis()]
-    return J_2, gamma.conjugate() / Integer(J.norm())
+    return J_2, gamma
