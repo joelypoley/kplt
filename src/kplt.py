@@ -419,7 +419,7 @@ def special_ell_power_equiv(I, O, ell, print_progress=False):
     # TODO: Handle failure to find gamma better.
     if gamma is None:
         raise ValueError('Couldn\'t find element of correct norm')
-        
+
     mu_0 = solve_ideal_equation(gamma, I_prime, D, N, O)
     mu = strong_approximation(mu_0, N, O, ell)
     assert gamma * mu in I_prime
@@ -454,6 +454,9 @@ def ell_power_equiv(J, O, ell, print_progress=False):
         raise NotImplementedError('The quaternion algebra must have prime'
                                   ' discrimint p = 3 mod 4.')
 
+    # When B has discriminant p = 3 mod 4 the call B.maximal_order() always
+    # returns the first maximal order in the cases environment in Lemma 2 of 
+    # the paper. I probably shouldn't rely on this.
     O_special = B.maximal_order()
     I = connecting_ideal(O_special, O)
     K = I * J
