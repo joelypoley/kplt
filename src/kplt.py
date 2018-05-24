@@ -57,10 +57,10 @@ def left_ideal(gens, O):
     if not all(x in O for x in gens):
         raise ValueError('All the generators must be in O.')
 
-    all_gens = [x * y for x in O.basis() for y in gens]
+    module_gens = [x * y for x in O.basis() for y in gens]
     B = O.quaternion_algebra()
     Z, d = (quaternion_algebra_cython.
-            integral_matrix_and_denom_from_rational_quaternions(all_gens))
+            integral_matrix_and_denom_from_rational_quaternions(module_gens))
     H = Z.hermite_form(include_zero_rows=False)
     basis = (quaternion_algebra_cython.
              rational_quaternions_from_integral_matrix_and_denom(B, H, d))
