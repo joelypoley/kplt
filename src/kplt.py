@@ -387,7 +387,7 @@ def strong_approximation(mu_0, N, O, ell):
             assert mu.reduced_norm() == ell**e
             return mu
 
-        # Again this is sort of a random heuristic.
+        # This is sort of a random heuristic. Can do better.
         count += 1
         if count > count_max:
             e += 2
