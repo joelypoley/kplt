@@ -185,7 +185,7 @@ def solve_norm_equation(q, r):
             return None
     else:
         sol = cornacchia(q, r)
-        assert sol in None or sol[0]**2 + q * sol[1]**2 == r
+        assert sol is None or sol[0]**2 + q * sol[1]**2 == r
         return sol
 
 
