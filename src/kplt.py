@@ -266,6 +266,7 @@ def solve_ideal_equation(gamma, I, D, N, O):
     gamma_ff = phi(gamma)
     gamma_ff_mat = gamma_ff.matrix(action='left')
     I_basis_ff = [phi(alpha).coefficient_tuple() for alpha in I.basis()]
+    # Only use 2nd and 3rd rows of gamma_ff_mat so solution is in Rj.
     lin_system = matrix(F, [gamma_ff_mat[2], gamma_ff_mat[3]] + I_basis_ff)
     sol = lin_system.left_kernel().basis()[0]
     y, z = sol[0], sol[1]
