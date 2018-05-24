@@ -257,7 +257,7 @@ def solve_ideal_equation(gamma, I, D, N, O):
     # phi is homomorphism O -> (a, b | F) with kernel NO.
     def phi(alpha):
         # alpha + NO = alpha_prime + NO.
-        alpha_prime =  D * c * alpha_i
+        alpha_prime =  D * c * alpha
         t, x, y, z = [
             Integer(coeff) for coeff in alpha_prime.coefficient_tuple()
         ]
