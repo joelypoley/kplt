@@ -350,7 +350,6 @@ def strong_approximation(mu_0, N, O, ell):
     count_max = 5 * e
     while e < e_max:
         # Then we solve for beta_1.
-        assert N.divides(ell**e - p * lamb**2 * Integer(beta_0.reduced_norm()))
         lhs = Integer(
             (ell**e - p * lamb**2 * Integer(beta_0.reduced_norm())) / N)
         y_1, z_1 = solve_linear_congruence(2 * Integer(y_0) * p * lamb,
