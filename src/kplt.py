@@ -28,10 +28,14 @@ def connecting_ideal(O_1, O_2):
         An ideal I that is a left O_1 ideal and a right O_2 ideal. Moreover I
         is a subset of O_1.
     """
+    # There exists some integer d such that d*O_2 is a subset of O_1. We
+    # first compute d.
     mat_1 = matrix([x.coefficient_tuple() for x in O_1.basis()])
     mat_2 = matrix([x.coefficient_tuple() for x in O_2.basis()])
     matcoeff = mat_2 * ~mat_1
     d = lcm(x.denominator() for x in matcoeff.coefficients())
+
+    # J is a subset of O_1 and is a O_1, O_2-ideal by construction.
     J = left_ideal([d * x * y for x in O_1.basis() for y in O_2.basis()], O_1)
 
     assert J.left_order() == O_1
@@ -170,6 +174,8 @@ def solve_norm_equation(q, r):
     Returns:
         Tuple of Sage integers (x, y) or None if there is no solution.
     """
+    # I assume two_squares is faster than the cornacchia algorithm I wrote. So 
+    # we will use this if we can.
     if q == 1:
         try:
             sol = two_squares(r)
