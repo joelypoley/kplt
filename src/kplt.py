@@ -304,7 +304,7 @@ def put_in_interval(x, a, b, n):
     x = Integer(x)
     n = Integer(n)
     if b - a < n:
-        raise ValueError("Not possible " + str(b - a) + " " + str(n))
+        raise ValueError("Not possible.")
 
     k = ceil((a - x) / n)
     x_prime = x + n * k
