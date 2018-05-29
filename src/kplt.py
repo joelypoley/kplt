@@ -368,10 +368,10 @@ def strong_approximation(mu_0, N, O, ell):
             2 * Integer(y_0) * p * lamb, p * lamb * 2 * z_0, lhs, N
         )
         y_1 = put_in_interval(
-            y_1, -2 * lamb * y_0 - N / 2, -2 * lamb * y_0 + N ** 2 / 2, N
+            y_1, -2 * lamb * y_0 - N / 2, -2 * lamb * y_0 + N / 2, N
         )
         z_1 = put_in_interval(
-            z_1, -2 * lamb * z_0 - N / 2, -2 * lamb * z_0 + N ** 2 / 2, N
+            z_1, -2 * lamb * z_0 - N / 2, -2 * lamb * z_0 + N  / 2, N
         )
         beta_1 = Integer(y_1) + Integer(z_1) * i
         assert mod(lhs, N) == mod(
