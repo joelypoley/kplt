@@ -1,3 +1,7 @@
+# KPLT
+
+This repository contains my personal notes and some code I wrote while reading *[On the quaternion ell-isogeny problem](https://arxiv.org/abs/1406.0981)* by David Kohel, Kristin Lauter, Christophe Petit, Jean-Pierre Tignol.
+
 # If you are going to clone this repo
 Install `git lfs` first.
 Instructions are [here](https://github.com/git-lfs/git-lfs/wiki/Installation).
@@ -33,5 +37,5 @@ This is the main TeX file, it describes the algorithm.
 ## quat_computing.tex
 This file contains information on how you compute with quaternion algebras.
 
-## src
+## src/
 This folder contains the code.
