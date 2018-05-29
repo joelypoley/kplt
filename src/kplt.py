@@ -308,18 +308,17 @@ def solve_linear_congruence(a, b, c, n):
     return x, y
 
 
-def put_in_interval(x, a, b, n):
-    """Returns x' = x mod n in the interval [a, b]."""
+def center_around(x, center, modulus):
+    """Returns x' = x mod modulus in the interval
+    [center - modulus / 2, center + modulus / 2].
+    """
     x = Integer(x)
-    n = Integer(n)
-    if b - a < n:
-        raise ValueError("Not possible.")
+    modulus = Integer(modulus)
+    k = ceil((center - modulus / 2 - x) / modulus)
+    x_prime = x + modulus * k
 
-    k = ceil((a - x) / n)
-    x_prime = x + n * k
-
-    assert mod(x, n) == mod(x_prime, n)
-    assert a <= x_prime <= b
+    assert mod(x, modulus) == mod(x_prime, modulus)
+    assert center - modulus / 2 <= x_prime <= center + modulus / 2
     return x_prime
 
 
@@ -367,12 +366,8 @@ def strong_approximation(mu_0, N, O, ell):
         y_1, z_1 = solve_linear_congruence(
             2 * Integer(y_0) * p * lamb, p * lamb * 2 * z_0, lhs, N
         )
-        y_1 = put_in_interval(
-            y_1, -2 * lamb * y_0 - N / 2, -2 * lamb * y_0 + N / 2, N
-        )
-        z_1 = put_in_interval(
-            z_1, -2 * lamb * z_0 - N / 2, -2 * lamb * z_0 + N  / 2, N
-        )
+        y_1 = center_around(y_1, -2 * lamb * y_0, N)
+        z_1 = center_around(z_1, -2 * lamb * y_0, N)
         beta_1 = Integer(y_1) + Integer(z_1) * i
         assert mod(lhs, N) == mod(
             p * lamb * (beta_0 * beta_1.conjugate()).reduced_trace(), N
