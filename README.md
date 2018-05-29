@@ -1,6 +1,6 @@
 # KPLT
 
-This repository contains my personal notes and some code I wrote while reading *[On the quaternion ell-isogeny problem](https://arxiv.org/abs/1406.0981)* by David Kohel, Kristin Lauter, Christophe Petit, Jean-Pierre Tignol.
+This repository contains my personal notes and some code I wrote while reading *[On the quaternion ell-isogeny problem](https://arxiv.org/abs/1406.0981)* by David Kohel, Kristin Lauter, Christophe Petit, Jean-Pierre Tignol. Use with caution.
 
 # If you are going to clone this repo
 Install `git lfs` first.
