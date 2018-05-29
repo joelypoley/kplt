@@ -3,7 +3,7 @@ from __future__ import print_function
 import unittest
 
 from sage.all import *
-from cornacchia import cornacchia 
+from cornacchia import cornacchia
 
 
 class CornacchiaTest(unittest.TestCase):
@@ -17,10 +17,9 @@ class CornacchiaTest(unittest.TestCase):
         print(type(x))
         print(type(y))
         self.assertTrue(type(x) == type(y) == Integer)
-        self.assertTrue(x**2 + d*y**2 == m)
+        self.assertTrue(x ** 2 + d * y ** 2 == m)
         self.assertTrue(gcd(x, y) == 1)
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

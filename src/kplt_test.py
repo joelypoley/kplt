@@ -17,6 +17,7 @@ set_random_seed(0)
 
 
 class IdealsTest(unittest.TestCase):
+
     def setUp(self):
         self.startTime = time.time()
 
@@ -94,7 +95,7 @@ class IdealsTest(unittest.TestCase):
         self.assertTrue([x in O for x in J.basis()])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # We do this instead of unittest.main() so that the time for each test is
     # printed.
     suite = unittest.TestLoader().loadTestsFromTestCase(IdealsTest)

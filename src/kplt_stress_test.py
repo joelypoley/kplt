@@ -22,13 +22,14 @@ for p in primes_generator:
     alpha = O.random_element()
     if alpha.reduced_norm() == 0:
         continue
-    I = left_ideal(
-        [alpha, choice(Integer(alpha.reduced_norm()).divisors())], O)
-    if I == O: print('I == O')
-    print('p = ', p, 'I = ', I)
-    if p == 311: continue
+    I = left_ideal([alpha, choice(Integer(alpha.reduced_norm()).divisors())], O)
+    if I == O:
+        print("I == O")
+    print("p = ", p, "I = ", I)
+    if p == 311:
+        continue
     start = time.time()
-    # The assert statements at in the function ell_power_equiv ensure that the 
+    # The assert statements at in the function ell_power_equiv ensure that the
     # result is correct.
     _ = ell_power_equiv(I, O, ell)
     end = time.time() - start
